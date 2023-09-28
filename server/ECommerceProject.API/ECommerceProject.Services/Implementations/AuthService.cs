@@ -1,5 +1,7 @@
-﻿namespace ECommerceProject.Services.Implementations;
+﻿using ECommerceProject.Services.Contracts;
 
-internal class AuthService
+namespace ECommerceProject.Services.Implementations;
+
+internal class AuthService : IAuthService
 {
 }

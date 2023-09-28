@@ -2,6 +2,7 @@
 
 namespace ECommerceProject.Services.Implementations;
 
-internal class UserService : IUserService
+public class TokenService : ITokenService
 {
+    
 }

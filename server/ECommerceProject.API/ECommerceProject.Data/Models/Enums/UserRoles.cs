@@ -1,5 +1,7 @@
 ﻿namespace ECommerceProject.Data.Models.Enums;
 
-public enum Categories
+public enum UserRoles
 {
+    User,
+    Admin,
 }
