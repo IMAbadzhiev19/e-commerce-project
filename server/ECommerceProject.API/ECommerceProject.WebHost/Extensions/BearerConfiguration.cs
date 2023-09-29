@@ -21,11 +21,9 @@ public static class BearerConfiguration
                 options.RequireHttpsMetadata= false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
-                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]!))
                 };
             });

@@ -1,7 +1,6 @@
 ﻿using Mapster;
-using System.ComponentModel.DataAnnotations;
 
-namespace ECommerceProject.Services.Models;
+namespace ECommerceProject.Shared.Models.Auth;
 
 public class RegisterIM
 {

@@ -34,16 +34,18 @@ builder.Services.AddCors(opts =>
 //Configures Swagger + Identity and Bearer
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddIdentity();
 builder.Services.AddSwagger();
+builder.Services.AddIdentity();
 builder.Services.AddBearer(builder);
 
+//Injecting services
 builder.Services.AddServices();
 
 builder.Services.AddCarter();
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();

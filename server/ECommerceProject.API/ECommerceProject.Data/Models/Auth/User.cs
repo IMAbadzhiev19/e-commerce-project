@@ -14,8 +14,8 @@ public class User : IdentityUser
     public string LastName { get; set; } = string.Empty;
 
 
-    //public Guid CartId { get; set; }
-
-    //[ForeignKey(nameof(CartId))]
-    //public Cart? Cart { get; set; }
+    public Guid? CartId { get; set; }
+    
+    [ForeignKey(nameof(CartId))]
+    public virtual Cart? Cart { get; set; }
 }
