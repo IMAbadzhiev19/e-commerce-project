@@ -35,8 +35,4 @@
     <ProjectReference Include="..\ECommerceProject.Services\ECommerceProject.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

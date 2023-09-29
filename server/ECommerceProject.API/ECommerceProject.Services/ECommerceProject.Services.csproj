@@ -28,8 +28,4 @@
     <ProjectReference Include="..\ECommerceProject.Data\ECommerceProject.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

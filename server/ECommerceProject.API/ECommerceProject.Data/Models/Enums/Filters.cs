@@ -5,5 +5,5 @@ public enum Filters
     Color,
     Model,
     Material,
-    
+    Price,
 }

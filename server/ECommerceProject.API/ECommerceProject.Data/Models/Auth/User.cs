@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ECommerceProject.Data.Models.ECommerce;
 using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceProject.Data.Models.Auth;
@@ -10,4 +12,10 @@ public class User : IdentityUser
     
     [Required]
     public string LastName { get; set; } = string.Empty;
+
+
+    //public Guid CartId { get; set; }
+
+    //[ForeignKey(nameof(CartId))]
+    //public Cart? Cart { get; set; }
 }

@@ -1,5 +1,8 @@
-﻿namespace ECommerceProject.Services.Contracts;
+﻿using ECommerceProject.Services.Models;
 
-internal interface IAuthService
+namespace ECommerceProject.Services.Contracts;
+
+public interface IAuthService
 {
+    Task CreateUser(RegisterIM registerIM);
 }
