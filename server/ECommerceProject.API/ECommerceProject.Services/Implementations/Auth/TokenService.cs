@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceProject.Services.Implementations.Auth;
 
@@ -50,12 +51,21 @@ public class TokenService : ITokenService
         var accessToken = this.CreateToken(authClaims, TokenTypes.AccessToken);
         var refreshToken = this.CreateToken(authClaims, TokenTypes.RefreshToken);
 
-        await this.SaveRefreshTokenAsync(new RefreshToken
+        if (!this._context.RefreshTokens.Any(x => x.UserId == user.Id))
         {
-            Token = new JwtSecurityTokenHandler().WriteToken(refreshToken),
-            UserId = user.Id,
-        });
-
+            await this.SaveRefreshTokenAsync(new RefreshToken
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(refreshToken),
+                UserId = user.Id,
+            });
+        }
+        else
+        {
+            if (accessToken.ValidTo < DateTime.Now)
+                throw new Exception("User is already logged in");
+            refreshToken = null;
+        }
+        
         return new()
         {
             AccessToken = accessToken,
@@ -63,9 +73,16 @@ public class TokenService : ITokenService
         };
     }
 
-    public Task DeleteRefreshTokenAsync(RefreshToken refreshToken)
+    public async Task DeleteRefreshTokenAsync(string userId)
     {
-        throw new NotImplementedException();
+        var refreshToken = await this._context
+                                    .RefreshTokens
+                                    .FirstOrDefaultAsync(x => x.UserId == userId);
+        if (refreshToken is null)
+            throw new ArgumentException("Invalid userId");
+        
+        this._context.Remove(refreshToken);
+        await this._context.SaveChangesAsync();
     }
 
     public Task<string> GenerateEmailConfirmationAsync(string email)

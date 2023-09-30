@@ -11,7 +11,7 @@ public interface ITokenService
 
     Task SaveRefreshTokenAsync(RefreshToken refreshToken);
 
-    Task DeleteRefreshTokenAsync(RefreshToken refreshToken);
+    Task DeleteRefreshTokenAsync(string userId);
 
     Task<string> GeneratePasswordResetTokenAsync(string email);
     Task<string> GenerateEmailConfirmationAsync(string email);
