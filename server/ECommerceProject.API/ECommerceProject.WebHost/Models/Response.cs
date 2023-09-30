@@ -1,6 +1,6 @@
 ﻿namespace ECommerceProject.WebHost.Models;
 
-public class Result
+public class Response
 {
     public string Status { get; set; } = string.Empty;
 

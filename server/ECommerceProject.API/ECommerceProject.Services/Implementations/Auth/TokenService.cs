@@ -27,9 +27,32 @@ public class TokenService : ITokenService
     }
 
 
-    public Task<Tokens> CreateNewTokensAsync(TokensIM tokens)
+    public async Task<Tokens> CreateNewTokensAsync(TokensIM tokens)
     {
-        throw new NotImplementedException();
+        var principals = this.GetPrincipalsFromExpiredToken(tokens.AccessToken);
+        if (principals is null)
+            throw new ArgumentException("Invalid access token");
+
+        var user = await this._userManager.FindByIdAsync(principals.FindFirst(ClaimTypes.NameIdentifier).Value!);
+        var refreshToken = await this._context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokens.RefreshToken);
+
+        if (user is null || refreshToken is null || !this.ValidateRefreshToken(tokens.RefreshToken))
+            throw new ArgumentException("Invalid refreshToken");
+
+        await this.DeleteRefreshTokenAsync(user.Id);
+        var newRefreshToken = this.CreateToken(principals.Claims.ToList(), TokenTypes.RefreshToken);
+
+        await this.SaveRefreshTokenAsync(new RefreshToken
+        {
+            Token = new JwtSecurityTokenHandler().WriteToken(newRefreshToken),
+            UserId = user.Id,
+        });
+
+        return new()
+        {
+            AccessToken = this.CreateToken(principals.Claims.ToList(), TokenTypes.AccessToken),
+            RefreshToken = newRefreshToken,
+        };
     }
 
     public async Task<Tokens> CreateTokensForUserAsync(string email)
@@ -126,5 +149,53 @@ public class TokenService : ITokenService
         );
 
         return token;
+    }
+
+    private ClaimsPrincipal? GetPrincipalsFromExpiredToken(string? token)
+    {
+        var tokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._config["JWT:Secret"]!)),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        SecurityToken securityToken;
+        var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken 
+            || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            throw new SecurityTokenException("Invalid token");
+        }
+
+        return principal;
+    }
+
+    private bool ValidateRefreshToken(string refreshToken)
+    {
+        var tokenValidationParameter = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._config["JWT:RefreshTokenSecret"]!)),
+            ValidateLifetime = false,
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        SecurityToken securityToken;
+        _ = tokenHandler.ValidateToken(refreshToken, tokenValidationParameter, out securityToken);
+
+        if (securityToken is not JwtSecurityToken jwtSecurityToken
+            || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

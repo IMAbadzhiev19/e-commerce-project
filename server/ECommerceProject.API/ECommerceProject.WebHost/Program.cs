@@ -38,15 +38,11 @@ builder.Services.AddSwagger();
 builder.Services.AddIdentity();
 builder.Services.AddBearer(builder);
 
-//Injecting services
 builder.Services.AddServices();
-
-builder.Services.AddCarter();
-
 builder.Services.AddAuthorization();
-
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddCarter();
 
 var app = builder.Build();
 
