@@ -1,5 +1,15 @@
-﻿namespace ECommerceProject.Services.Contracts;
+﻿using ECommerceProject.Shared.Models.User;
+using Microsoft.AspNetCore.Identity;
 
-internal interface IUserService
+namespace ECommerceProject.Services.Contracts;
+
+public interface IUserService
 {
+    Task<UserVM> GetUserByIdAsync(string userId);
+
+    Task<IdentityResult> ChangePasswordAsync(string userId, string newPassword);
+
+    Task<bool> CheckPasswordAsync(string userId, string password);
+
+    Task UpdateUserInfoAsync(string userId, UserIM userIM);
 }
