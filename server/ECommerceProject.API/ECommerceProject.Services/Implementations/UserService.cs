@@ -15,7 +15,7 @@ public class UserService : IUserService
         _userManager = userManager;
     }
 
-    public async Task<IdentityResult> ChangePassword(string userId, string newPassword)
+    public async Task<IdentityResult> ChangePasswordAsync(string userId, string newPassword)
     {
         var user = await this._userManager.FindByIdAsync(userId);
 
@@ -33,9 +33,19 @@ public class UserService : IUserService
         return (user is not null && await this._userManager.CheckPasswordAsync(user, password));
     }
 
+    public async Task<(UserVM user, string userId)> GetUserByEmailAsync(string email)
+    {
+        var user = await this._userManager.FindByEmailAsync(email);
+
+        if (user is null)
+            throw new ArgumentException("Invalid id");
+
+        return (user.Adapt<UserVM>(), user.Id);
+    }
+
     public async Task<UserVM> GetUserByIdAsync(string userId)
     {
-        var user = await this._userManager.FindByIdAsync(id);
+        var user = await this._userManager.FindByIdAsync(userId);
 
         if (user is null)
             throw new ArgumentException("Invalid id");
@@ -43,7 +53,7 @@ public class UserService : IUserService
         return user.Adapt<UserVM>();
     }
 
-    public async Task UpdateUserInfo(string userId, UserIM userIM)
+    public async Task UpdateUserInfoAsync(string userId, UserIM userIM)
     {
         var user = await this._userManager.FindByIdAsync(userId);
 

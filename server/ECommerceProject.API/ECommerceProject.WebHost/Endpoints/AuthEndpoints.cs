@@ -14,11 +14,18 @@ public class AuthEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-
-        app.MapPost("api/auth/login", async ([FromBody] LoginIM loginIM, ITokenService tokenService, IAuthService authService) =>
+        
+        app.MapPost("api/auth/login", async ([FromBody] LoginIM loginIM, ITokenService tokenService, IAuthService authService, IUserService userService) =>
         {
             try
             {
+                var result = await userService.GetUserByEmailAsync(loginIM.Email);
+
+                if (!await userService.CheckPasswordAsync(result.userId, loginIM.Password))
+                {
+                    throw new Exception("Invalid password");
+                }
+                
                 var tokens = await tokenService.CreateTokensForUserAsync(loginIM.Email);
 
                 return Results.Ok(new
@@ -39,18 +46,18 @@ public class AuthEndpoints : ICarterModule
         }).WithTags("Auth");
 
         app.MapPost("api/auth/register", async ([FromBody] RegisterIM registerIM, IAuthService authService) =>
-        {   
+        {
             try
             {
                 await authService.CreateUserAsync(registerIM);
-                
+
                 return Results.Ok(new Response
                 {
                     Status = "register-successful",
                     Message = "The user has been successfully registered"
                 });
             }
-            catch(NullReferenceException)
+            catch (NullReferenceException)
             {
                 return Results.BadRequest(
                     new Response
@@ -59,7 +66,7 @@ public class AuthEndpoints : ICarterModule
                         Message = "An internal error occured duing the creation of the user"
                     });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Results.BadRequest(
                     new Response
@@ -104,7 +111,7 @@ public class AuthEndpoints : ICarterModule
                     Expiration = newTokens.AccessToken!.ValidTo,
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Results.BadRequest(new Response
                 {
@@ -112,6 +119,16 @@ public class AuthEndpoints : ICarterModule
                     Message = e.Message,
                 });
             }
+        }).WithTags("Auth");
+
+        app.MapGet("confirm-email", async () =>
+        {
+
+        }).WithTags("Auth");
+
+        app.MapPost("forgot-password", async () =>
+        {
+
         }).WithTags("Auth");
     }
 }

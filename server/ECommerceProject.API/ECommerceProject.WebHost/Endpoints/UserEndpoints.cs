@@ -2,6 +2,7 @@
 using ECommerceProject.Services.Contracts;
 using ECommerceProject.Shared.Models.User;
 using ECommerceProject.WebHost.Models;
+using ECommerceProject.WebHost.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,14 +29,14 @@ public class UserEndpoints : ICarterModule
             }
         }).WithTags("User");
         
-        app.MapPost("change-password", [Authorize] async ([FromBody] string newPassword, IUserService userService, ICurrentUser currentUser) =>
+        app.MapPost("change-password", [Authorize] async ([FromBody] ChangePasswordModel passwords, IUserService userService, ICurrentUser currentUser) =>
         {
             try
             {
-                if (!await userService.CheckPasswordAsync(currentUser.UserId, newPassword))
+                if (!await userService.CheckPasswordAsync(currentUser.UserId, passwords.OldPassword))
                     throw new Exception("Your old password is invalid");
                 
-                var identityResult = await userService.ChangePasswordAsync(currentUser.UserId, newPassword);
+                var identityResult = await userService.ChangePasswordAsync(currentUser.UserId, passwords.NewPassword);
                 if (identityResult.Succeeded)
                     return Results.Ok(new Response
                     {

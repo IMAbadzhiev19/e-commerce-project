@@ -12,4 +12,6 @@ public interface IUserService
     Task<bool> CheckPasswordAsync(string userId, string password);
 
     Task UpdateUserInfoAsync(string userId, UserIM userIM);
+
+    Task<(UserVM user, string userId)> GetUserByEmailAsync(string email);
 }
