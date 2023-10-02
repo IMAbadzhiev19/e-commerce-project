@@ -1,4 +1,4 @@
-﻿namespace ECommerceProject.Services.Contracts;
+﻿namespace ECommerceProject.Services.Contracts.User;
 
 public interface ICurrentUser
 {

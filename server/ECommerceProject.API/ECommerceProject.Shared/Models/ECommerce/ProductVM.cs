@@ -1,13 +1,10 @@
 ﻿using ECommerceProject.Data.Models.Enums;
-using System.ComponentModel.DataAnnotations;
+using Mapster;
 
-namespace ECommerceProject.Data.Models.ECommerce;
+namespace ECommerceProject.Shared.Models.ECommerce;
 
-public class Product
+public class ProductVM
 {
-    [Key]
-    public Guid Id { get; set; }
-
     public string Title { get; set; } = string.Empty;
 
     public decimal Price { get; set; }
@@ -17,8 +14,6 @@ public class Product
     public string ImageUrl { get; set; } = string.Empty;
 
     public int Quantity { get; set; }
-
-    public Categories Category { get; set; }
-
-    public virtual ICollection<Cart> Carts { get; set; } = default!;
+    
+    public string Category { get; set; } = string.Empty;
 }

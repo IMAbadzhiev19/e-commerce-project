@@ -1,6 +1,6 @@
 ﻿using Mapster;
 
-namespace ECommerceProject.Shared.Models.Auth;
+namespace ECommerceProject.Shared.Models.User.Auth;
 
 public class RegisterIM
 {

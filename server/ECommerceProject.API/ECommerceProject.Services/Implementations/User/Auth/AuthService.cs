@@ -1,11 +1,11 @@
 ﻿using ECommerceProject.Data.Data;
 using ECommerceProject.Data.Models.Auth;
-using ECommerceProject.Services.Contracts.Auth;
-using ECommerceProject.Shared.Models.Auth;
+using ECommerceProject.Services.Contracts.User.Auth;
+using ECommerceProject.Shared.Models.User.Auth;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 
-namespace ECommerceProject.Services.Implementations.Auth;
+namespace ECommerceProject.Services.Implementations.User.Auth;
 
 public class AuthService : IAuthService
 {

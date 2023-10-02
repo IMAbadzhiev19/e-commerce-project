@@ -1,14 +1,14 @@
-﻿using ECommerceProject.Services.Contracts;
+﻿using ECommerceProject.Services.Contracts.User;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace ECommerceProject.Services.Implementations;
+namespace ECommerceProject.Services.Implementations.User;
 
 public class CurrentUser : ICurrentUser
 {
     public CurrentUser(IHttpContextAccessor httpContextAccessor)
     {
-        this.UserId = httpContextAccessor?
+        UserId = httpContextAccessor?
             .HttpContext?
             .User?
             .Claims

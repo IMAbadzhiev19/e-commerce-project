@@ -1,6 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 
-namespace ECommerceProject.Shared.Models.Auth.Token;
+namespace ECommerceProject.Shared.Models.User.Auth.Token;
 
 public class Tokens
 {

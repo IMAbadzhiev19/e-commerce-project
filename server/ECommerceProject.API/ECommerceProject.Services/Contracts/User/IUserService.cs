@@ -1,7 +1,7 @@
 ﻿using ECommerceProject.Shared.Models.User;
 using Microsoft.AspNetCore.Identity;
 
-namespace ECommerceProject.Services.Contracts;
+namespace ECommerceProject.Services.Contracts.User;
 
 public interface IUserService
 {

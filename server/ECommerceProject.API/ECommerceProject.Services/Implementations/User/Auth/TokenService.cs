@@ -1,8 +1,5 @@
 ﻿using ECommerceProject.Data.Data;
 using ECommerceProject.Data.Models.Auth;
-using ECommerceProject.Services.Contracts.Auth;
-using ECommerceProject.Shared.Models.Auth.Token;
-using ECommerceProject.Shared.Models.Auth.Token.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -10,15 +7,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using ECommerceProject.Services.Contracts.User.Auth;
+using ECommerceProject.Shared.Models.User.Auth.Token;
+using ECommerceProject.Shared.Models.User.Auth.Token.Enums;
 
-namespace ECommerceProject.Services.Implementations.Auth;
+namespace ECommerceProject.Services.Implementations.User.Auth;
 
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
     private readonly UserManager<User> _userManager;
     private readonly ApplicationDbContext _context;
-    
+
     public TokenService(IConfiguration config, UserManager<User> userManager, ApplicationDbContext context)
     {
         _config = config;
@@ -29,20 +29,20 @@ public class TokenService : ITokenService
 
     public async Task<Tokens> CreateNewTokensAsync(TokensIM tokens)
     {
-        var principals = this.GetPrincipalsFromExpiredToken(tokens.AccessToken);
+        var principals = GetPrincipalsFromExpiredToken(tokens.AccessToken);
         if (principals is null)
             throw new ArgumentException("Invalid access token");
 
-        var user = await this._userManager.FindByIdAsync(principals.FindFirst(ClaimTypes.NameIdentifier).Value!);
-        var refreshToken = await this._context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokens.RefreshToken);
+        var user = await _userManager.FindByIdAsync(principals.FindFirst(ClaimTypes.NameIdentifier).Value!);
+        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokens.RefreshToken);
 
-        if (user is null || refreshToken is null || !this.ValidateRefreshToken(tokens.RefreshToken))
+        if (user is null || refreshToken is null || !ValidateRefreshToken(tokens.RefreshToken))
             throw new ArgumentException("Invalid refreshToken");
 
         await this.DeleteRefreshTokenAsync(user.Id);
-        var newRefreshToken = this.CreateToken(principals.Claims.ToList(), TokenTypes.RefreshToken);
+        var newRefreshToken = CreateToken(principals.Claims.ToList(), TokenTypes.RefreshToken);
 
-        await this.SaveRefreshTokenAsync(new RefreshToken
+        await SaveRefreshTokenAsync(new RefreshToken
         {
             Token = new JwtSecurityTokenHandler().WriteToken(newRefreshToken),
             UserId = user.Id,
@@ -50,19 +50,19 @@ public class TokenService : ITokenService
 
         return new()
         {
-            AccessToken = this.CreateToken(principals.Claims.ToList(), TokenTypes.AccessToken),
+            AccessToken = CreateToken(principals.Claims.ToList(), TokenTypes.AccessToken),
             RefreshToken = newRefreshToken,
         };
     }
 
     public async Task<Tokens> CreateTokensForUserAsync(string email)
     {
-        var user = await this._userManager.FindByEmailAsync(email);
+        var user = await _userManager.FindByEmailAsync(email);
 
         if (user is null)
             throw new ArgumentException("Invalid email");
 
-        var userRoles = await this._userManager.GetRolesAsync(user);
+        var userRoles = await _userManager.GetRolesAsync(user);
         var authClaims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -71,12 +71,12 @@ public class TokenService : ITokenService
         foreach (var userRole in userRoles)
             authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 
-        var accessToken = this.CreateToken(authClaims, TokenTypes.AccessToken);
-        var refreshToken = this.CreateToken(authClaims, TokenTypes.RefreshToken);
+        var accessToken = CreateToken(authClaims, TokenTypes.AccessToken);
+        var refreshToken = CreateToken(authClaims, TokenTypes.RefreshToken);
 
-        if (!this._context.RefreshTokens.Any(x => x.UserId == user.Id))
+        if (!_context.RefreshTokens.Any(x => x.UserId == user.Id))
         {
-            await this.SaveRefreshTokenAsync(new RefreshToken
+            await SaveRefreshTokenAsync(new RefreshToken
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(refreshToken),
                 UserId = user.Id,
@@ -88,7 +88,7 @@ public class TokenService : ITokenService
                 throw new Exception("User is already logged in");
             refreshToken = null;
         }
-        
+
         return new()
         {
             AccessToken = accessToken,
@@ -98,14 +98,14 @@ public class TokenService : ITokenService
 
     public async Task DeleteRefreshTokenAsync(string userId)
     {
-        var refreshToken = await this._context
+        var refreshToken = await _context
                                     .RefreshTokens
                                     .FirstOrDefaultAsync(x => x.UserId == userId);
         if (refreshToken is null)
             throw new ArgumentException("Invalid userId");
-        
-        this._context.Remove(refreshToken);
-        await this._context.SaveChangesAsync();
+
+        _context.Remove(refreshToken);
+        await _context.SaveChangesAsync();
     }
 
     public Task<string> GenerateEmailConfirmationAsync(string email)
@@ -120,8 +120,8 @@ public class TokenService : ITokenService
 
     public async Task SaveRefreshTokenAsync(RefreshToken refreshToken)
     {
-        await this._context.AddAsync(refreshToken);
-        await this._context.SaveChangesAsync();
+        await _context.AddAsync(refreshToken);
+        await _context.SaveChangesAsync();
     }
 
 
@@ -133,13 +133,13 @@ public class TokenService : ITokenService
 
         if (tokenType == TokenTypes.AccessToken)
         {
-            signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._config["JWT:Secret"]!));
-            _ = int.TryParse(this._config["JWT:AccessTokenValidity"], out tokenValidity);
+            signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]!));
+            _ = int.TryParse(_config["JWT:AccessTokenValidity"], out tokenValidity);
         }
         else
         {
-            signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._config["JWT:RefreshTokenSecret"]!));
-            _ = int.TryParse(this._config["JWT:RefreshTokenValidity"], out tokenValidity);
+            signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:RefreshTokenSecret"]!));
+            _ = int.TryParse(_config["JWT:RefreshTokenValidity"], out tokenValidity);
         }
 
         var token = new JwtSecurityToken(
@@ -156,7 +156,7 @@ public class TokenService : ITokenService
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._config["JWT:Secret"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Secret"]!)),
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = false,
@@ -166,7 +166,7 @@ public class TokenService : ITokenService
         SecurityToken securityToken;
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
 
-        if (securityToken is not JwtSecurityToken jwtSecurityToken 
+        if (securityToken is not JwtSecurityToken jwtSecurityToken
             || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
         {
             throw new SecurityTokenException("Invalid token");
@@ -182,7 +182,7 @@ public class TokenService : ITokenService
             ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this._config["JWT:RefreshTokenSecret"]!)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:RefreshTokenSecret"]!)),
             ValidateLifetime = false,
         };
 

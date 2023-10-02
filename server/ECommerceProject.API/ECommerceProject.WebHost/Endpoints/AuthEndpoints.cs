@@ -1,8 +1,8 @@
 ﻿using Carter;
-using ECommerceProject.Services.Contracts;
-using ECommerceProject.Services.Contracts.Auth;
-using ECommerceProject.Shared.Models.Auth;
-using ECommerceProject.Shared.Models.Auth.Token;
+using ECommerceProject.Services.Contracts.User;
+using ECommerceProject.Services.Contracts.User.Auth;
+using ECommerceProject.Shared.Models.User.Auth;
+using ECommerceProject.Shared.Models.User.Auth.Token;
 using ECommerceProject.WebHost.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

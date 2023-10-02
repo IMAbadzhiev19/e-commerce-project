@@ -1,5 +1,5 @@
 ﻿using Carter;
-using ECommerceProject.Services.Contracts;
+using ECommerceProject.Services.Contracts.User;
 using ECommerceProject.Shared.Models.User;
 using ECommerceProject.WebHost.Models;
 using ECommerceProject.WebHost.Models.User;

@@ -6,4 +6,5 @@ public enum Filters
     Model,
     Material,
     Price,
+    ShoesSize,
 }

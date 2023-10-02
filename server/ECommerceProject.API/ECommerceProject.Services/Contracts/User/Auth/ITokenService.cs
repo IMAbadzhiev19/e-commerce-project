@@ -1,7 +1,7 @@
 ﻿using ECommerceProject.Data.Models.Auth;
-using ECommerceProject.Shared.Models.Auth.Token;
+using ECommerceProject.Shared.Models.User.Auth.Token;
 
-namespace ECommerceProject.Services.Contracts.Auth;
+namespace ECommerceProject.Services.Contracts.User.Auth;
 
 public interface ITokenService
 {
