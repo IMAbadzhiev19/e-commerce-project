@@ -12,7 +12,7 @@ public class ProductEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("product/request-product", async ([FromBody] ProductRM productRM, IProductService productService, ICurrentUser currentUser) =>
+        app.MapGet("product/request-product", async ([FromForm] ProductRM productRM, IProductService productService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -38,12 +38,13 @@ public class ProductEndpoints : ICarterModule
         {
             try
             {
+                var filters = new List<Filters>();
+                
                 var products = await productService
-                .GetProductsByCategoryAsync(
-                    Enum.Parse<Categories>(categoryIM.Name,
-                    new List<Filters>()
-                    //categoryIM.Filters.Select(x => Enum.Parse<Filters>(x)).ToList()
-                );
+                    .GetProductsByCategoryAsync(
+                        Enum.Parse<Categories>(categoryIM.Name),
+                        categoryIM.Filters.Select(x => Enum.Parse<Filters>(x)).ToList()
+                    );
 
                 return Results.Ok(products);
             }
@@ -52,6 +53,28 @@ public class ProductEndpoints : ICarterModule
                 return Results.BadRequest(new Response
                 {
                     Status = "failed",
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Product");
+
+        app.MapPost("products/upload-image", async ([FromForm] IFormFile image, IProductService productService) =>
+        {
+            try
+            {
+                await productService.UploadImageAsync(image);
+
+                return Results.Ok(new Response
+                {
+                    Status = "upload-image-success",
+                    Message = "Successfully uploaded image",
+                });
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "upload-image-failed",
                     Message = e.Message,
                 });
             }

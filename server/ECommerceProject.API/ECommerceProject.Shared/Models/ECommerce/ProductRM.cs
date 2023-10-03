@@ -1,4 +1,6 @@
-﻿namespace ECommerceProject.Shared.Models.ECommerce;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace ECommerceProject.Shared.Models.ECommerce;
 
 public class ProductRM
 {
@@ -7,8 +9,6 @@ public class ProductRM
     public decimal Price { get; set; }
 
     public string Description { get; set; } = string.Empty;
-
-    public string ImageUrl { get; set; } = string.Empty;
 
     public int Quantity { get; set; }
 

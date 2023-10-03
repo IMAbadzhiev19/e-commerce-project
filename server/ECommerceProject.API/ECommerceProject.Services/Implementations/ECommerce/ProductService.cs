@@ -4,6 +4,7 @@ using ECommerceProject.Data.Models.Enums;
 using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Shared.Models.ECommerce;
 using Mapster;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
@@ -31,6 +32,11 @@ public class ProductService : IProductService
     }
 
     public Task MakeProductRequestAsync(string userId, ProductRM productRM, string? comments)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UploadImageAsync(IFormFile image)
     {
         throw new NotImplementedException();
     }

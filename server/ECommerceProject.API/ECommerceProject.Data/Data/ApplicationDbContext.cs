@@ -28,6 +28,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfiguration(new UserEntityConfiguration());
+        builder.ApplyConfiguration(new ProductEntityConfiguration());
+        builder.ApplyConfiguration(new CartEntityConfiguration());
+        
         base.OnModelCreating(builder);
     }
 }

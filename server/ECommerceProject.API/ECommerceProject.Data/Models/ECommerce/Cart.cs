@@ -6,7 +6,6 @@ namespace ECommerceProject.Data.Models.ECommerce;
 
 public class Cart
 {
-    [Key]
     public Guid Id { get; set; }
 
     public string? UserId { get; set; }
