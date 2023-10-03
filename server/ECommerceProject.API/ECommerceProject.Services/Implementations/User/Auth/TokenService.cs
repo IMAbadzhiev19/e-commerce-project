@@ -16,10 +16,10 @@ namespace ECommerceProject.Services.Implementations.User.Auth;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _context;
 
-    public TokenService(IConfiguration config, UserManager<User> userManager, ApplicationDbContext context)
+    public TokenService(IConfiguration config, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
     {
         _config = config;
         _userManager = userManager;

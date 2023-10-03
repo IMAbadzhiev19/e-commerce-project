@@ -1,4 +1,5 @@
 ﻿using Carter;
+using ECommerceProject.Data.Models.Enums;
 using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Services.Contracts.User;
 using ECommerceProject.Shared.Models.ECommerce;
@@ -33,9 +34,27 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapGet("products/category{name}", async ([FromRoute] string categoryName, IProductService productService) =>
+        app.MapGet("products/category{name}", async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
         {
+            try
+            {
+                var products = await productService
+                .GetProductsByCategoryAsync(
+                    Enum.Parse<Categories>(categoryIM.Name,
+                    new List<Filters>()
+                    //categoryIM.Filters.Select(x => Enum.Parse<Filters>(x)).ToList()
+                );
 
+                return Results.Ok(products);
+            }
+            catch(Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "failed",
+                    Message = e.Message,
+                });
+            }
         }).WithTags("Product");
     }
 }

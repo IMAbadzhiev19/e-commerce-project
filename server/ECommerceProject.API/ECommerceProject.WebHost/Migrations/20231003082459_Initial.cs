@@ -45,6 +45,7 @@ namespace ECommerceProject.WebHost.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -80,6 +81,10 @@ namespace ECommerceProject.WebHost.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_Number = table.Column<int>(type: "int", nullable: true),
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_Region = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -268,7 +273,9 @@ namespace ECommerceProject.WebHost.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CartId",
                 table: "AspNetUsers",
-                column: "CartId");
+                column: "CartId",
+                unique: true,
+                filter: "[CartId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

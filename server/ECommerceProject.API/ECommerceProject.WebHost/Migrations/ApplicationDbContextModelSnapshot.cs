@@ -37,26 +37,7 @@ namespace ECommerceProject.WebHost.Migrations
                     b.ToTable("CartProduct");
                 });
 
-            modelBuilder.Entity("ECommerceProject.Data.Models.Auth.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
-                });
-
-            modelBuilder.Entity("ECommerceProject.Data.Models.Auth.User", b =>
+            modelBuilder.Entity("ECommerceProject.Data.Models.Auth.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -121,7 +102,9 @@ namespace ECommerceProject.WebHost.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartId");
+                    b.HasIndex("CartId")
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -132,6 +115,25 @@ namespace ECommerceProject.WebHost.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.Auth.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Cart", b =>
@@ -164,6 +166,9 @@ namespace ECommerceProject.WebHost.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -322,22 +327,53 @@ namespace ECommerceProject.WebHost.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ECommerceProject.Data.Models.Auth.ApplicationUser", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Cart", "Cart")
+                        .WithOne()
+                        .HasForeignKey("ECommerceProject.Data.Models.Auth.ApplicationUser", "CartId");
+
+                    b.OwnsOne("ECommerceProject.Data.Models.Auth.Address", "Address", b1 =>
+                        {
+                            b1.Property<string>("ApplicationUserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int?>("Number")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Region")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ApplicationUserId");
+
+                            b1.ToTable("AspNetUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ApplicationUserId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("ECommerceProject.Data.Models.Auth.RefreshToken", b =>
                 {
-                    b.HasOne("ECommerceProject.Data.Models.Auth.User", "User")
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ECommerceProject.Data.Models.Auth.User", b =>
-                {
-                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Cart", "Cart")
-                        .WithMany()
-                        .HasForeignKey("CartId");
-
-                    b.Navigation("Cart");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -351,7 +387,7 @@ namespace ECommerceProject.WebHost.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ECommerceProject.Data.Models.Auth.User", null)
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -360,7 +396,7 @@ namespace ECommerceProject.WebHost.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ECommerceProject.Data.Models.Auth.User", null)
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -375,7 +411,7 @@ namespace ECommerceProject.WebHost.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECommerceProject.Data.Models.Auth.User", null)
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -384,7 +420,7 @@ namespace ECommerceProject.WebHost.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ECommerceProject.Data.Models.Auth.User", null)
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

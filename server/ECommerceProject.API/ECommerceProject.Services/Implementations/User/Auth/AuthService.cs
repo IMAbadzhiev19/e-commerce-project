@@ -10,9 +10,9 @@ namespace ECommerceProject.Services.Implementations.User.Auth;
 public class AuthService : IAuthService
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AuthService(ApplicationDbContext context, UserManager<User> userManager)
+    public AuthService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _userManager = userManager;
@@ -21,7 +21,7 @@ public class AuthService : IAuthService
 
     public async Task CreateUserAsync(RegisterIM registerIM)
     {
-        var user = registerIM.Adapt<User>();
+        var user = registerIM.Adapt<ApplicationUser>();
         if (user is null)
             throw new NullReferenceException();
 

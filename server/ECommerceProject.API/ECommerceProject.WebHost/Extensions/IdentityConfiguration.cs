@@ -9,7 +9,7 @@ public static class IdentityConfiguration
     public static void AddIdentity(this IServiceCollection services)
     {
         services
-            .AddIdentity<User, IdentityRole>()
+            .AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 

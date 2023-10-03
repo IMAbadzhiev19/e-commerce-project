@@ -8,9 +8,9 @@ namespace ECommerceProject.Services.Implementations.User;
 
 public class UserService : IUserService
 {
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public UserService(UserManager<User> userManager)
+    public UserService(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }

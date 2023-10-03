@@ -1,11 +1,12 @@
-﻿using ECommerceProject.Data.Models.Auth;
+﻿using ECommerceProject.Data.Configurations;
+using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceProject.Data.Data;
 
-public class ApplicationDbContext : IdentityDbContext<User>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
@@ -23,4 +24,10 @@ public class ApplicationDbContext : IdentityDbContext<User>
     //public DbSet<Wishlist> Wishlists { get; set; } = default!;
 
     public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfiguration(new UserEntityConfiguration());
+        base.OnModelCreating(builder);
+    }
 }

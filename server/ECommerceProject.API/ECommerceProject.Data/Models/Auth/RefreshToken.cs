@@ -11,5 +11,5 @@ public class RefreshToken
     public string? UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]
-    public User? User { get; set; }
+    public ApplicationUser? User { get; set; }
 }
