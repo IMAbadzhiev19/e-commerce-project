@@ -18,7 +18,7 @@ public class ProductService : IProductService
         _context = context;
     }
 
-    public async Task<List<ProductVM>> GetProductsByCategoryAsync(Categories category, List<Filters> filters)
+    public async Task<List<ProductVM>> GetProductsByCategoryAsync(Categories category)
     {
         var products = await this._context.Products
         .AsNoTracking()

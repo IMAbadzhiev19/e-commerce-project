@@ -37,13 +37,10 @@ public class ProductEndpoints : ICarterModule
         app.MapGet("products/category{name}", async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
         {
             try
-            {
-                var filters = new List<Filters>();
-                
+            {   
                 var products = await productService
                     .GetProductsByCategoryAsync(
-                        Enum.Parse<Categories>(categoryIM.Name),
-                        categoryIM.Filters.Select(x => Enum.Parse<Filters>(x)).ToList()
+                        Enum.Parse<Categories>(categoryIM.Name)
                     );
 
                 return Results.Ok(products);
