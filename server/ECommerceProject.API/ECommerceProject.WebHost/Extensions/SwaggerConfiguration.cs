@@ -23,7 +23,7 @@ public static class SwaggerConfiguration
             {
                 Version = "v1",
                 Title = "JobHunter API",
-                Description = "An API for creating modern resumes and automatically applying them to jobs.",
+                Description = "An ECommerce API",
             });
             
             // var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

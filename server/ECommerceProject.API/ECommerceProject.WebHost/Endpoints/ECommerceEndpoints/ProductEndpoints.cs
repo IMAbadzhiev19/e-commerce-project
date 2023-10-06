@@ -12,7 +12,7 @@ public class ProductEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("product/request-product", async ([FromForm] ProductRM productRM, IProductService productService, ICurrentUser currentUser) =>
+        app.MapGet("product/request-product", async ([FromBody] ProductRM productRM, IProductService productService, ICurrentUser currentUser) =>
         {
             try
             {
