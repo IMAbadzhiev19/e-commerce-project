@@ -17,15 +17,8 @@ public class CartService : ICartService
         _userManager = userManager;
     }
 
-    public async Task AddProductToCart(string userId, Guid productId, Guid cartId)
+    public async Task AddProductToCart(Guid productId, Guid cartId)
     {
-        var user = await this._userManager.FindByIdAsync(userId);
-
-        if (user is null)
-        {
-            throw new ArgumentException("Invalid userId");
-        }
-
         var product = await this._context.Products
             .FindAsync(productId);
 
@@ -68,20 +61,8 @@ public class CartService : ICartService
         return cart.Id;
     }
 
-    public Task ProceedToCheckout(string userId)
+    public async Task RemoveProductFromCart(Guid productId, Guid cartId)
     {
-        throw new NotImplementedException();
-    }
-
-    public async Task RemoveProductFromCart(string userId, Guid productId, Guid cartId)
-    {
-        var user = await this._userManager.FindByIdAsync(userId);
-
-        if (user is null)
-        {
-            throw new ArgumentException("Invalid userId");
-        }
-
         var product = await this._context.Products
             .FindAsync(productId);
 

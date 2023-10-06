@@ -5,6 +5,7 @@ using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Services.Contracts.User;
 using ECommerceProject.Shared.Models.ECommerce;
 using ECommerceProject.WebHost.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceProject.WebHost.Endpoints.ECommerceEndpoints;
@@ -13,7 +14,7 @@ public class ProductEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("product/request-product", async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
+        app.MapGet("product/request-product", [Authorize] async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -35,7 +36,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapGet("products/category{name}", async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
+        app.MapGet("products/category{name}", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
         {
             try
             {   
@@ -56,7 +57,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPost("products/upload-image{id}", async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
+        app.MapPost("products/upload-image{id}", [Authorize] async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
         {
             try
             {
@@ -78,7 +79,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPut("products/update{id}", async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
+        app.MapPut("products/update{id}", [Authorize] async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
         {
             try
             {
