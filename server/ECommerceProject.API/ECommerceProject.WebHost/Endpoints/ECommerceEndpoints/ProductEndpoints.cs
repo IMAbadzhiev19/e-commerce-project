@@ -1,5 +1,6 @@
 ﻿using Carter;
 using ECommerceProject.Data.Models.Enums;
+using ECommerceProject.Services.Contracts;
 using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Services.Contracts.User;
 using ECommerceProject.Shared.Models.ECommerce;
@@ -12,11 +13,11 @@ public class ProductEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("product/request-product", async ([FromBody] ProductRM productRM, IProductService productService, ICurrentUser currentUser) =>
+        app.MapGet("product/request-product", async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
         {
             try
             {
-                await productService.MakeProductRequestAsync(currentUser.UserId, productRM, productRM.Comments);
+                await emailService.SendProductRequest(productRM);
 
                 return Results.Ok(new Response
                 {
@@ -55,11 +56,11 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPost("products/upload-image", async ([FromForm] IFormFile image, IProductService productService) =>
+        app.MapPost("products/upload-image{id}", async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
         {
             try
             {
-                await productService.UploadImageAsync(image);
+                await fileService.UploadImageAsync(image, id);
 
                 return Results.Ok(new Response
                 {
@@ -72,6 +73,27 @@ public class ProductEndpoints : ICarterModule
                 return Results.BadRequest(new Response
                 {
                     Status = "upload-image-failed",
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Product");
+
+        app.MapPut("products/update{id}", async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
+        {
+            try
+            {
+                await productService.UpdateProductAsync(id, productUM);
+                return Results.Ok(new Response
+                {
+                    Status = "update-product-success",
+                    Message = $"Successfully updated the product with id {id}",
+                });
+            }
+            catch(Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "update-product-failed",
                     Message = e.Message,
                 });
             }

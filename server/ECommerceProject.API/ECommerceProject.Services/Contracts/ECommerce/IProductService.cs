@@ -9,7 +9,7 @@ public interface IProductService
 {
     Task<List<ProductVM>> GetProductsByCategoryAsync(Categories category);
 
-    Task MakeProductRequestAsync(string userId, ProductRM productRM, string? comments);
+    //Task MakeProductRequestAsync(string userId, ProductRM productRM, string? comments);
 
-    Task UploadImageAsync(IFormFile image);
+    Task UpdateProductAsync(Guid productId, ProductUM newProduct);
 }
