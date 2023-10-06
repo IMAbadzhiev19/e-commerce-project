@@ -2,10 +2,10 @@
 
 namespace ECommerceProject.Data.Models.ECommerce;
 
-public class Review
+public class Comment
 {
-    public Guid Id { get; set; }
-    
+    public int Id { get; set; }
+
     public string? UserId { get; set; }
 
     public ApplicationUser? User { get; set; }
@@ -14,5 +14,5 @@ public class Review
 
     public Product? Product { get; set; }
 
-    public int? Grade { get; set; }
+    public DateTime Date { get; set; }
 }
