@@ -1,4 +1,5 @@
 ﻿using Carter;
+using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Services.Contracts.User;
 using ECommerceProject.Services.Contracts.User.Auth;
 using ECommerceProject.Shared.Models.User.Auth;
@@ -121,14 +122,36 @@ public class AuthEndpoints : ICarterModule
             }
         }).WithTags("Auth");
 
-        app.MapGet("confirm-email", async () =>
+        app.MapGet("api/auth/confirm-email", async () =>
         {
 
         }).WithTags("Auth");
 
-        app.MapPost("forgot-password", async () =>
+        app.MapPost("api/auth/forgot-password", async () =>
         {
 
+        }).WithTags("Auth");
+
+        app.MapGet("api/auth/make-admin{id}", [Authorize(Roles = UserRoles.Superuser)] async ([FromRoute] string id, IAuthService authService) =>
+        {
+            try
+            {
+                await authService.MakeAdminAsync(id);
+
+                return Results.Ok(new Response
+                {
+                    Status = "make-admin-success",
+                    Message = $"Successfully made user: \'{id}\' an admin",
+                });
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "make-admin-failed",
+                    Message = e.Message,
+                });
+            }
         }).WithTags("Auth");
     }
 }

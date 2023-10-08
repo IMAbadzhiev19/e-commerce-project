@@ -12,7 +12,7 @@ public class UserEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("current-user", [Authorize] async (IUserService userService, ICurrentUser currentUser) =>
+        app.MapGet("api/user/current-user", [Authorize] async (IUserService userService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -29,7 +29,7 @@ public class UserEndpoints : ICarterModule
             }
         }).WithTags("User");
         
-        app.MapPost("change-password", [Authorize] async ([FromBody] ChangePasswordModel passwords, IUserService userService, ICurrentUser currentUser) =>
+        app.MapPost("api/user/change-password", [Authorize] async ([FromBody] ChangePasswordModel passwords, IUserService userService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -56,7 +56,7 @@ public class UserEndpoints : ICarterModule
             }
         }).WithTags("User");
         
-        app.MapPut("update-user-info", [Authorize] async ([FromBody] UserIM userIM, IUserService userService, ICurrentUser currentUser) =>
+        app.MapPut("api/user/update-user-info", [Authorize] async ([FromBody] UserIM userIM, IUserService userService, ICurrentUser currentUser) =>
         {
             try
             {

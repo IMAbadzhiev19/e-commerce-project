@@ -1,4 +1,5 @@
 ﻿using Carter;
+using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.Enums;
 using ECommerceProject.Services.Contracts;
 using ECommerceProject.Services.Contracts.ECommerce;
@@ -14,7 +15,7 @@ public class ProductEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("product/request-product", [Authorize] async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
+        app.MapGet("api/product/request-product", [Authorize] async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -36,7 +37,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapGet("products/category{name}", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
+        app.MapGet("api/product/category{name}", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
         {
             try
             {   
@@ -57,7 +58,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPost("products/upload-image{id}", [Authorize] async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
+        app.MapPost("api/product/upload-image{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
         {
             try
             {
@@ -79,7 +80,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPut("products/update{id}", [Authorize] async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
+        app.MapPut("api/product/update{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
         {
             try
             {

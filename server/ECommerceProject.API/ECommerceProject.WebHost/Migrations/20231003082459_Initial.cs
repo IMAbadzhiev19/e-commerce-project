@@ -1,4 +1,7 @@
 ﻿using System;
+using ECommerceProject.Data.Models.Auth;
+using ECommerceProject.Data.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

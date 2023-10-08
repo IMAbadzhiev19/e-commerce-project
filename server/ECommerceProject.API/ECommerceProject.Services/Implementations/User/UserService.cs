@@ -1,4 +1,5 @@
 ﻿using ECommerceProject.Data.Models.Auth;
+using ECommerceProject.Data.Models.Enums;
 using ECommerceProject.Services.Contracts.User;
 using ECommerceProject.Shared.Models.User;
 using Mapster;

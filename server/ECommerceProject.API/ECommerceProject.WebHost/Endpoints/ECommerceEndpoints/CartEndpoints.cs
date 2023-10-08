@@ -11,7 +11,7 @@ public class CartEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("cart/create{userId}", [Authorize] async ([FromRoute] string userId, ICurrentUser currentUser, ICartService cartService) =>
+        app.MapPost("api/cart/create{userId}", [Authorize] async ([FromRoute] string userId, ICurrentUser currentUser, ICartService cartService) =>
         {
             try
             {
@@ -32,7 +32,7 @@ public class CartEndpoints : ICarterModule
             }
         }).WithTags("Cart");
 
-        app.MapPost("cart/assign-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
+        app.MapPost("api/cart/assign-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
         {
             try
             {
@@ -53,7 +53,7 @@ public class CartEndpoints : ICarterModule
             }
         }).WithTags("Cart");
 
-        app.MapDelete("cart/remove-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
+        app.MapDelete("api/cart/remove-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
         {
             try
             {
