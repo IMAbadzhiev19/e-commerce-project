@@ -4,7 +4,7 @@ namespace ECommerceProject.Data.Models.ECommerce;
 
 public class Comment
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string? UserId { get; set; }
 

@@ -25,6 +25,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<RefreshToken> RefreshTokens { get; set; } = default!;
 
+    public DbSet<Comment> Comments { get; set; } = default!;
+
+    public DbSet<Order> Orders { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfiguration(new UserEntityConfiguration());

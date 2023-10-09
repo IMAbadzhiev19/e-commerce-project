@@ -19,6 +19,11 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICartService, CartService>();
+        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IReviewService,ReviewService>();
+        services.AddScoped<IWishlistService, WishlistService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFileService, FileService>();
