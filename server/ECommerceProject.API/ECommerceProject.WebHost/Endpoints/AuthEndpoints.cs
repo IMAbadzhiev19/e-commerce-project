@@ -132,7 +132,7 @@ public class AuthEndpoints : ICarterModule
 
         }).WithTags("Auth");
 
-        app.MapGet("api/auth/make-admin{id}", [Authorize(Roles = UserRoles.Superuser)] async ([FromRoute] string id, IAuthService authService) =>
+        app.MapGet("api/auth/make-admin{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] string id, IAuthService authService) =>
         {
             try
             {
