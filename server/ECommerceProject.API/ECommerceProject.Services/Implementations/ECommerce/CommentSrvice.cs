@@ -54,18 +54,11 @@ namespace ECommerceProject.Services.Implementations.ECommerce
 
         public async Task RemoveComment(string userId, Guid commentId)
         {
-            var comment = await _context.Comments
-                                         .Where(c=>c.Id == commentId)
-                                         .FirstOrDefaultAsync();
+            var comment = await _context.Comments.FirstOrDefaultAsync(x => x.UserId == userId && x .Id == commentId);
 
             if(comment == null)
             {
-                throw new ArgumentException("This comment is not yours or doesn't exist");
-            }
-
-            if(comment.UserId == userId)
-            {
-                throw new ArgumentException("This comment is not yours or doesn't exist");
+                throw new ArgumentException($"This comment is not yours or doesn't exist");
             }
 
             this._context.Remove(comment);

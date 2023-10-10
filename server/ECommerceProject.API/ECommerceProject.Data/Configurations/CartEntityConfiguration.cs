@@ -17,5 +17,9 @@ public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
         builder
             .HasMany(x => x.Products)
             .WithMany(x => x.Carts);
+
+        builder
+            .HasOne(x => x.User)
+            .WithMany();
     }
 }
