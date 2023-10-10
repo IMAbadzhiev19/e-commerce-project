@@ -12,7 +12,7 @@ namespace ECommerceProject.Services.Implementations;
 public class FileService : IFileService
 {
     private readonly IConfiguration _config;
-    private readonly BlobServiceClient _blobServiceClient;
+    private readonly BlobServiceClient _blobServiceClient = null!;
     private readonly ApplicationDbContext _context;
 
     public FileService(ApplicationDbContext context, IConfiguration config)

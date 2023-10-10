@@ -2,4 +2,7 @@
 
 public enum Status
 { 
+    Packing,
+    Travelling,
+    Delivered,
 }

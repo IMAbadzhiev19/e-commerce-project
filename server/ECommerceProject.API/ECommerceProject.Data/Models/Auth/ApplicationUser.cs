@@ -12,8 +12,4 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; } = string.Empty;
 
     public Address Address { get; set; } = default!;
-
-    public Guid? CartId { get; set; }
-    
-    public virtual Cart? Cart { get; set; }
 }

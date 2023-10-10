@@ -1,4 +1,7 @@
 ﻿namespace ECommerceProject.Data.Models.Enums;
 
-public enum Type
-{ }
+public enum PaymentType
+{
+    Cash,
+    Card,
+}

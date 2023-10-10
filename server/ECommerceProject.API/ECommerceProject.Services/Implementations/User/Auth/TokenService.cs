@@ -33,7 +33,7 @@ public class TokenService : ITokenService
         if (principals is null)
             throw new ArgumentException("Invalid access token");
 
-        var user = await _userManager.FindByIdAsync(principals.FindFirst(ClaimTypes.NameIdentifier).Value!);
+        var user = await _userManager.FindByIdAsync(principals.FindFirst(ClaimTypes.NameIdentifier)?.Value!);
         var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Token == tokens.RefreshToken);
 
         if (user is null || refreshToken is null || !ValidateRefreshToken(tokens.RefreshToken))

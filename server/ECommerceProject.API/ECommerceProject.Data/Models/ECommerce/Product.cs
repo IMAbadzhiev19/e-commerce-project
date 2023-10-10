@@ -16,8 +16,6 @@ public class Product
 
     public int? Quantity { get; set; }
 
-    public List<(float size, int quantity)>? AvailableShoeSizes { get; set; } = default!;
-
     public Categories Category { get; set; }
 
     public virtual ICollection<Cart> Carts { get; set; } = default!;

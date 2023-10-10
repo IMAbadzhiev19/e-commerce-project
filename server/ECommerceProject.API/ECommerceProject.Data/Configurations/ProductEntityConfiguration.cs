@@ -1,6 +1,4 @@
-﻿using ECommerceProject.Data.Models;
-using ECommerceProject.Data.Models.Auth;
-using ECommerceProject.Data.Models.ECommerce;
+﻿using ECommerceProject.Data.Models.ECommerce;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,6 +24,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 
         builder
             .Property(x => x.Price)
+            .HasPrecision(18, 3)
             .IsRequired();
 
         builder

@@ -1,4 +1,5 @@
 ﻿using ECommerceProject.Data.Models.Auth;
+using ECommerceProject.Data.Models.Enums;
 
 namespace ECommerceProject.Data.Models.ECommerce;
 
@@ -16,5 +17,5 @@ public class Payment
 
     public decimal Price { get; set; }
 
-    public Type Type { get; set; } = default!;
+    public PaymentType Type { get; set; } = default!;
 }

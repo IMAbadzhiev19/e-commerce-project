@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ECommerceProject.Data.Models.ECommerce;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ECommerceProject.Data.Models.ECommerce;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerceProject.Data.Configurations;

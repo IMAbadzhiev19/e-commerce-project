@@ -54,8 +54,6 @@ public class ProductService : IProductService
             product.ImageUrl = newProduct.ImageUrl;
         if (newProduct.Quantity != null)
             product.Quantity = newProduct.Quantity;
-        if (newProduct.AvailableShoeSizes != null)
-            product.AvailableShoeSizes = newProduct.AvailableShoeSizes;
 
         await this._context.SaveChangesAsync();
     }

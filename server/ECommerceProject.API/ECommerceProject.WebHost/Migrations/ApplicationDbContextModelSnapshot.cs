@@ -45,9 +45,6 @@ namespace ECommerceProject.WebHost.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CartId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -61,11 +58,13 @@ namespace ECommerceProject.WebHost.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -101,10 +100,6 @@ namespace ECommerceProject.WebHost.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartId")
-                        .IsUnique()
-                        .HasFilter("[CartId] IS NOT NULL");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -142,9 +137,105 @@ namespace ECommerceProject.WebHost.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique()
+                        .HasFilter("[ProductId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId")
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Product", b =>
@@ -157,26 +248,70 @@ namespace ECommerceProject.WebHost.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 3)
+                        .HasColumnType("decimal(18,3)");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Wishlist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("Wishlists");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -312,6 +447,21 @@ namespace ECommerceProject.WebHost.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProductWishlist", b =>
+                {
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WishlistId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductsId", "WishlistId");
+
+                    b.HasIndex("WishlistId");
+
+                    b.ToTable("ProductWishlist");
+                });
+
             modelBuilder.Entity("CartProduct", b =>
                 {
                     b.HasOne("ECommerceProject.Data.Models.ECommerce.Cart", null)
@@ -329,10 +479,6 @@ namespace ECommerceProject.WebHost.Migrations
 
             modelBuilder.Entity("ECommerceProject.Data.Models.Auth.ApplicationUser", b =>
                 {
-                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Cart", "Cart")
-                        .WithOne()
-                        .HasForeignKey("ECommerceProject.Data.Models.Auth.ApplicationUser", "CartId");
-
                     b.OwnsOne("ECommerceProject.Data.Models.Auth.Address", "Address", b1 =>
                         {
                             b1.Property<string>("ApplicationUserId")
@@ -363,8 +509,6 @@ namespace ECommerceProject.WebHost.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
-
-                    b.Navigation("Cart");
                 });
 
             modelBuilder.Entity("ECommerceProject.Data.Models.Auth.RefreshToken", b =>
@@ -372,6 +516,84 @@ namespace ECommerceProject.WebHost.Migrations
                     b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Cart", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Comment", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Product", "Product")
+                        .WithOne()
+                        .HasForeignKey("ECommerceProject.Data.Models.ECommerce.Comment", "ProductId");
+
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Order", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Cart", "Cart")
+                        .WithOne()
+                        .HasForeignKey("ECommerceProject.Data.Models.ECommerce.Order", "CartId");
+
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Payment", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Order", "Order")
+                        .WithOne()
+                        .HasForeignKey("ECommerceProject.Data.Models.ECommerce.Payment", "OrderId");
+
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Review", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerceProject.Data.Models.ECommerce.Wishlist", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("ECommerceProject.Data.Models.ECommerce.Wishlist", "UserId");
 
                     b.Navigation("User");
                 });
@@ -423,6 +645,21 @@ namespace ECommerceProject.WebHost.Migrations
                     b.HasOne("ECommerceProject.Data.Models.Auth.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductWishlist", b =>
+                {
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECommerceProject.Data.Models.ECommerce.Wishlist", null)
+                        .WithMany()
+                        .HasForeignKey("WishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

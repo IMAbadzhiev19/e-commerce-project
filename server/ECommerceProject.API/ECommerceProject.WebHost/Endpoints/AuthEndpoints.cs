@@ -122,15 +122,15 @@ public class AuthEndpoints : ICarterModule
             }
         }).WithTags("Auth");
 
-        app.MapGet("api/auth/confirm-email", async () =>
-        {
+        //app.MapGet("api/auth/confirm-email", async () =>
+        //{
 
-        }).WithTags("Auth");
+        //}).WithTags("Auth");
 
-        app.MapPost("api/auth/forgot-password", async () =>
-        {
+        //app.MapPost("api/auth/forgot-password", async () =>
+        //{
 
-        }).WithTags("Auth");
+        //}).WithTags("Auth");
 
         app.MapGet("api/auth/make-admin{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] string id, IAuthService authService) =>
         {

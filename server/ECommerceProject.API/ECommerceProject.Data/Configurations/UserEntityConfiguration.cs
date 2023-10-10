@@ -1,6 +1,4 @@
-﻿using ECommerceProject.Data.Models;
-using ECommerceProject.Data.Models.Auth;
-using ECommerceProject.Data.Models.ECommerce;
+﻿using ECommerceProject.Data.Models.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,10 +11,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
         //Setups primary and foreign keys
         builder
             .HasKey(x => x.Id);
-
-        builder
-            .HasOne(x => x.Cart)
-            .WithOne();
 
         //Setups contstraints
         builder
@@ -31,10 +25,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder
             .Property(x => x.LastName)
             .HasMaxLength(70)
-            .IsRequired();
-
-        builder
-            .Property(x => x.Address)
             .IsRequired();
 
         //Setups value objects
