@@ -1,0 +1,13 @@
+export * from './auth.service';
+import { AuthService } from './auth.service';
+export * from './cart.service';
+import { CartService } from './cart.service';
+export * from './comment.service';
+import { CommentService } from './comment.service';
+export * from './eCommerceProjectWebHost.service';
+import { ECommerceProjectWebHostService } from './eCommerceProjectWebHost.service';
+export * from './product.service';
+import { ProductService } from './product.service';
+export * from './user.service';
+import { UserService } from './user.service';
+export const APIS = [AuthService, CartService, CommentService, ECommerceProjectWebHostService, ProductService, UserService];

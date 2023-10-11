@@ -6,17 +6,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
+/// <summary>
+/// The class containing the implementations of the ICartService interface
+/// </summary>
 public class CartService : ICartService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
 
+    /// <summary>
+    /// The constructor used for injecting services
+    /// </summary>
+    /// <param name="context">DBContext</param>
+    /// <param name="userManager">UserManager</param>
     public CartService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _userManager = userManager;
     }
 
+    /// <inheritdoc/>
     public async Task AddProductToCart(Guid productId, Guid cartId)
     {
         var product = await this._context.Products
@@ -39,6 +48,7 @@ public class CartService : ICartService
         await this._context.SaveChangesAsync();
     }
 
+    /// <inheritdoc/>
     public async Task<Guid> CreateCart(string userId)
     {
         var user = await this._userManager.FindByIdAsync(userId);
@@ -61,6 +71,7 @@ public class CartService : ICartService
         return cart.Id;
     }
 
+    /// <inheritdoc/>
     public async Task RemoveProductFromCart(Guid productId, Guid cartId)
     {
         var product = await this._context.Products

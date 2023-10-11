@@ -4,8 +4,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceProject.WebHost.Extensions;
 
+/// <summary>
+/// Identity configuration
+/// </summary>
 public static class IdentityConfiguration
 {
+    /// <summary>
+    /// Extension method that adds the identity configuration
+    /// </summary>
+    /// <param name="services">The Service Collector</param>
     public static void AddIdentity(this IServiceCollection services)
     {
         services

@@ -8,8 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceProject.WebHost.Endpoints;
 
+/// <summary>
+/// User Endpoints
+/// </summary>
 public class UserEndpoints : ICarterModule
 {
+    /// <summary>
+    /// Extension method that adds the user endpoints
+    /// </summary>
+    /// <param name="app"></param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("api/user/current-user", [Authorize] async (IUserService userService, ICurrentUser currentUser) =>

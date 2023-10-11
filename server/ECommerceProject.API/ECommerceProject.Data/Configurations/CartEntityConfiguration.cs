@@ -4,8 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerceProject.Data.Configurations;
 
+/// <summary>
+/// Cart entity configuration
+/// </summary>
 public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
 {
+    /// <summary>
+    /// Configure Cart entity
+    /// </summary>
+    /// <param name="builder"></param>
     public void Configure(EntityTypeBuilder<Cart> builder)
     {
         //Setup primary and foreign keys

@@ -10,8 +10,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ECommerceProject.Services;
 
+/// <summary>
+/// Static classed used for Dependency Injection
+/// </summary>
 public static class DependencyInjection
 {
+    /// <summary>
+    /// An extension method used for injecting services
+    /// </summary>
+    /// <param name="services">The service collector</param>
     public static void AddServices(this IServiceCollection services)
     {
         services.AddScoped<IAuthService, AuthService>();

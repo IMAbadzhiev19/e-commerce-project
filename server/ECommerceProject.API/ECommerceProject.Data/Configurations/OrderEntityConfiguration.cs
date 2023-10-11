@@ -4,8 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerceProject.Data.Configurations;
 
+/// <summary>
+/// Order entity configuration
+/// </summary>
 public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
 {
+    /// <summary>
+    /// Configure Order entity
+    /// </summary>
+    /// <param name="builder"></param>
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder

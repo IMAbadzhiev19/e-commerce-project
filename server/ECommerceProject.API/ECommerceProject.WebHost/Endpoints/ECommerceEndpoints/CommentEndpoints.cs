@@ -9,8 +9,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceProject.WebHost.Endpoints.ECommerceEndpoints;
 
+/// <summary>
+/// Comment Endpoints
+/// </summary>
 public class CommentEndpoints : ICarterModule
 {
+    /// <summary>
+    /// Extension method that adds the comment endpoints
+    /// </summary>
+    /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("api/comment/create", [Authorize] async ([FromBody] CommentIM commentIM, ICommentService commentService, ICurrentUser currentUser) =>
@@ -59,7 +66,7 @@ public class CommentEndpoints : ICarterModule
                 var comments = await commentService.GetComments(productId);
                 return Results.Ok(comments);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Results.BadRequest(new Response
                 {
@@ -67,6 +74,6 @@ public class CommentEndpoints : ICarterModule
                     Message = e.Message,
                 });
             }
-        });
+        }).WithTags("Comment");
     }
 }

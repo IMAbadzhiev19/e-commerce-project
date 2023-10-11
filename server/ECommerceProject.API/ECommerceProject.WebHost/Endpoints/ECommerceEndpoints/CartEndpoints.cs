@@ -7,8 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceProject.WebHost.Endpoints.ECommerceEndpoints;
 
+/// <summary>
+/// Cart endpoints
+/// </summary>
 public class CartEndpoints : ICarterModule
 {
+    /// <summary>
+    /// Extension method that adds the cart endpoints
+    /// </summary>
+    /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("api/cart/create{userId}", [Authorize] async ([FromRoute] string userId, ICurrentUser currentUser, ICartService cartService) =>

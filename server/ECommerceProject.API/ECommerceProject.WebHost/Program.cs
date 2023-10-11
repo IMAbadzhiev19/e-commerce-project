@@ -20,14 +20,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(o =>
 });
 
 //Configures Cors
-builder.Services.AddCors(opts =>
+builder.Services.AddCors(options =>
 {
-    opts.AddDefaultPolicy(config =>
+    options.AddDefaultPolicy(builder =>
     {
-        config
+        builder
             .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 

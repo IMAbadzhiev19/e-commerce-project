@@ -11,8 +11,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceProject.WebHost.Endpoints.ECommerceEndpoints;
 
+/// <summary>
+/// Product Endpoints
+/// </summary>
 public class ProductEndpoints : ICarterModule
 {
+    /// <summary>
+    /// Extension method that adds the product endpoints
+    /// </summary>
+    /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("api/product/request-product", [Authorize] async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
@@ -37,7 +44,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapGet("api/product/category{name}", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
+        app.MapGet("api/product/category", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
         {
             try
             {   

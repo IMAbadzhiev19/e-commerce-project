@@ -11,8 +11,15 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace ECommerceProject.WebHost.Endpoints;
 
+/// <summary>
+/// Auth endpoints
+/// </summary>
 public class AuthEndpoints : ICarterModule
 {
+    /// <summary>
+    /// Extension method that adds the auth endpoints
+    /// </summary>
+    /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         
@@ -38,7 +45,7 @@ public class AuthEndpoints : ICarterModule
             }
             catch (Exception e)
             {
-                return Results.BadRequest(new Response
+                return Results.Ok(new Response
                 {
                     Status = "login-failed",
                     Message = e.Message,

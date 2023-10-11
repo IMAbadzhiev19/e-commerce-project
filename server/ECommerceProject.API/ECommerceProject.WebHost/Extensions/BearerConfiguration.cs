@@ -4,8 +4,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ECommerceProject.WebHost.Extensions;
 
+/// <summary>
+/// BearerConfiguration
+/// </summary>
 public static class BearerConfiguration
 {
+    /// <summary>
+    /// Extension method that adds the bearer configuration
+    /// </summary>
+    /// <param name="services">The Service Collector</param>
+    /// <param name="builder">The WebApplicationBuilder</param>
     public static void AddBearer(this IServiceCollection services, WebApplicationBuilder builder)
     {
         services

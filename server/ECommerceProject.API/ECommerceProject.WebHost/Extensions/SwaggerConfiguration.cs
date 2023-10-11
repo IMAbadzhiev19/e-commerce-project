@@ -1,10 +1,18 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
 namespace ECommerceProject.WebHost.Extensions;
 
+/// <summary>
+/// Swagger configuration
+/// </summary>
 public static class SwaggerConfiguration
 {
+    /// <summary>
+    /// Extension method that adds swagger configuration
+    /// </summary>
+    /// <param name="services">The Service Collector</param>
     public static void AddSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
@@ -25,9 +33,9 @@ public static class SwaggerConfiguration
                 Title = "JobHunter API",
                 Description = "An ECommerce API",
             });
-            
-            // var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            // options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
     }
 }

@@ -4,8 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerceProject.Data.Configurations;
 
+/// <summary>
+/// Comment entity configuration
+/// </summary>
 public class CommentEntityConfiguration : IEntityTypeConfiguration<Comment>
 {
+    /// <summary>
+    /// Configure Comment entity
+    /// </summary>
+    /// <param name="builder"></param>
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
         builder

@@ -2,22 +2,28 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ECommerceProject.Data.Configurations
+namespace ECommerceProject.Data.Configurations;
+
+/// <summary>
+/// Review entity configuration
+/// </summary>
+public class ReviewEntityConfiguration : IEntityTypeConfiguration<Review>
 {
-    public class ReviewEntityConfiguration : IEntityTypeConfiguration<Review>
+    /// <summary>
+    /// Configure Review entity
+    /// </summary>
+    /// <param name="builder"></param>
+    public void Configure(EntityTypeBuilder<Review> builder)
     {
-        public void Configure(EntityTypeBuilder<Review> builder)
-        {
-            builder
-                .HasKey(x => x.Id);
+        builder
+            .HasKey(x => x.Id);
 
-            builder
-                .HasOne(x => x.User)
-                .WithMany();
+        builder
+            .HasOne(x => x.User)
+            .WithMany();
 
-            builder
-                .HasOne(x=>x.Product)
-                .WithMany();
-        }
+        builder
+            .HasOne(x=>x.Product)
+            .WithMany();
     }
 }

@@ -4,8 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerceProject.Data.Configurations;
 
+/// <summary>
+/// User entity configuration
+/// </summary>
 public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
+    /// <summary>
+    /// Configure User entity
+    /// </summary>
+    /// <param name="builder"></param>
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         //Setups primary and foreign keys

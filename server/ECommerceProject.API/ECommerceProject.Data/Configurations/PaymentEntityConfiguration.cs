@@ -4,8 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerceProject.Data.Configurations;
 
+/// <summary>
+/// Payment entity configuration
+/// </summary>
 public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment>
 {
+    /// <summary>
+    /// Configure Payment entity
+    /// </summary>
+    /// <param name="builder"></param>
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder
