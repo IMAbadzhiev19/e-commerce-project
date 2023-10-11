@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using ECommerceProject.Data.Models.Auth;
+using Mapster;
 
 namespace ECommerceProject.Shared.Models.User.Auth;
 
@@ -12,6 +13,8 @@ public class RegisterIM
     public string LastName { get; set; } = string.Empty;
 
     public string Email { get; set; } = string.Empty;
+
+    public Address Address { get; set; } = default!;
 
     public string PhoneNumber { get; set; } = string.Empty;
 
