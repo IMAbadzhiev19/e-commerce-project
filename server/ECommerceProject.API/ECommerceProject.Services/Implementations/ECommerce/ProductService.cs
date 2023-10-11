@@ -23,7 +23,7 @@ public class ProductService : IProductService
         _userManager = userManager;
     }
 
-    public async Task<List<ProductVM>> GetProductsByCategoryAsync(Categories category)
+    public async Task<ICollection<ProductVM>> GetProductsByCategoryAsync(Categories category)
     {
         var products = await this._context.Products
         .AsNoTracking()

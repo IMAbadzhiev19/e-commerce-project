@@ -1,12 +1,13 @@
 ﻿using ECommerceProject.Data.Models.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
 
 namespace ECommerceProject.Services.Contracts.ECommerce;
 
 public interface ICommentService
 {
-    Task<Guid> CreateComment(string userId, Guid productId, string text);
+    Task<Guid> CreateComment(string userId, CommentIM commentIM);
 
     Task RemoveComment(string userId, Guid commentId);
 
-    Task<List<Comment>> GetComments(Guid productId); 
+    Task<ICollection<Comment>> GetComments(Guid productId); 
 }

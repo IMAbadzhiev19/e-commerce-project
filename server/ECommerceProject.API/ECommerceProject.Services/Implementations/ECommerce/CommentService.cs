@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ECommerceProject.Data.Data;
+﻿using ECommerceProject.Data.Data;
 using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,10 +19,9 @@ namespace ECommerceProject.Services.Implementations.ECommerce
             this._user = user;
         }
 
-        public async Task<Guid> CreateComment(string userId, Guid productId, string text)
+        public async Task<Guid> CreateComment(string userId, CommentIM commentIM)
         {
-            var product = await this._context.Products
-           .FindAsync(productId);
+            var product = await this._context.Products.FindAsync(commentIM.ProductId);
 
             if (product == null)
             {
@@ -34,6 +29,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce
             }
 
             var user = await _user.FindByIdAsync(userId);
+
             if (user == null)
             {
                 throw new ArgumentException("This user doesn't exist");
@@ -42,13 +38,14 @@ namespace ECommerceProject.Services.Implementations.ECommerce
             Comment comment = new Comment 
             {
                 UserId = userId,
-                Text = text,
-                ProductId = productId,
+                Text = commentIM.Text,
+                ProductId = product.Id,
                 Date = DateTime.Now,
             };
 
             await _context.AddAsync(comment);
             await this._context.SaveChangesAsync();
+
             return comment.Id;
         }
 
@@ -65,17 +62,19 @@ namespace ECommerceProject.Services.Implementations.ECommerce
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Comment>> GetComments(Guid productId)
+        public async Task<ICollection<Comment>> GetComments(Guid productId)
         {
             var product = await this._context.Products
-            .FindAsync(productId);
+                .FindAsync(productId);
 
             if(product == null)
             {
                 throw new ArgumentException("This product doesn't exist");
             }
 
-            var comments = await _context.Comments.Where(c => c.ProductId == productId).ToListAsync();
+            var comments = await _context.Comments
+                .Where(c => c.ProductId == productId)
+                .ToListAsync();
 
             if(comments == null)
             {

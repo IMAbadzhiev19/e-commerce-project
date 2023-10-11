@@ -8,5 +8,5 @@ public interface IReviewService
 
     Task RemoveReview(string userId,Guid reviewId);
 
-    Task<List<Review>> GetReviews(string userId);
+    Task<ICollection<Review>> GetReviews(string userId);
 }

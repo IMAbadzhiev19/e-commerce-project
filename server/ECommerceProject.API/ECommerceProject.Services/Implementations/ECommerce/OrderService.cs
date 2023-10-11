@@ -27,7 +27,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce
             throw new NotImplementedException();
         }
 
-        public Task<List<Order>> GetOrders(string userId)
+        public Task<ICollection<Order>> GetOrders(string userId)
         {
             throw new NotImplementedException();
         }

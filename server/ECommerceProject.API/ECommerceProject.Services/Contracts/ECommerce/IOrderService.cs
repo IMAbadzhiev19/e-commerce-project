@@ -8,5 +8,5 @@ public interface IOrderService
 
     Task RemoveOrder(string userid, Guid orderId);
 
-    Task<List<Order>> GetOrders(string userId);
+    Task<ICollection<Order>> GetOrders(string userId);
 }
