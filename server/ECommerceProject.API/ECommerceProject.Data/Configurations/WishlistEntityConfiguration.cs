@@ -22,7 +22,7 @@ public class WishlistEntityConfiguration : IEntityTypeConfiguration<WishList>
             .HasOne(x => x.User)
             .WithOne();
 
-        builder
+        builder 
             .HasMany(x => x.Products)
             .WithMany();
     }
