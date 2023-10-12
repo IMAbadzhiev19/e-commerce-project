@@ -3,8 +3,12 @@ using ECommerceProject.Shared.Models.ECommerce;
 
 namespace ECommerceProject.Services.Implementations;
 
+/// <summary>
+/// A class representing the email service
+/// </summary>
 public class EmailService : IEmailService
 {
+    /// <inheritdoc/>
     public Task SendProductRequest(ProductRM productRM)
     {
         throw new NotImplementedException();

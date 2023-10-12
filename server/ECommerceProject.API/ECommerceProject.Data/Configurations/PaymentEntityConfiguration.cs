@@ -12,7 +12,7 @@ public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment>
     /// <summary>
     /// Configure Payment entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder

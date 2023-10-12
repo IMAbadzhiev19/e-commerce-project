@@ -6,25 +6,25 @@
 public interface ICartService
 {
     /// <summary>
-    /// Asynchronous method used for creating a cart and assigning it to an user
+    /// Asynchronous method used for creating a cart and assigning it to a user.
     /// </summary>
-    /// <param name="userId">The id of the user</param>
-    /// <returns>The id of the cart</returns>
+    /// <param name="userId">The unique identifier of the user.</param>
+    /// <returns>The unique identifier of the created cart.</returns>
     Task<Guid> CreateCart(string userId);
 
     /// <summary>
-    /// Asynchronous method used for adding a product to a cart
+    /// Asynchronous method used for adding a product to a cart.
     /// </summary>
-    /// <param name="productId">The id of the product</param>
-    /// <param name="cartId">The id of the cart</param>
-    /// <returns></returns>
+    /// <param name="productId">The unique identifier of the product to add to the cart.</param>
+    /// <param name="cartId">The unique identifier of the cart to add the product to.</param>
+    /// <returns>Task representing the add operation.</returns>
     Task AddProductToCart(Guid productId, Guid cartId);
 
     /// <summary>
-    /// Asynchronous method used for removing a product from the cart
+    /// Asynchronous method used for removing a product from a cart.
     /// </summary>
-    /// <param name="productId">The id of the product</param>
-    /// <param name="cartId">The id of the cart</param>
-    /// <returns></returns>
+    /// <param name="productId">The unique identifier of the product to remove from the cart.</param>
+    /// <param name="cartId">The unique identifier of the cart to remove the product from.</param>
+    /// <returns>Task representing the removal operation.</returns>
     Task RemoveProductFromCart(Guid productId, Guid cartId);
 }

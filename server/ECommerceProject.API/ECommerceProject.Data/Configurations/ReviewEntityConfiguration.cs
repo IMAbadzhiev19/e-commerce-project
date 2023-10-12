@@ -12,7 +12,7 @@ public class ReviewEntityConfiguration : IEntityTypeConfiguration<Review>
     /// <summary>
     /// Configure Review entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Review> builder)
     {
         builder

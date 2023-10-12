@@ -7,15 +7,23 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceProject.Services.Implementations.User;
 
+/// <summary>
+/// A class representing the user service
+/// </summary>
 public class UserService : IUserService
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
+    /// <summary>
+    /// A constructor used for injecting dependencies
+    /// </summary>
+    /// <param name="userManager">UserManager</param>
     public UserService(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
 
+    /// <inheritdoc/>
     public async Task<IdentityResult> ChangePasswordAsync(string userId, string newPassword)
     {
         var user = await _userManager.FindByIdAsync(userId);
@@ -27,6 +35,7 @@ public class UserService : IUserService
         return await _userManager.ResetPasswordAsync(user, passwordToken, newPassword);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> CheckPasswordAsync(string userId, string password)
     {
         var user = await _userManager.FindByIdAsync(userId);
@@ -34,6 +43,7 @@ public class UserService : IUserService
         return user is not null && await _userManager.CheckPasswordAsync(user, password);
     }
 
+    /// <inheritdoc/>
     public async Task<(UserVM user, string userId)> GetUserByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
@@ -44,6 +54,7 @@ public class UserService : IUserService
         return (user.Adapt<UserVM>(), user.Id);
     }
 
+    /// <inheritdoc/>
     public async Task<UserVM> GetUserByIdAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
@@ -54,6 +65,7 @@ public class UserService : IUserService
         return user.Adapt<UserVM>();
     }
 
+    /// <inheritdoc/>
     public async Task UpdateUserInfoAsync(string userId, UserIM userIM)
     {
         var user = await _userManager.FindByIdAsync(userId);

@@ -7,18 +7,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceProject.Services.Implementations.User.Auth;
 
+/// <summary>
+/// A class representing the auth service
+/// </summary>
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
+    /// <summary>
+    /// A constructor used for injecting dependencies
+    /// </summary>
+    /// <param name="userManager"></param>
+    /// <param name="roleManager"></param>
     public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
     }
 
-
+    /// <inheritdoc/>
     public async Task CreateUserAsync(RegisterIM registerIM)
     {
         if (!await this._roleManager.RoleExistsAsync(UserRoles.User))
@@ -37,6 +45,7 @@ public class AuthService : IAuthService
             throw new Exception("Adding role failed");
     }
 
+    /// <inheritdoc/>
     public async Task MakeAdminAsync(string userId)
     {
         if (!await this._roleManager.RoleExistsAsync(UserRoles.Admin))

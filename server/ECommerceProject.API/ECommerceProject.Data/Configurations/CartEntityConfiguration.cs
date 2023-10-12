@@ -12,13 +12,13 @@ public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
     /// <summary>
     /// Configure Cart entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Cart> builder)
     {
         //Setup primary and foreign keys
         builder
             .HasKey(x => x.Id);
-
+        
         builder
             .HasMany(x => x.Products)
             .WithMany(x => x.Carts);

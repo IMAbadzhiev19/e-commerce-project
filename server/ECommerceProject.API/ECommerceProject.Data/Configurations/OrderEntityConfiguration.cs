@@ -12,7 +12,7 @@ public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
     /// <summary>
     /// Configure Order entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder

@@ -12,7 +12,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
     /// <summary>
     /// Configure Product entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         //Setup primary and foreign keys

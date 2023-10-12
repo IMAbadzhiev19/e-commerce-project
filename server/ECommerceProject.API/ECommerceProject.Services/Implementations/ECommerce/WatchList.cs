@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
 /// <summary>
-/// A class representing the order service
+/// A class representing the watchlist
 /// </summary>
-public class OrderService: IOrderService
+public class WatchList : IWatchList
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _user;
@@ -19,26 +19,32 @@ public class OrderService: IOrderService
     /// </summary>
     /// <param name="context"></param>
     /// <param name="user"></param>
-    public OrderService(ApplicationDbContext context, UserManager<ApplicationUser> user)
+    public WatchList(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
         this._user = user;
     }
 
     /// <inheritdoc/>
-    public Task<Guid> CreateOrder(string userId, Guid cartId)
+    public Task AddProductToWatchlist(string userId, Guid productId, Guid watchlistId)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public Task<ICollection<Order>> GetOrders(string userId)
+    public Task<Guid> CreateWatchList(string userId)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public Task RemoveOrder(string userid, Guid orderId)
+    public Task<Watchlist> GetWatchlists(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc/>
+    public Task RemoveProductFromWatchlist(string userId, Guid productId, Guid watchlistId)
     {
         throw new NotImplementedException();
     }

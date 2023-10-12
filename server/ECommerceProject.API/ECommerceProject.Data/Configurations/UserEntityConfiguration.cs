@@ -12,7 +12,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<ApplicationUser>
     /// <summary>
     /// Configure User entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         //Setups primary and foreign keys

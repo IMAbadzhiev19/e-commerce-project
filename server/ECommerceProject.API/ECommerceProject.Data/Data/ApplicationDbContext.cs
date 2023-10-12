@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ECommerceProject.Data.Data;
 
 /// <summary>
-/// Application Database Context
+/// Class representing the application database context
 /// </summary>
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {

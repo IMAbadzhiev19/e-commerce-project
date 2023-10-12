@@ -6,82 +6,93 @@ using ECommerceProject.Shared.Models.ECommerce;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECommerceProject.Services.Implementations.ECommerce
+namespace ECommerceProject.Services.Implementations.ECommerce;
+
+/// <summary>
+/// A class representing the comment service
+/// </summary>
+public class CommentService : ICommentService
 {
-    public class CommentService : ICommentService
+    private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _user;
+
+
+    /// <summary>
+    /// A constructor used for injecting dependencies
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="user"></param>
+    public CommentService(ApplicationDbContext context,UserManager<ApplicationUser> user)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _user;
+        this._context = context;
+        this._user = user;
+    }
 
-        public CommentService(ApplicationDbContext context,UserManager<ApplicationUser> user)
+    /// <inheritdoc/>
+    public async Task<Guid> CreateComment(string userId, CommentIM commentIM)
+    {
+        var product = await this._context.Products.FindAsync(commentIM.ProductId);
+
+        if (product == null)
         {
-            this._context = context;
-            this._user = user;
+            throw new ArgumentException("This product doesn't exist");
         }
 
-        public async Task<Guid> CreateComment(string userId, CommentIM commentIM)
+        var user = await _user.FindByIdAsync(userId);
+
+        if (user == null)
         {
-            var product = await this._context.Products.FindAsync(commentIM.ProductId);
-
-            if (product == null)
-            {
-                throw new ArgumentException("This product doesn't exist");
-            }
-
-            var user = await _user.FindByIdAsync(userId);
-
-            if (user == null)
-            {
-                throw new ArgumentException("This user doesn't exist");
-            }
-
-            Comment comment = new Comment 
-            {
-                UserId = userId,
-                Text = commentIM.Text,
-                ProductId = product.Id,
-                Date = DateTime.Now,
-            };
-
-            await _context.AddAsync(comment);
-            await this._context.SaveChangesAsync();
-
-            return comment.Id;
+            throw new ArgumentException("This user doesn't exist");
         }
 
-        public async Task RemoveComment(string userId, Guid commentId)
+        Comment comment = new Comment 
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(x => x.UserId == userId && x .Id == commentId);
+            UserId = userId,
+            Text = commentIM.Text,
+            ProductId = product.Id,
+            Date = DateTime.Now,
+        };
 
-            if(comment == null)
-            {
-                throw new ArgumentException($"This comment is not yours or doesn't exist");
-            }
+        await _context.AddAsync(comment);
+        await this._context.SaveChangesAsync();
 
-            this._context.Remove(comment);
-            await _context.SaveChangesAsync();
+        return comment.Id;
+    }
+
+    /// <inheritdoc/>
+    public async Task RemoveComment(string userId, Guid commentId)
+    {
+        var comment = await _context.Comments.FirstOrDefaultAsync(x => x.UserId == userId && x .Id == commentId);
+
+        if(comment == null)
+        {
+            throw new ArgumentException($"This comment is not yours or doesn't exist");
         }
 
-        public async Task<ICollection<Comment>> GetComments(Guid productId)
+        this._context.Remove(comment);
+        await _context.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task<ICollection<Comment>> GetComments(Guid productId)
+    {
+        var product = await this._context.Products
+            .FindAsync(productId);
+
+        if(product == null)
         {
-            var product = await this._context.Products
-                .FindAsync(productId);
-
-            if(product == null)
-            {
-                throw new ArgumentException("This product doesn't exist");
-            }
-
-            var comments = await _context.Comments
-                .Where(c => c.ProductId == productId)
-                .ToListAsync();
-
-            if(comments == null)
-            {
-                throw new ArgumentException("This product doesn't have comments");
-            }
-
-            return comments;
+            throw new ArgumentException("This product doesn't exist");
         }
+
+        var comments = await _context.Comments
+            .Where(c => c.ProductId == productId)
+            .ToListAsync();
+
+        if(comments == null)
+        {
+            throw new ArgumentException("This product doesn't have comments");
+        }
+
+        return comments;
     }
 }

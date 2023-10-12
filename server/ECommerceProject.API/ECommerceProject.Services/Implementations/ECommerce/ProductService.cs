@@ -12,17 +12,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
+/// <summary>
+/// A class representing the product service
+/// </summary>
 public class ProductService : IProductService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
 
+    /// <summary>
+    /// A constructor used for injecting dependencies
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="userManager"></param>
     public ProductService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _userManager = userManager;
     }
 
+    /// <inheritdoc/>
     public async Task<ICollection<ProductVM>> GetProductsByCategoryAsync(Categories category)
     {
         var products = await this._context.Products
@@ -36,6 +45,7 @@ public class ProductService : IProductService
         return products.Adapt<List<ProductVM>>();
     }
 
+    /// <inheritdoc/>
     public async Task UpdateProductAsync(Guid productId, ProductUM newProduct)
     {
         var product = await this._context.Products.FindAsync(productId);

@@ -12,7 +12,7 @@ public class CommentEntityConfiguration : IEntityTypeConfiguration<Comment>
     /// <summary>
     /// Configure Comment entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Comment> builder)
     {
         builder

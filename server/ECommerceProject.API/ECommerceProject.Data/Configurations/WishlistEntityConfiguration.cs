@@ -12,7 +12,7 @@ public class WishlistEntityConfiguration : IEntityTypeConfiguration<Wishlist>
     /// <summary>
     /// Configure Wishlist entity
     /// </summary>
-    /// <param name="builder"></param>
+    /// <param name="builder">EntityTypeBuilder</param>
     public void Configure(EntityTypeBuilder<Wishlist> builder)
     {
         builder

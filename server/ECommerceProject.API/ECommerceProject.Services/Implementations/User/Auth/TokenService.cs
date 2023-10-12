@@ -13,12 +13,21 @@ using ECommerceProject.Shared.Models.User.Auth.Token.Enums;
 
 namespace ECommerceProject.Services.Implementations.User.Auth;
 
+/// <summary>
+/// A class representing the token service
+/// </summary>
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _config;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _context;
 
+    /// <summary>
+    /// A constructor used for injecting dependencies
+    /// </summary>
+    /// <param name="config"></param>
+    /// <param name="userManager"></param>
+    /// <param name="context"></param>
     public TokenService(IConfiguration config, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
     {
         _config = config;
@@ -26,7 +35,7 @@ public class TokenService : ITokenService
         _context = context;
     }
 
-
+    /// <inheritdoc/>
     public async Task<Tokens> CreateNewTokensAsync(TokensIM tokens)
     {
         var principals = GetPrincipalsFromExpiredToken(tokens.AccessToken);
@@ -55,6 +64,7 @@ public class TokenService : ITokenService
         };
     }
 
+    /// <inheritdoc/>
     public async Task<Tokens> CreateTokensForUserAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
@@ -96,6 +106,7 @@ public class TokenService : ITokenService
         };
     }
 
+    /// <inheritdoc/>
     public async Task DeleteRefreshTokenAsync(string userId)
     {
         var refreshToken = await _context
@@ -108,16 +119,19 @@ public class TokenService : ITokenService
         await _context.SaveChangesAsync();
     }
 
+    /// <inheritdoc/>
     public Task<string> GenerateEmailConfirmationAsync(string email)
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc/>
     public Task<string> GeneratePasswordResetTokenAsync(string email)
     {
         throw new NotImplementedException();
     }
 
+    /// <inheritdoc/>
     public async Task SaveRefreshTokenAsync(RefreshToken refreshToken)
     {
         await _context.AddAsync(refreshToken);
@@ -125,7 +139,13 @@ public class TokenService : ITokenService
     }
 
 
-    //Helpers
+    /// <summary>
+    /// Create a JWT token with the provided claims and token type.
+    /// </summary>
+    /// <param name="authClaims">A list of claims to include in the token.</param>
+    /// <param name="tokenType">The type of token (access or refresh).</param>
+    /// <returns>The created JWT token.</returns>
+
     private JwtSecurityToken CreateToken(List<Claim> authClaims, TokenTypes tokenType)
     {
         SymmetricSecurityKey? signingKey;
@@ -151,6 +171,12 @@ public class TokenService : ITokenService
         return token;
     }
 
+    /// <summary>
+    /// Extract and validate claims from an expired JWT token.
+    /// </summary>
+    /// <param name="token">The expired JWT token to validate.</param>
+    /// <returns>A ClaimsPrincipal containing validated claims, or null if validation fails.</returns>
+
     private ClaimsPrincipal? GetPrincipalsFromExpiredToken(string? token)
     {
         var tokenValidationParameters = new TokenValidationParameters
@@ -175,6 +201,11 @@ public class TokenService : ITokenService
         return principal;
     }
 
+    /// <summary>
+    /// Validate the format and integrity of a refresh token.
+    /// </summary>
+    /// <param name="refreshToken">The refresh token to validate.</param>
+    /// <returns>True if the token is valid; otherwise, false.</returns>
     private bool ValidateRefreshToken(string refreshToken)
     {
         var tokenValidationParameter = new TokenValidationParameters
