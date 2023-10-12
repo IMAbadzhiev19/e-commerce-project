@@ -3,6 +3,7 @@ using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Shared.Models.ECommerce;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
@@ -29,31 +30,25 @@ public class OrderService: IOrderService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateOrder(string userId,OrderIM order)
+    public async Task<Guid> CreateOrder(string userId, OrderIM order)
     {
         var user = await _user.FindByIdAsync(userId);
-        if (user == null)
+        if (user is null)
         {
             throw new ArgumentException("This user doesn't exist"); 
         }
 
         var cart = await this._context.Carts.FindAsync(order.CartId);
-        if(cart == null)
+        if(cart is null)
         {
             throw new ArgumentException("This cart doesn't exist");
         }
 
-        Order newOrder = new Order() {
-            UserId = userId,
-            OrderDate = order.OrderDate,
-            DeliveryDate = order.DeliveryDate,
-            CartId = order.CartId,
-            Status = order.Status
-        };
+        var newOrder = order.Adapt<Order>();
 
-        this._context.Orders.Add(newOrder);
+        await this._context.Orders.AddAsync(newOrder);
         await this._context.SaveChangesAsync();
-
+        
         return newOrder.Id;
     }
 
@@ -62,7 +57,7 @@ public class OrderService: IOrderService
     {
         var orders = await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
 
-        if(orders == null)
+        if(orders is null)
         {
             throw new ArgumentException("This user doesn't have orders");
         }
@@ -75,7 +70,7 @@ public class OrderService: IOrderService
     {
         var order = _context.Orders.FirstOrDefaultAsync(o=>o.UserId == userId && o.Id == orderId);
 
-        if(order == null)
+        if(order is null)
         {
             throw new ArgumentException("This order isn't your or doesn't exist");
         }

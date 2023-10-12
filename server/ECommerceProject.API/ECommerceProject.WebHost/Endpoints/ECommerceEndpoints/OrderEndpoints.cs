@@ -9,32 +9,39 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceProject.WebHost.Endpoints.ECommerceEndpoints;
 
+/// <summary>
+/// Represents the class for defining order-related endpoints.
+/// </summary>
 public class OrderEndpoints : ICarterModule
 {
+    /// <summary>
+    /// Adds the routes for creating a new order.
+    /// </summary>
+    /// <param name="app">The IEndpointRouteBuilder instance.</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/order/create", [Authorize] async ([FromBody] OrderIM orderIM,IOrderService orderService, ICurrentUser currentUser) =>
+        app.MapPost("api/order/create", [Authorize] async ([FromBody] OrderIM orderIM, IOrderService orderService, ICurrentUser currentUser) =>
         {
             try
             {
-                var order = await orderService.CreateOrder(currentUser.UserId, orderIM);
-
-                return Results.Ok();
+                var orderId = await orderService.CreateOrder(currentUser.UserId, orderIM);
+                return Results.Ok(orderId);
             }
             catch (Exception ex)
             {
-                return Results.BadRequest(new Response {
+                return Results.BadRequest(new Response
+                {
                     Status = "create-failed",
                     Message = ex.Message
                 });
             }
         }).WithTags("Order");
-
-        app.MapDelete("api/order/delete{orderId}", [Authorize] async ([FromBody] Guid orderId, IOrderService orderService, ICurrentUser currentUser) =>
+        
+        app.MapDelete("api/order/remove{id}", [Authorize] async ([FromRoute] Guid id, IOrderService orderService, ICurrentUser currentUser) =>
         {
             try
             {
-                await orderService.RemoveOrder(currentUser.UserId,orderId);
+                await orderService.RemoveOrder(currentUser.UserId, id);
 
                 return Results.Ok();
             }
@@ -47,13 +54,12 @@ public class OrderEndpoints : ICarterModule
                 });
             }
         }).WithTags("Order");
-
-
-        app.MapDelete("api/order/get", [Authorize] async (IOrderService orderService, ICurrentUser currentUser) =>
+        
+        app.MapGet("api/order/orders", [Authorize] async (IOrderService orderService, ICurrentUser currentUser) =>
         {
             try
             {
-                var comments = await orderService.GetOrders(currentUser.UserId);
+                var orders = await orderService.GetOrders(currentUser.UserId);
 
                 return Results.Ok();
             }
