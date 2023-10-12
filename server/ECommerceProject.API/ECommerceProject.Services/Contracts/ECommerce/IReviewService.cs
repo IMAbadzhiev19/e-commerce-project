@@ -1,4 +1,5 @@
 ﻿using ECommerceProject.Data.Models.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
 
 namespace ECommerceProject.Services.Contracts.ECommerce;
 
@@ -13,7 +14,7 @@ public interface IReviewService
     /// <param name="userId">The unique identifier of the user creating the review.</param>
     /// <param name="productId">The unique identifier of the product to review.</param>
     /// <returns>The unique identifier of the created review.</returns>
-    Task<Guid> CreateReview(string userId, Guid productId);
+    Task<Guid> CreateReview(string userId, ReviewIM review);
 
     /// <summary>
     /// Remove an existing review.
@@ -28,5 +29,5 @@ public interface IReviewService
     /// </summary>
     /// <param name="userId">The unique identifier of the user to retrieve reviews for.</param>
     /// <returns>Task representing a collection of reviews.</returns>
-    Task<ICollection<Review>> GetReviews(string userId);
+    Task<ICollection<Review>> GetReviews(Guid productId);
 }
