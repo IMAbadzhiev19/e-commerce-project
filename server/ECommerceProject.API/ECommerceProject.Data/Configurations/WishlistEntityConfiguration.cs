@@ -7,13 +7,13 @@ namespace ECommerceProject.Data.Configurations;
 /// <summary>
 /// Wishlist entity configuration
 /// </summary>
-public class WishlistEntityConfiguration : IEntityTypeConfiguration<Wishlist>
+public class WishlistEntityConfiguration : IEntityTypeConfiguration<WishList>
 {
     /// <summary>
     /// Configure Wishlist entity
     /// </summary>
     /// <param name="builder">EntityTypeBuilder</param>
-    public void Configure(EntityTypeBuilder<Wishlist> builder)
+    public void Configure(EntityTypeBuilder<WishList> builder)
     {
         builder
             .HasKey(x => x.Id);
@@ -25,6 +25,5 @@ public class WishlistEntityConfiguration : IEntityTypeConfiguration<Wishlist>
         builder
             .HasMany(x => x.Products)
             .WithMany();
-
     }
 }

@@ -46,7 +46,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     /// <summary>
     /// Wishlists DbSet
     /// </summary>
-    public DbSet<Wishlist> Wishlists { get; set; } = default!;
+    public DbSet<WishList> Wishlists { get; set; } = default!;
 
     /// <summary>
     /// RefreshTokens DbSet

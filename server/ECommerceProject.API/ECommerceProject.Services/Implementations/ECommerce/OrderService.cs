@@ -2,7 +2,10 @@
 using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
@@ -26,20 +29,58 @@ public class OrderService: IOrderService
     }
 
     /// <inheritdoc/>
-    public Task<Guid> CreateOrder(string userId, Guid cartId)
+    public async Task<Guid> CreateOrder(string userId,OrderIM order)
     {
-        throw new NotImplementedException();
+        var user = await _user.FindByIdAsync(userId);
+        if (user == null)
+        {
+            throw new ArgumentException("This user doesn't exist"); 
+        }
+
+        var cart = await this._context.Carts.FindAsync(order.CartId);
+        if(cart == null)
+        {
+            throw new ArgumentException("This cart doesn't exist");
+        }
+
+        Order newOrder = new Order() {
+            UserId = userId,
+            OrderDate = order.OrderDate,
+            DeliveryDate = order.DeliveryDate,
+            CartId = order.CartId,
+            Status = order.Status
+        };
+
+        this._context.Orders.Add(newOrder);
+        await this._context.SaveChangesAsync();
+
+        return newOrder.Id;
     }
 
     /// <inheritdoc/>
-    public Task<ICollection<Order>> GetOrders(string userId)
+    public async Task<ICollection<Order>> GetOrders(string userId)
     {
-        throw new NotImplementedException();
+        var orders = await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
+
+        if(orders == null)
+        {
+            throw new ArgumentException("This user doesn't have orders");
+        }
+
+        return orders;
     }
 
     /// <inheritdoc/>
-    public Task RemoveOrder(string userid, Guid orderId)
+    public async Task RemoveOrder(string userId, Guid orderId)
     {
-        throw new NotImplementedException();
+        var order = _context.Orders.FirstOrDefaultAsync(o=>o.UserId == userId && o.Id == orderId);
+
+        if(order == null)
+        {
+            throw new ArgumentException("This order isn't your or doesn't exist");
+        }
+
+        this._context.Remove(order);
+        await _context.SaveChangesAsync();
     }
 }

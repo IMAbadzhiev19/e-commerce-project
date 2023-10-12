@@ -1,4 +1,5 @@
 ﻿using ECommerceProject.Data.Models.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
 
 namespace ECommerceProject.Services.Contracts.ECommerce;
 
@@ -11,9 +12,9 @@ public interface IOrderService
     /// Create a new order based on the contents of a user's cart.
     /// </summary>
     /// <param name="userId">The unique identifier of the user creating the order.</param>
-    /// <param name="cartId">The unique identifier of the cart to use for creating the order.</param>
+    /// <param name="">The unique identifier of the cart to use for creating the order.</param>
     /// <returns>The unique identifier of the created order.</returns>
-    Task<Guid> CreateOrder(string userId, Guid cartId);
+    Task<Guid> CreateOrder(string userId, OrderIM order);
 
     /// <summary>
     /// Remove an existing order.

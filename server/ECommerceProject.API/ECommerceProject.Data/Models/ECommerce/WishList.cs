@@ -5,7 +5,7 @@ namespace ECommerceProject.Data.Models.ECommerce;
 /// <summary>
 /// Represents a watchlist in the system.
 /// </summary>
-public class Watchlist
+public class WishList
 {
     /// <summary>
     /// Gets or sets the unique identifier for the watchlist.

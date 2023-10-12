@@ -31,18 +31,17 @@ public class CommentService : ICommentService
     /// <inheritdoc/>
     public async Task<Guid> CreateComment(string userId, CommentIM commentIM)
     {
-        var product = await this._context.Products.FindAsync(commentIM.ProductId);
-
-        if (product == null)
-        {
-            throw new ArgumentException("This product doesn't exist");
-        }
-
         var user = await _user.FindByIdAsync(userId);
 
         if (user == null)
         {
             throw new ArgumentException("This user doesn't exist");
+        }
+
+        var product = await this._context.Products.FindAsync(commentIM.ProductId);
+        if (product == null)
+        {
+            throw new ArgumentException("This product doesn't exist");
         }
 
         Comment comment = new Comment 

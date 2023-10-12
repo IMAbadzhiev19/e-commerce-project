@@ -9,7 +9,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce;
 /// <summary>
 /// A class representing the watchlist
 /// </summary>
-public class WatchList : IWatchList
+public class WishListSercive : IWishListService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _user;
@@ -19,32 +19,32 @@ public class WatchList : IWatchList
     /// </summary>
     /// <param name="context"></param>
     /// <param name="user"></param>
-    public WatchList(ApplicationDbContext context, UserManager<ApplicationUser> user)
+    public WishListSercive(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
         this._user = user;
     }
 
     /// <inheritdoc/>
-    public Task AddProductToWatchlist(string userId, Guid productId, Guid watchlistId)
+    public Task AddProductToWishList(string userId, Guid productId, Guid watchlistId)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public Task<Guid> CreateWatchList(string userId)
+    public Task<Guid> CreateWishList(string userId)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public Task<Watchlist> GetWatchlists(string userId)
+    public Task<WishList> GetWishLists(string userId)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public Task RemoveProductFromWatchlist(string userId, Guid productId, Guid watchlistId)
+    public Task RemoveProductFromWishList(string userId, Guid productId, Guid watchlistId)
     {
         throw new NotImplementedException();
     }
