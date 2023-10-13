@@ -30,7 +30,7 @@ public static class DependencyInjection
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IReviewService,ReviewService>();
-        services.AddScoped<IWishlistService, WishlistSercive>();
+        services.AddScoped<IWishlistService, WishlistService>();
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IFileService, FileService>();

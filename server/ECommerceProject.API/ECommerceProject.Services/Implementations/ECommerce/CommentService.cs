@@ -71,7 +71,7 @@ public class CommentService : ICommentService
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<Comment>> GetCommentsAsync(Guid productId)
+    public async Task<ICollection<CommentVM>> GetCommentsAsync(Guid productId)
     {
         var product = await this._context.Products
             .FindAsync(productId);
@@ -90,6 +90,6 @@ public class CommentService : ICommentService
             throw new ArgumentException("This product doesn't have comments");
         }
 
-        return comments;
+        return comments.Adapt<List<CommentVM>>();
     }
 }

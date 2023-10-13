@@ -29,5 +29,5 @@ public interface ICommentService
     /// </summary>
     /// <param name="productId">The unique identifier of the product to retrieve comments for.</param>
     /// <returns>Task representing a collection of comments.</returns>
-    Task<ICollection<Comment>> GetCommentsAsync(Guid productId);
+    Task<ICollection<CommentVM>> GetCommentsAsync(Guid productId);
 }

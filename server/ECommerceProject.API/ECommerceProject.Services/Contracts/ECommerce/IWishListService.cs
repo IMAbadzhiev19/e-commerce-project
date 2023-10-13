@@ -1,4 +1,5 @@
 ﻿using ECommerceProject.Data.Models.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
 
 namespace ECommerceProject.Services.Contracts.ECommerce;
 
@@ -35,5 +36,12 @@ public interface IWishlistService
     /// </summary>
     /// <param name="userId">The unique identifier of the user to retrieve watchlist for.</param>
     /// <returns>Task representing the user's watchlist.</returns>
-    Task<Wishlist> GetWishlistsAsync(string userId);
+    Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId);
+
+    /// <summary>
+    /// Removes user's wishlist
+    /// </summary>
+    /// <param name="wishlistId">The unique identifier of the wishlist</param>
+    /// <param name="userId">The unique identifier of the user</param>
+    Task RemoveWishlistAsync(Guid wishlistId, string userId);
 }

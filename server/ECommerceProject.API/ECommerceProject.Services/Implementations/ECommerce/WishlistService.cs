@@ -2,14 +2,17 @@
 using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
 /// <summary>
 /// A class representing the watchlist
 /// </summary>
-public class WishlistSercive : IWishlistService
+public class WishlistService : IWishlistService
 {
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -19,7 +22,7 @@ public class WishlistSercive : IWishlistService
     /// </summary>
     /// <param name="context"></param>
     /// <param name="user"></param>
-    public WishlistSercive(ApplicationDbContext context, UserManager<ApplicationUser> user)
+    public WishlistService(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
         this._userManager = user;
@@ -71,7 +74,7 @@ public class WishlistSercive : IWishlistService
     }
 
     /// <inheritdoc/>
-    public async Task<Wishlist> GetWishlistsAsync(string userId)
+    public async Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId)
     {
         var user = _userManager.FindByIdAsync(userId);
         if (user is null)
@@ -79,12 +82,14 @@ public class WishlistSercive : IWishlistService
             throw new ArgumentException();
         }
 
-        var wishlist = await this._context.Wishlists.FindAsync(userId);
+        var wishlist = await this._context.Wishlists
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
 
         if (wishlist is null)
             throw new Exception("Wishlist not found");
 
-        return wishlist;
+        return wishlist.Adapt<List<WishlistVM>>();
     }
 
     /// <inheritdoc/>
@@ -110,6 +115,19 @@ public class WishlistSercive : IWishlistService
 
         wishList.Products.Remove(product);
         _context.Wishlists.Update(wishList);
+        await this._context.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task RemoveWishlistAsync(Guid wishlistId, string userId)
+    {
+        var wishlist = await this._context.Wishlists
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == wishlistId);
+
+        if (wishlist is null)
+            throw new ArgumentException("Invalid wishlistId or userId");
+
+        this._context.Remove(wishlist);
         await this._context.SaveChangesAsync();
     }
 }
