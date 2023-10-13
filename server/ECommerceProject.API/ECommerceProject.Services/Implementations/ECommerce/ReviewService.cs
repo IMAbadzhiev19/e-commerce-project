@@ -52,7 +52,7 @@ public class ReviewService : IReviewService
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<Review>> GetReviewsAsync(Guid productId)
+    public async Task<ICollection<ReviewVM>> GetReviewsAsync(Guid productId)
     {
         var product = await this._context.Products.FindAsync(productId);
         if(product is null)
@@ -69,7 +69,7 @@ public class ReviewService : IReviewService
             throw new Exception("Review not found");
         }
 
-        return reviews;
+        return reviews.Adapt<List<ReviewVM>>();
     }
 
     /// <inheritdoc/>

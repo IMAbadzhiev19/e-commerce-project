@@ -26,7 +26,7 @@ public class ProductEndpoints : ICarterModule
         {
             try
             {
-                await emailService.SendProductRequest(productRM);
+                await emailService.SendProductRequestAsync(productRM);
 
                 return Results.Ok(new Response
                 {

@@ -24,7 +24,7 @@ public class CommentEndpoints : ICarterModule
         {
             try
             {
-                var commentId = await commentService.CreateComment(currentUser.UserId, commentIM);
+                var commentId = await commentService.CreateCommentAsync(currentUser.UserId, commentIM);
 
                 return Results.Ok(commentId);
             }
@@ -42,7 +42,7 @@ public class CommentEndpoints : ICarterModule
         {
             try
             {
-                await commentService.RemoveComment(currentUser.UserId, id);
+                await commentService.RemoveCommentAsync(currentUser.UserId, id);
                 return Results.Ok(new Response
                 {
                     Status = "remove-success",
@@ -63,7 +63,7 @@ public class CommentEndpoints : ICarterModule
         {
             try
             {
-                var comments = await commentService.GetComments(productId);
+                var comments = await commentService.GetCommentsAsync(productId);
                 return Results.Ok(comments);
             }
             catch (Exception e)

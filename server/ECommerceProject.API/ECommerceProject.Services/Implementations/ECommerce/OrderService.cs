@@ -16,7 +16,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce;
 public class OrderService: IOrderService
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _user;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     /// <summary>
     /// A constructor used for injecting dependencies
@@ -26,13 +26,13 @@ public class OrderService: IOrderService
     public OrderService(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
-        this._user = user;
+        this._userManager = user;
     }
 
     /// <inheritdoc/>
     public async Task<Guid> CreateOrderAsync(string userId, OrderIM order)
     {
-        var user = await _user.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException("This user doesn't exist"); 

@@ -24,7 +24,7 @@ public class OrderEndpoints : ICarterModule
         {
             try
             {
-                var orderId = await orderService.CreateOrder(currentUser.UserId, orderIM);
+                var orderId = await orderService.CreateOrderAsync(currentUser.UserId, orderIM);
                 return Results.Ok(orderId);
             }
             catch (Exception ex)
@@ -41,7 +41,7 @@ public class OrderEndpoints : ICarterModule
         {
             try
             {
-                await orderService.RemoveOrder(currentUser.UserId, id);
+                await orderService.RemoveOrderAsync(currentUser.UserId, id);
 
                 return Results.Ok();
             }
@@ -59,7 +59,7 @@ public class OrderEndpoints : ICarterModule
         {
             try
             {
-                var orders = await orderService.GetOrders(currentUser.UserId);
+                var orders = await orderService.GetOrdersAsync(currentUser.UserId);
 
                 return Results.Ok();
             }

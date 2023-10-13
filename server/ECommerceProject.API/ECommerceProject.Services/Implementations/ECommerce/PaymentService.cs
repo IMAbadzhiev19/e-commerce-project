@@ -16,7 +16,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce;
 public class PaymentService: IPaymentService
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _user;
+    private readonly UserManager<ApplicationUser> userManager;
 
     /// <summary>
     /// A constructor used for injecting dependencies
@@ -26,6 +26,6 @@ public class PaymentService: IPaymentService
     public PaymentService(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
-        this._user = user;
+        this.userManager = user;
     }
 }

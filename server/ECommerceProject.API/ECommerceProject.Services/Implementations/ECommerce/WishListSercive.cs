@@ -12,7 +12,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce;
 public class WishlistSercive : IWishlistService
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _user;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     /// <summary>
     /// A constructor used for injecting dependencies
@@ -22,13 +22,13 @@ public class WishlistSercive : IWishlistService
     public WishlistSercive(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
-        this._user = user;
+        this._userManager = user;
     }
 
     /// <inheritdoc/>
     public async Task AddProductToWishlistAsync(string userId, Guid productId, Guid wishlistId)
     {
-        var user = _user.FindByIdAsync(userId);
+        var user = _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException("Invalid userId");
@@ -54,7 +54,7 @@ public class WishlistSercive : IWishlistService
     /// <inheritdoc/>
     public async Task<Guid> CreateWishlistAsync(string userId)
     {
-        var user = await _user.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException();
@@ -73,7 +73,7 @@ public class WishlistSercive : IWishlistService
     /// <inheritdoc/>
     public async Task<Wishlist> GetWishlistsAsync(string userId)
     {
-        var user = _user.FindByIdAsync(userId);
+        var user = _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException();
@@ -90,7 +90,7 @@ public class WishlistSercive : IWishlistService
     /// <inheritdoc/>
     public async Task RemoveProductFromWishlistAsync(string userId, Guid productId, Guid wishlistId)
     {
-        var user = _user.FindByIdAsync(userId);
+        var user = _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException("Invalid userId");

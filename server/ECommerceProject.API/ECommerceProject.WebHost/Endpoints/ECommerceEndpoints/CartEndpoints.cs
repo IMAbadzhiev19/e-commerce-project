@@ -22,7 +22,7 @@ public class CartEndpoints : ICarterModule
         {
             try
             {
-                var cartId = await cartService.CreateCart(currentUser.UserId);
+                var cartId = await cartService.CreateCartAsync(currentUser.UserId);
                 return Results.Ok(new Response
                 {
                     Status = "create-success",
@@ -43,7 +43,7 @@ public class CartEndpoints : ICarterModule
         {
             try
             {
-                await cartService.AddProductToCart(productId, cartId);
+                await cartService.AddProductToCartAsync(productId, cartId);
                 return Results.Ok(new Response
                 {
                     Status = "assign-product-success",
@@ -64,7 +64,7 @@ public class CartEndpoints : ICarterModule
         {
             try
             {
-                await cartService.RemoveProductFromCart(productId, cartId);
+                await cartService.RemoveProductFromCartAsync(productId, cartId);
                 return Results.Ok(new Response
                 {
                     Status = "remove-product-success",

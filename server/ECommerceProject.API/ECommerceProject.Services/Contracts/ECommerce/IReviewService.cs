@@ -29,5 +29,5 @@ public interface IReviewService
     /// </summary>
     /// <param name="productId">The unique identifier of the user to retrieve reviews for.</param>
     /// <returns>Task representing a collection of reviews.</returns>
-    Task<ICollection<Review>> GetReviewsAsync(Guid productId);
+    Task<ICollection<ReviewVM>> GetReviewsAsync(Guid productId);
 }

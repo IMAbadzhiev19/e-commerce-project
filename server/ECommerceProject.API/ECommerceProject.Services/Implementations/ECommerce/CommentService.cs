@@ -15,7 +15,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce;
 public class CommentService : ICommentService
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _user;
+    private readonly UserManager<ApplicationUser> _userManager;
 
 
     /// <summary>
@@ -26,13 +26,13 @@ public class CommentService : ICommentService
     public CommentService(ApplicationDbContext context,UserManager<ApplicationUser> user)
     {
         this._context = context;
-        this._user = user;
+        this._userManager = user;
     }
 
     /// <inheritdoc/>
     public async Task<Guid> CreateCommentAsync(string userId, CommentIM commentIM)
     {
-        var user = await _user.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
 
         if (user is null)
         {
