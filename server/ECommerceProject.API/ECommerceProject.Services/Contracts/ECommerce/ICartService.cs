@@ -10,7 +10,7 @@ public interface ICartService
     /// </summary>
     /// <param name="userId">The unique identifier of the user.</param>
     /// <returns>The unique identifier of the created cart.</returns>
-    Task<Guid> CreateCart(string userId);
+    Task<Guid> CreateCartAsync(string userId);
 
     /// <summary>
     /// Asynchronous method used for adding a product to a cart.
@@ -18,7 +18,7 @@ public interface ICartService
     /// <param name="productId">The unique identifier of the product to add to the cart.</param>
     /// <param name="cartId">The unique identifier of the cart to add the product to.</param>
     /// <returns>Task representing the add operation.</returns>
-    Task AddProductToCart(Guid productId, Guid cartId);
+    Task AddProductToCartAsync(Guid productId, Guid cartId);
 
     /// <summary>
     /// Asynchronous method used for removing a product from a cart.
@@ -26,5 +26,5 @@ public interface ICartService
     /// <param name="productId">The unique identifier of the product to remove from the cart.</param>
     /// <param name="cartId">The unique identifier of the cart to remove the product from.</param>
     /// <returns>Task representing the removal operation.</returns>
-    Task RemoveProductFromCart(Guid productId, Guid cartId);
+    Task RemoveProductFromCartAsync(Guid productId, Guid cartId);
 }

@@ -11,5 +11,5 @@ public interface IEmailService
     /// Asynchronously send an email notification for a product request.
     /// </summary>
     /// <param name="productRM">The product request model containing the required information for the email.</param>
-    Task SendProductRequest(ProductRM productRM);
+    Task SendProductRequestAsync(ProductRM productRM);
 }

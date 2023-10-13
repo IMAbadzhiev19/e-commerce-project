@@ -30,7 +30,7 @@ public class OrderService: IOrderService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateOrder(string userId, OrderIM order)
+    public async Task<Guid> CreateOrderAsync(string userId, OrderIM order)
     {
         var user = await _user.FindByIdAsync(userId);
         if (user is null)
@@ -53,7 +53,7 @@ public class OrderService: IOrderService
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<Order>> GetOrders(string userId)
+    public async Task<ICollection<Order>> GetOrdersAsync(string userId)
     {
         var orders = await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
 
@@ -66,7 +66,7 @@ public class OrderService: IOrderService
     }
 
     /// <inheritdoc/>
-    public async Task RemoveOrder(string userId, Guid orderId)
+    public async Task RemoveOrderAsync(string userId, Guid orderId)
     {
         var order = _context.Orders.FirstOrDefaultAsync(o=>o.UserId == userId && o.Id == orderId);
 

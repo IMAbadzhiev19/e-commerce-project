@@ -3,6 +3,7 @@ using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Shared.Models.ECommerce;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ namespace ECommerceProject.Services.Implementations.ECommerce;
 public class ReviewService : IReviewService
 {
     private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _user;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     /// <summary>
     /// A constructor used for injecting dependencies
@@ -24,57 +25,56 @@ public class ReviewService : IReviewService
     public ReviewService(ApplicationDbContext context, UserManager<ApplicationUser> user)
     {
         this._context = context;
-        this._user = user;
+        this._userManager = user;
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateReview(string userId, ReviewIM review)
+    public async Task<Guid> CreateReviewAsync(string userId, ReviewIM reviewIM)
     {
-        var product = await this._context.Products.FindAsync(review.ProductId);
-        if (product == null)
+        var product = await this._context.Products.FindAsync(reviewIM.ProductId);
+        if (product is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid productId");
         }
 
-        var user = _user.FindByIdAsync(userId);
-        if (user == null)
+        var user = _userManager.FindByIdAsync(userId);
+        if (user is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid userId");
         }
 
-        Review newReview = new Review()
-        { 
-            Grade = review.Grade,
-            UserId = userId,
-            ProductId = review.ProductId,
-        };
+        var review = reviewIM.Adapt<Review>();
+        review.UserId = userId;
 
-        this._context.Reviews.Add(newReview);
+        await this._context.Reviews.AddAsync(review);
         await _context.SaveChangesAsync();
-        return newReview.Id;
+        return review.Id;
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<Review>> GetReviews(Guid productId)
+    public async Task<ICollection<Review>> GetReviewsAsync(Guid productId)
     {
         var product = await this._context.Products.FindAsync(productId);
-        if(product == null)
+        if(product is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid productId");
         }
 
-        var reviews = await _context.Reviews.Where(r=>r.ProductId == productId).ToListAsync();
-        if(reviews == null)
+        var reviews = await _context.Reviews
+            .Where(r=>r.ProductId == productId)
+            .ToListAsync();
+        
+        if(reviews is null)
         {
-            throw new ArgumentException();
+            throw new Exception("Review not found");
         }
 
         return reviews;
     }
 
     /// <inheritdoc/>
-    public async Task RemoveReview(string userId, Guid reviewId)
+    public async Task RemoveReviewAsync(string userId, Guid reviewId)
     {
-        
+        throw new NotImplementedException();
     }
 }

@@ -57,11 +57,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     /// Comments DbSet
     /// </summary>
     public DbSet<Comment> Comments { get; set; } = default!;
-
-    public Task FindAsync(Guid wishListId)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     /// <summary>
     /// OnModelCreating method used for configuring the database

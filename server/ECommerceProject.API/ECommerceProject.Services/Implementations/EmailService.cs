@@ -9,7 +9,7 @@ namespace ECommerceProject.Services.Implementations;
 public class EmailService : IEmailService
 {
     /// <inheritdoc/>
-    public Task SendProductRequest(ProductRM productRM)
+    public Task SendProductRequestAsync(ProductRM productRM)
     {
         throw new NotImplementedException();
     }

@@ -2,7 +2,6 @@
 using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
-using ECommerceProject.Shared.Models.ECommerce;
 using Microsoft.AspNetCore.Identity;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
@@ -27,41 +26,41 @@ public class WishlistSercive : IWishlistService
     }
 
     /// <inheritdoc/>
-    public async Task AddProductToWishlist(string userId, Guid productId, Guid wishListId)
+    public async Task AddProductToWishlistAsync(string userId, Guid productId, Guid wishlistId)
     {
         var user = _user.FindByIdAsync(userId);
-        if (user == null)
+        if (user is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid userId");
         }
 
-        var wishList = await this._context.Wishlists.FindAsync(wishListId);
-        if (wishList == null)
+        var wishlist = await this._context.Wishlists.FindAsync(wishlistId);
+        if (wishlist is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid wishlistId");
         }
 
         var product = await _context.Products.FindAsync(productId);
-        if(product == null)
+        if(product is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid productId");
         }
 
-        wishList.Products.Add(product);
-        _context.Wishlists.Update(wishList);
+        wishlist.Products.Add(product);
+        _context.Wishlists.Update(wishlist);
         await this._context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateWishlist(string userId)
+    public async Task<Guid> CreateWishlistAsync(string userId)
     {
         var user = await _user.FindByIdAsync(userId);
-        if (user == null)
+        if (user is null)
         {
             throw new ArgumentException();
         }
-
-        Wishlist wishlist = new Wishlist()
+        
+        var wishlist = new Wishlist
         {
             UserId = userId,
         };
@@ -72,37 +71,41 @@ public class WishlistSercive : IWishlistService
     }
 
     /// <inheritdoc/>
-    public async Task<Wishlist> GetWishlists(string userId)
+    public async Task<Wishlist> GetWishlistsAsync(string userId)
     {
         var user = _user.FindByIdAsync(userId);
-        if (user == null)
+        if (user is null)
         {
             throw new ArgumentException();
         }
 
         var wishlist = await this._context.Wishlists.FindAsync(userId);
+
+        if (wishlist is null)
+            throw new Exception("Wishlist not found");
+
         return wishlist;
     }
 
     /// <inheritdoc/>
-    public async Task RemoveProductFromWishlist(string userId, Guid productId, Guid wishListId)
+    public async Task RemoveProductFromWishlistAsync(string userId, Guid productId, Guid wishlistId)
     {
         var user = _user.FindByIdAsync(userId);
-        if (user == null)
+        if (user is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid userId");
         }
 
-        var wishList = await this._context.Wishlists.FindAsync(wishListId);
-        if (wishList == null)
+        var wishList = await this._context.Wishlists.FindAsync(wishlistId);
+        if (wishList is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid wishlistId");
         }
 
         var product = await _context.Products.FindAsync(productId);
-        if (product == null)
+        if (product is null)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Invalid productId");
         }
 
         wishList.Products.Remove(product);

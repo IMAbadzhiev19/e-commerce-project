@@ -26,7 +26,7 @@ public class CartService : ICartService
     }
 
     /// <inheritdoc/>
-    public async Task AddProductToCart(Guid productId, Guid cartId)
+    public async Task AddProductToCartAsync(Guid productId, Guid cartId)
     {
         var product = await this._context.Products
             .FindAsync(productId);
@@ -49,7 +49,7 @@ public class CartService : ICartService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateCart(string userId)
+    public async Task<Guid> CreateCartAsync(string userId)
     {
         var user = await this._userManager.FindByIdAsync(userId);
 
@@ -72,7 +72,7 @@ public class CartService : ICartService
     }
 
     /// <inheritdoc/>
-    public async Task RemoveProductFromCart(Guid productId, Guid cartId)
+    public async Task RemoveProductFromCartAsync(Guid productId, Guid cartId)
     {
         var product = await this._context.Products
             .FindAsync(productId);

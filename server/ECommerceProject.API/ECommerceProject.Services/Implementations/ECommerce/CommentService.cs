@@ -3,6 +3,7 @@ using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
 using ECommerceProject.Shared.Models.ECommerce;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,28 +30,24 @@ public class CommentService : ICommentService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateComment(string userId, CommentIM commentIM)
+    public async Task<Guid> CreateCommentAsync(string userId, CommentIM commentIM)
     {
         var user = await _user.FindByIdAsync(userId);
 
-        if (user == null)
+        if (user is null)
         {
             throw new ArgumentException("This user doesn't exist");
         }
 
         var product = await this._context.Products.FindAsync(commentIM.ProductId);
-        if (product == null)
+        if (product is null)
         {
             throw new ArgumentException("This product doesn't exist");
         }
 
-        Comment comment = new Comment 
-        {
-            UserId = userId,
-            Text = commentIM.Text,
-            ProductId = product.Id,
-            Date = DateTime.Now,
-        };
+        var comment = commentIM.Adapt<Comment>();
+        comment.UserId = userId;
+        comment.Date = DateTime.Now;
 
         await _context.AddAsync(comment);
         await this._context.SaveChangesAsync();
@@ -59,9 +56,10 @@ public class CommentService : ICommentService
     }
 
     /// <inheritdoc/>
-    public async Task RemoveComment(string userId, Guid commentId)
+    public async Task RemoveCommentAsync(string userId, Guid commentId)
     {
-        var comment = await _context.Comments.FirstOrDefaultAsync(x => x.UserId == userId && x .Id == commentId);
+        var comment = await _context.Comments
+            .FirstOrDefaultAsync(x => x.UserId == userId && x .Id == commentId);
 
         if(comment == null)
         {
@@ -73,12 +71,12 @@ public class CommentService : ICommentService
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<Comment>> GetComments(Guid productId)
+    public async Task<ICollection<Comment>> GetCommentsAsync(Guid productId)
     {
         var product = await this._context.Products
             .FindAsync(productId);
 
-        if(product == null)
+        if(product is null)
         {
             throw new ArgumentException("This product doesn't exist");
         }
@@ -87,7 +85,7 @@ public class CommentService : ICommentService
             .Where(c => c.ProductId == productId)
             .ToListAsync();
 
-        if(comments == null)
+        if(comments is null)
         {
             throw new ArgumentException("This product doesn't have comments");
         }

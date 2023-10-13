@@ -14,7 +14,7 @@ public interface IOrderService
     /// <param name="userId">The unique identifier of the user creating the order.</param>
     /// <param name="">The unique identifier of the cart to use for creating the order.</param>
     /// <returns>The unique identifier of the created order.</returns>
-    Task<Guid> CreateOrder(string userId, OrderIM order);
+    Task<Guid> CreateOrderAsync(string userId, OrderIM order);
 
     /// <summary>
     /// Remove an existing order.
@@ -22,12 +22,12 @@ public interface IOrderService
     /// <param name="userId">The unique identifier of the user removing the order.</param>
     /// <param name="orderId">The unique identifier of the order to remove.</param>
     /// <returns>Task representing the removal operation.</returns>
-    Task RemoveOrder(string userId, Guid orderId);
+    Task RemoveOrderAsync(string userId, Guid orderId);
 
     /// <summary>
     /// Get a collection of orders associated with a user.
     /// </summary>
     /// <param name="userId">The unique identifier of the user to retrieve orders for.</param>
     /// <returns>Task representing a collection of orders.</returns>
-    Task<ICollection<Order>> GetOrders(string userId);
+    Task<ICollection<Order>> GetOrdersAsync(string userId);
 }
