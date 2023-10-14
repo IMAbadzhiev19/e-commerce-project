@@ -74,6 +74,21 @@ public class WishlistService : IWishlistService
     }
 
     /// <inheritdoc/>
+    public async Task<WishlistVM> GetWishlistByIdAsync(string userId, Guid wishlistId)
+    {
+        var wishlist = await this._context.Wishlists
+            .FindAsync(wishlistId);
+
+        if (wishlist is null)
+            throw new ArgumentException("Invalid wishlistId");
+
+        if (wishlist.UserId != userId)
+            throw new Exception("The wishlist does not belong to you");
+
+        return wishlist.Adapt<WishlistVM>();
+    }
+
+    /// <inheritdoc/>
     public async Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId)
     {
         var user = _userManager.FindByIdAsync(userId);

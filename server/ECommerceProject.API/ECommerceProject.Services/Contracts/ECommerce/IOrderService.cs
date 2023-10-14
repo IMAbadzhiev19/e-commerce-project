@@ -29,5 +29,13 @@ public interface IOrderService
     /// </summary>
     /// <param name="userId">The unique identifier of the user to retrieve orders for.</param>
     /// <returns>Task representing a collection of orders.</returns>
-    Task<ICollection<Order>> GetOrdersAsync(string userId);
+    Task<ICollection<OrderVM>> GetOrdersAsync(string userId);
+
+    /// <summary>
+    /// Get a order associated with a user
+    /// </summary>
+    /// <param name="userId">The unique identitifer of the user</param>
+    /// <param name="orderId">The unique identitifer of the order</param>
+    /// <returns>Order View Model</returns>
+    Task<OrderVM> GetOrderByIdAsync(string userId, Guid orderId);
 }

@@ -18,7 +18,7 @@ public class CartEndpoints : ICarterModule
     /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/cart/create{userId}", [Authorize] async ([FromRoute] string userId, ICurrentUser currentUser, ICartService cartService) =>
+        app.MapPost("api/carts/create{userId}", [Authorize] async ([FromRoute] string userId, ICurrentUser currentUser, ICartService cartService) =>
         {
             try
             {
@@ -39,7 +39,7 @@ public class CartEndpoints : ICarterModule
             }
         }).WithTags("Cart");
 
-        app.MapPost("api/cart/assign-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
+        app.MapPost("api/carts/assign-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
         {
             try
             {
@@ -60,7 +60,7 @@ public class CartEndpoints : ICarterModule
             }
         }).WithTags("Cart");
 
-        app.MapDelete("api/cart/remove-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
+        app.MapDelete("api/carts/remove-product", [Authorize] async ([FromQuery] Guid productId, [FromQuery] Guid cartId, ICartService cartService) =>
         {
             try
             {
@@ -77,6 +77,23 @@ public class CartEndpoints : ICarterModule
                 {
                     Status = "remove-product-failed",
                     Message = e.Message,
+                });
+            }
+        }).WithTags("Cart");
+
+        app.MapGet("api/carts/get-cart{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, ICartService cartService) =>
+        {
+            try
+            {
+                var cart = await cartService.GetCartByIdAsync(currentUser.UserId, id);
+                return Results.Ok(cart);
+            }
+            catch(Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "get-cart-failed",
+                    
                 });
             }
         }).WithTags("Cart");

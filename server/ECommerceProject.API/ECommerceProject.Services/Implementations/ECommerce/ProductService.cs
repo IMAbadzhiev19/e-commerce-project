@@ -32,6 +32,18 @@ public class ProductService : IProductService
     }
 
     /// <inheritdoc/>
+    public async Task<ProductVM> GetProductByIdAsync(Guid productId)
+    {
+        var product = await this._context.Products
+            .FindAsync(productId);
+
+        if (product is null)
+            throw new ArgumentException("Invalid productId");
+
+        return product.Adapt<ProductVM>();
+    }
+
+    /// <inheritdoc/>
     public async Task<ICollection<ProductVM>> GetProductsByCategoryAsync(Categories category)
     {
         var products = await this._context.Products

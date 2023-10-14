@@ -22,7 +22,7 @@ public class ProductEndpoints : ICarterModule
     /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/product/request-product", [Authorize] async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
+        app.MapGet("api/products/request-product", [Authorize] async ([FromBody] ProductRM productRM, IEmailService emailService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -44,7 +44,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapGet("api/product/category", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
+        app.MapGet("api/products/category", [Authorize] async ([FromBody] CategoryIM categoryIM, IProductService productService) =>
         {
             try
             {   
@@ -65,7 +65,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPost("api/product/upload-image{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
+        app.MapPost("api/products/upload-image{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] Guid id, [FromForm] IFormFile image, IFileService fileService) =>
         {
             try
             {
@@ -87,7 +87,7 @@ public class ProductEndpoints : ICarterModule
             }
         }).WithTags("Product");
 
-        app.MapPut("api/product/update{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
+        app.MapPut("api/products/update{id}", [Authorize(Roles = UserRoles.Admin)] async ([FromRoute] Guid id, [FromBody] ProductUM productUM , IProductService productService) =>
         {
             try
             {
@@ -103,6 +103,23 @@ public class ProductEndpoints : ICarterModule
                 return Results.BadRequest(new Response
                 {
                     Status = "update-product-failed",
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Product");
+
+        app.MapGet("api/products/get-product{id}", [Authorize] async ([FromRoute] Guid id, IProductService productService) =>
+        {
+            try
+            {
+                var product = await productService.GetProductByIdAsync(id);
+                return Results.Ok(product);
+            }
+            catch(Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "get-product-failed",
                     Message = e.Message,
                 });
             }

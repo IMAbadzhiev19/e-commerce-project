@@ -1,4 +1,6 @@
-﻿namespace ECommerceProject.Services.Contracts.ECommerce;
+﻿using ECommerceProject.Shared.Models.ECommerce;
+
+namespace ECommerceProject.Services.Contracts.ECommerce;
 
 /// <summary>
 /// Cart Service Interface
@@ -27,4 +29,12 @@ public interface ICartService
     /// <param name="cartId">The unique identifier of the cart to remove the product from.</param>
     /// <returns>Task representing the removal operation.</returns>
     Task RemoveProductFromCartAsync(Guid productId, Guid cartId);
+
+    /// <summary>
+    /// Asynchronous method used for retrieving a cart by id.
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user</param>
+    /// <param name="cartId">The unique identifier of the cart</param>
+    /// <returns>Cart View Model</returns>
+    Task<CartVM> GetCartByIdAsync(string userId, Guid cartId);
 }

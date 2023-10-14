@@ -52,6 +52,21 @@ public class ReviewService : IReviewService
     }
 
     /// <inheritdoc/>
+    public async Task<ReviewVM> GetReviewByIdAsync(string userId, Guid reviewId)
+    {
+        var review = await this._context.Reviews
+            .FindAsync(reviewId);
+
+        if (review is null)
+            throw new ArgumentException("Invalid reviewId");
+
+        if (review.UserId != userId)
+            throw new Exception("This review doesn't belong to you");
+
+        return review.Adapt<ReviewVM>();
+    }
+
+    /// <inheritdoc/>
     public async Task<ICollection<ReviewVM>> GetReviewsAsync(Guid productId)
     {
         var product = await this._context.Products.FindAsync(productId);
@@ -75,6 +90,16 @@ public class ReviewService : IReviewService
     /// <inheritdoc/>
     public async Task RemoveReviewAsync(string userId, Guid reviewId)
     {
-        throw new NotImplementedException();
+        var review = await this._context.Reviews
+            .FindAsync(reviewId);
+
+        if (review is null)
+            throw new ArgumentException("Invalid reviewId");
+
+        if (review.UserId != userId)
+            throw new Exception("This review doesn't belong to you");
+
+        this._context.Reviews.Remove(review);
+        await this._context.SaveChangesAsync();
     }
 }

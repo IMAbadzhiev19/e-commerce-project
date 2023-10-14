@@ -20,7 +20,7 @@ public class OrderEndpoints : ICarterModule
     /// <param name="app">The IEndpointRouteBuilder instance.</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/order/create", [Authorize] async ([FromBody] OrderIM orderIM, IOrderService orderService, ICurrentUser currentUser) =>
+        app.MapPost("api/orders/create", [Authorize] async ([FromBody] OrderIM orderIM, IOrderService orderService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -37,7 +37,7 @@ public class OrderEndpoints : ICarterModule
             }
         }).WithTags("Order");
         
-        app.MapDelete("api/order/remove{id}", [Authorize] async ([FromRoute] Guid id, IOrderService orderService, ICurrentUser currentUser) =>
+        app.MapDelete("api/orders/remove{id}", [Authorize] async ([FromRoute] Guid id, IOrderService orderService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -55,13 +55,30 @@ public class OrderEndpoints : ICarterModule
             }
         }).WithTags("Order");
         
-        app.MapGet("api/order/orders", [Authorize] async (IOrderService orderService, ICurrentUser currentUser) =>
+        app.MapGet("api/orders/get-orders", [Authorize] async (IOrderService orderService, ICurrentUser currentUser) =>
         {
             try
             {
                 var orders = await orderService.GetOrdersAsync(currentUser.UserId);
 
-                return Results.Ok();
+                return Results.Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "get-failed",
+                    Message = ex.Message
+                });
+            }
+        }).WithTags("Order");
+
+        app.MapGet("api/orders/get-order{id}", [Authorize] async ([FromRoute] Guid id, IOrderService orderService, ICurrentUser currentUser) =>
+        {
+            try
+            {
+                var order = await orderService.GetOrderByIdAsync(currentUser.UserId, id);
+                return Results.Ok(order);
             }
             catch (Exception ex)
             {

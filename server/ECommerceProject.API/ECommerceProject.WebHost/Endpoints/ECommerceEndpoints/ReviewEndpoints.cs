@@ -12,7 +12,7 @@ public class ReviewEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/review/create", [Authorize] async ([FromBody] ReviewIM reviewIM, ICurrentUser currentUser, IReviewService reviewService) =>
+        app.MapPost("api/reviews/create", [Authorize] async ([FromBody] ReviewIM reviewIM, ICurrentUser currentUser, IReviewService reviewService) =>
         {
             try
             {
@@ -29,7 +29,7 @@ public class ReviewEndpoints : ICarterModule
             }
         }).WithTags("Review");
 
-        app.MapDelete("api/review/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IReviewService reviewService) =>
+        app.MapDelete("api/reviews/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IReviewService reviewService) =>
         {
             try
             {
@@ -46,7 +46,7 @@ public class ReviewEndpoints : ICarterModule
             }
         }).WithTags("Review");
 
-        app.MapGet("api/review/reviews", [Authorize] async ([FromQuery] Guid productId, IReviewService reviewService) =>
+        app.MapGet("api/reviews/get-reviews", [Authorize] async ([FromQuery] Guid productId, IReviewService reviewService) =>
         {
             try
             {
@@ -57,7 +57,24 @@ public class ReviewEndpoints : ICarterModule
             {
                 return Results.BadRequest(new Response
                 {
-                    Status = "reviews-failed",
+                    Status = "get-reviews-failed",
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Review");
+
+        app.MapGet("api/reviews/get-review{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IReviewService reviewService) =>
+        {
+            try
+            {
+                var review = await reviewService.GetReviewByIdAsync(currentUser.UserId, id);
+                return Results.Ok(review);
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "get-review-failed",
                     Message = e.Message,
                 });
             }

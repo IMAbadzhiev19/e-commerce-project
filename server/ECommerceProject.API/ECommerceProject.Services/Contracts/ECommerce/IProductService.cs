@@ -26,4 +26,11 @@ public interface IProductService
     /// <param name="newProduct">The updated product data.</param>
     /// <returns>Task representing the update operation.</returns>
     Task UpdateProductAsync(Guid productId, ProductUM newProduct);
+
+    /// <summary>
+    /// Get a product by its unique identitifer
+    /// </summary>
+    /// <param name="productId">The unique identifier of the product</param>
+    /// <returns>Product View Model</returns>
+    Task<ProductVM> GetProductByIdAsync(Guid productId);
 }

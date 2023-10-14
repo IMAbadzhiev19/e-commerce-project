@@ -6,7 +6,6 @@ using ECommerceProject.Shared.Models.ECommerce;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
@@ -53,7 +52,21 @@ public class OrderService: IOrderService
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<Order>> GetOrdersAsync(string userId)
+    public async Task<OrderVM> GetOrderByIdAsync(string userId, Guid orderId)
+    {
+        var order = await this._context.Orders.FindAsync(orderId);
+
+        if (order is null)
+            throw new ArgumentException("Invalid orderId");
+
+        if (order.UserId != userId)
+            throw new Exception("This order doesn't belong to this user");
+
+        return order.Adapt<OrderVM>();
+    }
+
+    /// <inheritdoc/>
+    public async Task<ICollection<OrderVM>> GetOrdersAsync(string userId)
     {
         var orders = await _context.Orders.Where(o => o.UserId == userId).ToListAsync();
 
@@ -62,7 +75,7 @@ public class OrderService: IOrderService
             throw new ArgumentException("This user doesn't have orders");
         }
 
-        return orders;
+        return orders.Adapt<List<OrderVM>>();
     }
 
     /// <inheritdoc/>

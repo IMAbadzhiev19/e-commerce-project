@@ -2,7 +2,10 @@
 using ECommerceProject.Data.Models.Auth;
 using ECommerceProject.Data.Models.ECommerce;
 using ECommerceProject.Services.Contracts.ECommerce;
+using ECommerceProject.Shared.Models.ECommerce;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceProject.Services.Implementations.ECommerce;
 
@@ -69,6 +72,18 @@ public class CartService : ICartService
         await this._context.SaveChangesAsync();
 
         return cart.Id;
+    }
+
+    /// <inheritdoc/>
+    public async Task<CartVM> GetCartByIdAsync(string userId, Guid cartId)
+    {
+        var cart = await this._context.Carts
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == cartId);
+
+        if (cart is null)
+            throw new Exception("An error occured while retrieving the cart");
+
+        return cart.Adapt<CartVM>();
     }
 
     /// <inheritdoc/>

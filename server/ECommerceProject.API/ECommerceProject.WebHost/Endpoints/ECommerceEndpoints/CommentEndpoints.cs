@@ -20,7 +20,7 @@ public class CommentEndpoints : ICarterModule
     /// <param name="app">IEndpointRouteBuilder</param>
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/comment/create", [Authorize] async ([FromBody] CommentIM commentIM, ICommentService commentService, ICurrentUser currentUser) =>
+        app.MapPost("api/comments/create", [Authorize] async ([FromBody] CommentIM commentIM, ICommentService commentService, ICurrentUser currentUser) =>
         {
             try
             {
@@ -38,7 +38,7 @@ public class CommentEndpoints : ICarterModule
             }
         }).WithTags("Comment");
 
-        app.MapDelete("api/comment/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, ICommentService commentService) =>
+        app.MapDelete("api/comments/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, ICommentService commentService) =>
         {
             try
             {
@@ -59,7 +59,7 @@ public class CommentEndpoints : ICarterModule
             }
         }).WithTags("Comment");
 
-        app.MapGet("api/comment/comments{productId}", [Authorize] async ([FromRoute] Guid productId, ICommentService commentService) =>
+        app.MapGet("api/comments/get-comments{productId}", [Authorize] async ([FromRoute] Guid productId, ICommentService commentService) =>
         {
             try
             {
@@ -71,6 +71,23 @@ public class CommentEndpoints : ICarterModule
                 return Results.BadRequest(new Response
                 {
                     Status = "comments-failed",
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Comment");
+
+        app.MapGet("api/comments/get-comment{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, ICommentService commentService) =>
+        {
+            try
+            {
+                var comment = await commentService.GetCommentByIdAsync(currentUser.UserId, id);
+                return Results.Ok(comment);
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "get-comment-failed",
                     Message = e.Message,
                 });
             }

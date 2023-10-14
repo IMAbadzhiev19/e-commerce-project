@@ -6,6 +6,11 @@
 public enum Categories
 {
     /// <summary>
+    /// Empty category
+    /// </summary>
+    None,
+    
+    /// <summary>
     /// Furniture category.
     /// </summary>
     Furniture,

@@ -92,4 +92,18 @@ public class CommentService : ICommentService
 
         return comments.Adapt<List<CommentVM>>();
     }
+
+    /// <inheritdoc/>
+    public async Task<CommentVM> GetCommentByIdAsync(string userId, Guid commentId)
+    {
+        var comment = await this._context.Comments.FindAsync(commentId);
+
+        if (comment is null)
+            throw new ArgumentException("Invalid commentId");
+
+        if (comment.UserId != userId)
+            throw new Exception("The comment doesn't belong to you");
+
+            return comment.Adapt<CommentVM>();
+    }
 }

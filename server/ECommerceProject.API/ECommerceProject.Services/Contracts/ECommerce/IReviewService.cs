@@ -30,4 +30,12 @@ public interface IReviewService
     /// <param name="productId">The unique identifier of the user to retrieve reviews for.</param>
     /// <returns>Task representing a collection of reviews.</returns>
     Task<ICollection<ReviewVM>> GetReviewsAsync(Guid productId);
+
+    /// <summary>
+    /// Get a review by its unique identitifer associated with user
+    /// </summary>
+    /// <param name="userId">The unique identifier of the user</param>
+    /// <param name="reviewId">The unique identitifer of the review</param>
+    /// <returns></returns>
+    Task<ReviewVM> GetReviewByIdAsync(string userId, Guid reviewId);
 }

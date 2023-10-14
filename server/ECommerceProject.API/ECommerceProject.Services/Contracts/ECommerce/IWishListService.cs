@@ -44,4 +44,12 @@ public interface IWishlistService
     /// <param name="wishlistId">The unique identifier of the wishlist</param>
     /// <param name="userId">The unique identifier of the user</param>
     Task RemoveWishlistAsync(Guid wishlistId, string userId);
+
+    /// <summary>
+    /// Gets a wishlist associated with a user by its unique identifier
+    /// </summary>
+    /// <param name="userId">The unique identitifer of the user</param>
+    /// <param name="wishlistId">The unique identitifer of the wishlist</param>
+    /// <returns>Wishlist View Model</returns>
+    Task<WishlistVM> GetWishlistByIdAsync(string userId, Guid wishlistId);
 }

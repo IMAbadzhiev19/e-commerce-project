@@ -30,4 +30,12 @@ public interface ICommentService
     /// <param name="productId">The unique identifier of the product to retrieve comments for.</param>
     /// <returns>Task representing a collection of comments.</returns>
     Task<ICollection<CommentVM>> GetCommentsAsync(Guid productId);
+
+    /// <summary>
+    /// Get a comment by its unique identitifer
+    /// </summary>
+    /// <param name="userId">The unique identitifer of the user</param>
+    /// <param name="commentId">The unique identitifer of the comment</param>
+    /// <returns>Comment View Model</returns>
+    Task<CommentVM> GetCommentByIdAsync(string userId, Guid commentId);
 }

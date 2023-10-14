@@ -11,7 +11,7 @@ public class WishlistEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("api/wishlist/create", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapPost("api/wishlists/create", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -28,7 +28,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapDelete("api/wishlist/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapDelete("api/wishlists/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -45,7 +45,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapPut("api/wishlist/assign-product{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapPut("api/wishlists/assign-product{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -62,7 +62,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapPut("api/wishlist/remove-product{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapPut("api/wishlists/remove-product{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -79,7 +79,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapGet("api/wishlist/wishlists", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapGet("api/wishlists/get-wishlists", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -90,7 +90,24 @@ public class WishlistEndpoints : ICarterModule
             {
                 return Results.BadRequest(new Response
                 {
-                    Status = "wishlists-failed",
+                    Status = "get-wishlists-failed",
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Wishlist");
+
+        app.MapGet("api/wishlists/get-wishlist{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        {
+            try
+            {
+                var wishlist = await wishlistService.GetWishlistByIdAsync(currentUser.UserId, id);
+                return Results.Ok(wishlist);
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "get-wishlist-failed",
                     Message = e.Message,
                 });
             }
