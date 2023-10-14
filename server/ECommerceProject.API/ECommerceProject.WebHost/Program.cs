@@ -2,6 +2,7 @@ using Carter;
 using ECommerceProject.Data.Data;
 using ECommerceProject.Services;
 using ECommerceProject.WebHost.Extensions;
+using ECommerceProject.WebHost.Seeding;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,7 @@ builder.Services.AddCarter();
 
 var app = builder.Build();
 
+await SeedInitialAdmin.SeedInitialAdminAsync(configuration, app.Services.CreateScope().ServiceProvider);
 
 if (app.Environment.IsDevelopment())
 {

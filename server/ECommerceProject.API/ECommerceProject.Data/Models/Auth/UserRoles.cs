@@ -14,6 +14,4 @@ public static class UserRoles
     /// Administrator role which gives you access to some features a user doesn't have access to
     /// </summary>
     public const string Admin = "Admin";
-    
-    //public const string Superuser = "Superuser";
 }

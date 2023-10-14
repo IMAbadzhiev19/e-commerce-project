@@ -1,4 +1,5 @@
 ﻿using System;
+using ECommerceProject.WebHost.Extensions;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
