@@ -33,4 +33,10 @@ public interface IProductService
     /// <param name="productId">The unique identifier of the product</param>
     /// <returns>Product View Model</returns>
     Task<ProductVM> GetProductByIdAsync(Guid productId);
+
+    /// <summary>
+    /// Adds a collection of products to the database
+    /// </summary>
+    /// <param name="products">The collection of products to be added</param>
+    Task AddProductsAsync(ICollection<ProductIM> products);
 }

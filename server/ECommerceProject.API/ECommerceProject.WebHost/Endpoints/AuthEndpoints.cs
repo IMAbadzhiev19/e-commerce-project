@@ -57,13 +57,9 @@ public class AuthEndpoints : ICarterModule
         {
             try
             {
-                await authService.CreateUserAsync(registerIM);
+                var userId = await authService.CreateUserAsync(registerIM);
 
-                return Results.Ok(new Response
-                {
-                    Status = "register-successful",
-                    Message = "The user has been successfully registered"
-                });
+                return Results.Ok(userId);
             }
             catch (NullReferenceException)
             {

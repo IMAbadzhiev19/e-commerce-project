@@ -27,7 +27,7 @@ public class AuthService : IAuthService
     }
 
     /// <inheritdoc/>
-    public async Task CreateUserAsync(RegisterIM registerIM)
+    public async Task<string> CreateUserAsync(RegisterIM registerIM)
     {
         if (!await this._roleManager.RoleExistsAsync(UserRoles.User))
             await this._roleManager.CreateAsync(new IdentityRole(UserRoles.User));
@@ -43,6 +43,9 @@ public class AuthService : IAuthService
         var roleResult = await _userManager.AddToRoleAsync(user, UserRoles.User);
         if (!roleResult.Succeeded)
             throw new Exception("Adding role failed");
+
+        var createdUser = await _userManager.FindByEmailAsync(user.Email!);
+        return createdUser!.Id;
     }
 
     /// <inheritdoc/>

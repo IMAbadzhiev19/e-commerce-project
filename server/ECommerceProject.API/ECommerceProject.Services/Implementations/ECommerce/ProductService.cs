@@ -46,13 +46,23 @@ public class ProductService : IProductService
     /// <inheritdoc/>
     public async Task<ICollection<ProductVM>> GetProductsByCategoryAsync(Categories category)
     {
-        var products = await this._context.Products
-        .AsNoTracking()
-        .Where(x => x.Category == category)
-        .ToListAsync();
+        List<Product> products;
+        if (category is Categories.None)
+        {
+            products = await this._context.Products
+                .AsNoTracking()
+                .ToListAsync();
+        }
+        else
+        {
+            products = await this._context.Products
+                .AsNoTracking()
+                .Where(p => p.Category == category)
+                .ToListAsync();
+        }
 
         if (products.Count == 0)
-            throw new Exception("There are no products within this category");
+            return new List<ProductVM>();
 
         return products.Adapt<List<ProductVM>>();
     }
@@ -76,6 +86,18 @@ public class ProductService : IProductService
             product.ImageUrl = newProduct.ImageUrl;
         if (newProduct.Quantity != null)
             product.Quantity = newProduct.Quantity;
+
+        await this._context.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task AddProductsAsync(ICollection<ProductIM> products)
+    {
+        foreach(var product in products)
+        {
+            await this._context.Products
+                .AddAsync(product.Adapt<Product>());
+        }
 
         await this._context.SaveChangesAsync();
     }

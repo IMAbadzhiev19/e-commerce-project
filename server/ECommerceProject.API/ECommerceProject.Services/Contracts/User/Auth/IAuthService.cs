@@ -11,7 +11,8 @@ public interface IAuthService
     /// Asynchronously create a new user based on the provided registration input model.
     /// </summary>
     /// <param name="registerIM">The registration input model with user details.</param>
-    Task CreateUserAsync(RegisterIM registerIM);
+    /// <returns>The unique identitifer of the user</returns>
+    Task<string> CreateUserAsync(RegisterIM registerIM);
 
     /// <summary>
     /// Asynchronously grant administrator privileges to a user.
