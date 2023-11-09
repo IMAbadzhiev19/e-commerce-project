@@ -79,4 +79,16 @@ public class ProductService : IProductService
 
         await this._context.SaveChangesAsync();
     }
+
+    public async Task<ICollection<ProductVM>> GetProducts()
+    {
+        var products = await this._context.Products.ToListAsync();
+
+        if(products is null)
+        {
+            throw new ArgumentException("NULL");
+        }
+
+        return products.Adapt<List<ProductVM>>();
+    }
 }

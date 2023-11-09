@@ -33,4 +33,6 @@ public interface IProductService
     /// <param name="productId">The unique identifier of the product</param>
     /// <returns>Product View Model</returns>
     Task<ProductVM> GetProductByIdAsync(Guid productId);
+
+    Task<ICollection<ProductVM>> GetProducts();
 }
