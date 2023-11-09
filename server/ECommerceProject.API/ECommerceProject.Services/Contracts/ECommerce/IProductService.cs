@@ -34,5 +34,13 @@ public interface IProductService
     /// <returns>Product View Model</returns>
     Task<ProductVM> GetProductByIdAsync(Guid productId);
 
+<<<<<<< HEAD
     Task<ICollection<ProductVM>> GetProducts();
+=======
+    /// <summary>
+    /// Adds a collection of products to the database
+    /// </summary>
+    /// <param name="products">The collection of products to be added</param>
+    Task AddProductsAsync(ICollection<ProductIM> products);
+>>>>>>> d43f027a62472554b881294057529ac59b4514ad
 }
