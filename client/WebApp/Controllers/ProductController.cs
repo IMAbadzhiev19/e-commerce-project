@@ -5,9 +5,10 @@ using WebApp.ModelView;
 
 namespace WebApp.Controllers
 {
+    [Route("/Product/")]
     public class ProductController : Controller
     {
-        private Uri _uri = new Uri("https://localhost:7007/");
+        private Uri _uri = new Uri("https://localhost:7148/");
         private readonly HttpClient _httpClient;
 
         public ProductController() 
@@ -16,7 +17,7 @@ namespace WebApp.Controllers
             _httpClient.BaseAddress = _uri;
         }
 
-        [HttpGet]
+        [HttpGet("GetProduct")]
         public IActionResult getProduct()
         {
             List<ProductView> productViews = new();
@@ -28,7 +29,7 @@ namespace WebApp.Controllers
                 productViews = JsonConvert.DeserializeObject<List<ProductView>>(data);
             }
 
-            return View(productViews);
+            return RedirectToAction("Index");
         }
     }
 }

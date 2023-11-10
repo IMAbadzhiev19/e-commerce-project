@@ -104,12 +104,21 @@ public class ProductService : IProductService
     /// <inheritdoc/>
     public async Task AddProductsAsync(ICollection<ProductIM> products)
     {
-        foreach(var product in products)
+        foreach (var product in products)
         {
             await this._context.Products
                 .AddAsync(product.Adapt<Product>());
         }
 
         await this._context.SaveChangesAsync();
+    }
+
+    public async Task<Guid> CreateProduct(ProductIM product)
+    {
+        var newProduct = product.Adapt<Product>();
+
+        await this._context.Products.AddAsync(newProduct);
+        await _context.SaveChangesAsync();
+        return newProduct.Id;
     }
 }

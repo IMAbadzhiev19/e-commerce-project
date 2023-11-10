@@ -141,5 +141,22 @@ public class ProductEndpoints : ICarterModule
                 });
             }
         }).WithTags("Product");
+
+        app.MapPost("api/products/create", [Authorize] async ([FromBody] ProductIM product,IProductService productService) =>
+        {
+            try
+            {
+                var newProduct = await productService.CreateProduct(product);
+                return Results.Ok(newProduct);
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new Response
+                {
+                    Status = "create-product-failed", 
+                    Message = e.Message,
+                });
+            }
+        }).WithTags("Product");
     }
 }

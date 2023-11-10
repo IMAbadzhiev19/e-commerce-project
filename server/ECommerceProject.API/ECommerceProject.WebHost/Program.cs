@@ -47,8 +47,8 @@ builder.Services.AddCarter();
 
 var app = builder.Build();
 
-await SeedInitialAdmin.SeedInitialAdminAsync(configuration, app.Services.CreateScope().ServiceProvider);
-await SeedProducts.SeedProductsAsync(app.Services.CreateScope().ServiceProvider);
+//await SeedInitialAdmin.SeedInitialAdminAsync(configuration, app.Services.CreateScope().ServiceProvider);
+//await SeedProducts.SeedProductsAsync(app.Services.CreateScope().ServiceProvider);
 
 if (app.Environment.IsDevelopment())
 {

@@ -35,6 +35,9 @@ public interface IProductService
     Task<ProductVM> GetProductByIdAsync(Guid productId);
 
     Task<ICollection<ProductVM>> GetProducts();
+
+    Task<Guid> CreateProduct(ProductIM products);
+
     /// <summary>
     /// Adds a collection of products to the database
     /// </summary>

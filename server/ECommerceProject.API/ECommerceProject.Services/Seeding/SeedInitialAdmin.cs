@@ -23,7 +23,7 @@ public static class SeedInitialAdmin
         var authService = serviceProvider.GetRequiredService<IAuthService>();
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        if (!await roleManager.RoleExistsAsync(UserRoles.User) && !await roleManager.RoleExistsAsync(UserRoles.Admin))
+        if (!await roleManager?.RoleExistsAsync(UserRoles.User) && !await roleManager?.RoleExistsAsync(UserRoles.Admin))
         {
             var userId = await authService.CreateUserAsync(
                 new RegisterIM
