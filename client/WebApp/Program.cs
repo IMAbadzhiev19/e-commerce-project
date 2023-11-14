@@ -28,7 +28,7 @@ namespace WebApp
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Product}/{action=Index}/{id?}");
+                pattern: "/{action=Index}/{id?}");
 
             app.MapRazorPages();
 

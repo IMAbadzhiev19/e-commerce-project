@@ -1,0 +1,9 @@
+﻿@model IEnumerable<WebApp.ModelView.ProductView>
+
+@foreach(var product in Model)
+{
+    <div>
+        <p>@product.Title</p>
+        <p>@product.Price</p>
+    </div>
+}
