@@ -22,16 +22,16 @@ namespace WebApp.Controllers
         [HttpGet("/Register")]
         public IActionResult Register()
         {
-            List<ProductView> productViews = new();
-            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "api/products/get-products").Result;
+            //List<ProductView> productViews = new();
+            //HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "api/products/get-products").Result;
 
-            if(response.IsSuccessStatusCode) 
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                productViews = JsonConvert.DeserializeObject<List<ProductView>>(data);
-            }
+            //if(response.IsSuccessStatusCode) 
+            //{
+            //    string data = response.Content.ReadAsStringAsync().Result;
+            //    productViews = JsonConvert.DeserializeObject<List<ProductView>>(data);
+            //}
 
-            return View(productViews);
+            return View();
         }
     }
 }

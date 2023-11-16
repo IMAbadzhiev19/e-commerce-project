@@ -1,0 +1,36 @@
+﻿body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family:sans-serif;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding-bottom:20px;
+}
+
+lable {
+    margin-top: 20px;
+}
+
+input {
+    width: 300px;
+    border:none;
+    outline:none;
+    border-bottom:1px solid;
+    background:transparent;
+}
+
+div {
+    position:absolute;
+    top:50%;
+    transform:translate(0,-50%);
+    padding:20px;
+    background-color: snow;
+    width: fit-content;
+    height: fit-content;
+    border-radius: 15px;
+    box-shadow:8px 8px 8px 8px rgba(205,228,214,0.6);
+}
