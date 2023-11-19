@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Pages;
 
-namespace WebApp.Views.Product
+namespace WebApp.Views.User
 {
     public class RegisterModel : PageModel
     {

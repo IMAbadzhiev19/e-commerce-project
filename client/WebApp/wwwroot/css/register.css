@@ -34,3 +34,14 @@ div {
     border-radius: 15px;
     box-shadow:8px 8px 8px 8px rgba(205,228,214,0.6);
 }
+
+button
+{
+    align-self:center;
+    outline:none;
+    border:none;
+    border-radius:10px;
+    margin-top:10px;
+    width:fit-content;
+    padding:10px;
+}

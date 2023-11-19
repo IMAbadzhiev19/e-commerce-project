@@ -8,6 +8,9 @@ namespace WebApp
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddMvc();
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
