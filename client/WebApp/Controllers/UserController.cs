@@ -27,7 +27,12 @@ namespace WebApp.Controllers
 
 
         [HttpGet("/Register")]
-        public IActionResult Register() => View();
+        public IActionResult Register()
+        {
+            var user = new UserMV();
+            return View(user);
+        }
+
 //List<ProductView> productViews = new();
             //HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "api/products/get-products").Result;
 
@@ -36,10 +41,14 @@ namespace WebApp.Controllers
             //    string data = response.Content.ReadAsStringAsync().Result;
             //    productViews = JsonConvert.DeserializeObject<List<ProductView>>(data);
             //}
-        [HttpPost("/CreateUser")]
-        public IActionResult CreateUser([FromBody]UserMV user)
+
+        [HttpPost("/Register")]
+        public async IActionResult Register([FromForm]UserMV user)
         {
-            return RedirectToAction("Index");
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,
+                _httpClient.BaseAddress + "api/auth/register");
+            HttpResponseMessage response = await _httpClient.SendAsync(request,user);
         }
     }
 }
