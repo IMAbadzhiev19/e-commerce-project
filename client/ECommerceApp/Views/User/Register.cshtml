@@ -1,14 +1,14 @@
-﻿@model WebApp.ModelView.UserMV
+﻿@model ECommerceApp.Models.UserVM
 
 @{
     ViewData["Title"] = "Register";
 }
 
-<form method="post" asp-action="/Register">
+<form method="post" asp-action="Register">
 
     <lable for="UserName" class="form-label">User name</lable>
 
-    <input type="text" asp-for="Model.UserName" id="userName" />
+    <input type="text" asp-for="UserName" id="userName" />
 
     <lable for="FirstName" class="form-label">First name</lable>
     <input type="text" asp-for="FirstName" id="firstName" />
@@ -24,7 +24,7 @@
     <input type="number" asp-for="PhoneNumber" id="phoneNumber" />
 
     <lable for="Password" class="form-label">Password</lable>
-    <input type="password" class="form-control" asp-for="Password" id="password" />
+    <input type="password" class="form-control" asp-for="PasswordHash" id="password" />
 
     <button class="btn btn-primary" name="submit" type="submit">Sign in</button>
 </form>

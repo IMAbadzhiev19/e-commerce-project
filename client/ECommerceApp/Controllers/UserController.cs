@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Drawing.Imaging;
 using System.Net.Http.Headers;
-using WebApp.ModelView;
+using ECommerceApp.Models;
 
 namespace WebApp.Controllers
 {
-    [Route("User")]
+    [Route("/User/")]
     public class UserController : Controller
     {
         private Uri _uri = new Uri("https://localhost:7148/");
         private readonly HttpClient _httpClient;
 
-        [HttpGet("/he")]
+        [HttpGet("he")]
         public IActionResult Index()
         {
             return View();
@@ -27,10 +27,10 @@ namespace WebApp.Controllers
         }
 
 
-        [HttpGet("/Register")]
+        [HttpGet("Register")]
         public IActionResult Register()
         {
-            var user = new UserMV();
+            var user = new UserVM();
             return View(user);
         }
 
@@ -43,9 +43,10 @@ namespace WebApp.Controllers
         //    productViews = JsonConvert.DeserializeObject<List<ProductView>>(data);
         //}
 
-        [HttpPost("/Register")]
-        public async Task<IActionResult> Register([FromForm] UserMV user)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromForm]UserVM user)
         {
+            var hello = 5;
             if (ModelState.IsValid)
             {
                 string contentQuery = JsonConvert.SerializeObject(user);
