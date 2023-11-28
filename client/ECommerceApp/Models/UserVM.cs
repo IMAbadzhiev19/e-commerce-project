@@ -13,4 +13,6 @@ public class UserVM
     public string? LastName { get; set; }
 
     public string PhoneNumber { get; set; } = string.Empty;
+
+    public Address? Address { get; set; }
 }

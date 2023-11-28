@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Drawing.Imaging;
 using System.Net.Http.Headers;
 using ECommerceApp.Models;
+using System.Text;
 
 namespace WebApp.Controllers
 {
@@ -23,7 +24,9 @@ namespace WebApp.Controllers
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = _uri;
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjA0NWMwMzJjLWNiZWItNDk2NS1iOGNlLTQ1MWRmNWJjM2E2NiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE2OTk5ODUyMDN9.I9JFGzz3-Cqqpx9KmE4c0fdDxTVH-ohCy_2M0rlN7po");
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //_httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjA0NWMwMzJjLWNiZWItNDk2NS1iOGNlLTQ1MWRmNWJjM2E2NiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE2OTk5ODUyMDN9.I9JFGzz3-Cqqpx9KmE4c0fdDxTVH-ohCy_2M0rlN7po");
         }
 
 
@@ -49,17 +52,15 @@ namespace WebApp.Controllers
             var hello = 5;
             if (ModelState.IsValid)
             {
-                string contentQuery = JsonConvert.SerializeObject(user);
-                HttpContent content = new StringContent(contentQuery);
+                var contentQuery = JsonConvert.SerializeObject(user);
+                HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
 
-                var request = new HttpRequestMessage();
-                request.Content = content;
-                request.Method = HttpMethod.Post;
-                request.RequestUri = new Uri(_httpClient.BaseAddress + "api/auth/register");
+                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "api/auth/register", content);
 
-                HttpResponseMessage response = await _httpClient.SendAsync(request);
-
-                var result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    var hell1 = 1;
+                }
 
                 return RedirectToAction("Index");
             }
