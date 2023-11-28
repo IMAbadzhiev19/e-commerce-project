@@ -49,7 +49,6 @@ namespace WebApp.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm]UserVM user)
         {
-            var hello = 5;
             if (ModelState.IsValid)
             {
                 var contentQuery = JsonConvert.SerializeObject(user);
@@ -59,7 +58,7 @@ namespace WebApp.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var hell1 = 1;
+                    
                 }
 
                 return RedirectToAction("Index");
