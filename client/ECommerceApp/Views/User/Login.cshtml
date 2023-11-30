@@ -1,0 +1,27 @@
+﻿@model ECommerceApp.Models.LoginMV
+
+@{
+    Layout = null;
+}
+
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/registerStyle.css">
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.css">
+</head>
+<body>
+    <div class="myCard">
+
+        <form asp-action="Login" method="post">
+            <h3 class="align-self-center">Log in</h3>
+            <input class="mt-4 form-control" type="text" asp-for="Email" placeholder="Email" />
+            <input class="mt-4 form-control" type="password" asp-for="Password" placeholder="Password" />
+
+            <button type="submit" class="mt-4 btn btn-info">Log in</button>
+        </form>
+
+    </div>
+</body>
+
+</html>

@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Net.Http.Headers;
 using ECommerceApp.Models;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApp.Controllers
 {
@@ -47,7 +48,7 @@ namespace WebApp.Controllers
         //}
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromForm]UserVM user)
+        public async Task<IActionResult> Register([FromForm] UserVM user)
         {
             if (ModelState.IsValid)
             {
@@ -58,13 +59,43 @@ namespace WebApp.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    
+                    return RedirectToAction("Privacy", "Home");
                 }
 
                 return RedirectToAction("Index");
             }
 
             return View();
+        }
+
+        [HttpGet("Login")]
+        public async Task<IActionResult> Login()
+        {
+            LoginMV login = new LoginMV();
+
+            return View(login);
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromForm] LoginMV login)
+        {
+            if (ModelState.IsValid)
+            {
+                var contentQuery = JsonConvert.SerializeObject(login);
+                HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "api/auth/login", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var data = response.Content.ReadAsStringAsync().Result;
+                    var loginInfo = JsonConvert.DeserializeObject<LoginInfo>(data);
+                    _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"bearer {loginInfo.AccessToken}");
+                    return RedirectToAction("Privacy", "Home");
+                }
+            }
+
+            return RedirectToAction("Error", "Home");
         }
     }
 }
