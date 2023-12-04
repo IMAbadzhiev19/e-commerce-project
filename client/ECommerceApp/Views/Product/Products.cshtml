@@ -1,0 +1,12 @@
+﻿@model ICollection<ProductMV>
+@{
+    Layout = null;
+}
+
+@foreach(var item in Model)
+{
+    <div>
+        <p>@item.Title</p>
+        <p>@item.Price</p>
+    </div>
+}
