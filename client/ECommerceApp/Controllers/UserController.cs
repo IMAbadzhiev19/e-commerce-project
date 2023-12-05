@@ -95,14 +95,14 @@ namespace WebApp.Controllers
                     ViewBag.AccessToken = loginInfo.AccessToken;
 
                     _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"bearer {loginInfo.AccessToken}");
-                    return RedirectToAction("Privacy", "Home");
+                    return PartialView("_StoreTokenScript", loginInfo.AccessToken);
                 }
             }
 
             return RedirectToAction("Error", "Home");
         }
 
-        [HttpGet("/Logout")]
+        [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + "api/auth/logout");

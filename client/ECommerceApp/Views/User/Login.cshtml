@@ -2,16 +2,9 @@
 
 @{
     Layout = null;
-    var accessToken = ViewBag.AccessToken as string;
 }
 
-@if (!string.IsNullOrEmpty(accessToken))
-{
-    <script>
-        localStorage.setItem("accessToken", "@accessToken");
-    </script>
-}
-
+@await Html.PartialAsync("_StoreTokenScript");
 
 <html>
 <head>
@@ -26,10 +19,16 @@
             <input class="mt-4 form-control" type="text" asp-for="Email" placeholder="Email" />
             <input class="mt-4 form-control" type="password" asp-for="Password" placeholder="Password" />
 
-            <button type="submit" class="mt-4 btn btn-info">Log in</button>
+            <button type="submit" id="btn" class="mt-4 btn btn-info">Log in</button>
         </form>
-
+        
     </div>
+    <script>
+        const element = document.querySelector("#btn");
+        element.addEventListener("click", () => {
+            location.href = "/Home/Privacy";
+        });
+    </script>
 </body>
 
 </html>
