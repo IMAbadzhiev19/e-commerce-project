@@ -2,6 +2,14 @@
 
 @{
     Layout = null;
+    var accessToken = ViewBag.AccessToken as string;
+}
+
+@if (!string.IsNullOrEmpty(accessToken))
+{
+    <script>
+        localStorage.setItem("accessToken", "@accessToken");
+    </script>
 }
 
 

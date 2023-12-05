@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using ECommerceApp.Models;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.JSInterop;
 
 namespace WebApp.Controllers
 {
@@ -35,8 +36,7 @@ namespace WebApp.Controllers
         public IActionResult Register()
         {
             var user = new UserVM();
-            return RedirectToAction("Products","Product");
-            //return View(user);
+            return View(user);
         }
 
         //List<ProductView> productViews = new();
@@ -91,12 +91,23 @@ namespace WebApp.Controllers
                 {
                     var data = response.Content.ReadAsStringAsync().Result;
                     var loginInfo = JsonConvert.DeserializeObject<LoginInfo>(data);
+
+                    ViewBag.AccessToken = loginInfo.AccessToken;
+
                     _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"bearer {loginInfo.AccessToken}");
                     return RedirectToAction("Privacy", "Home");
                 }
             }
 
             return RedirectToAction("Error", "Home");
+        }
+
+        [HttpGet("/Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + "api/auth/logout");
+
+            return View();
         }
     }
 }
