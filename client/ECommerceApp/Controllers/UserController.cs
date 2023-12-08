@@ -16,7 +16,7 @@ namespace WebApp.Controllers
         private Uri _uri = new Uri("https://localhost:7148/");
         private readonly HttpClient _httpClient;
 
-        [HttpGet("he")]
+        [HttpGet("Index")]
         public IActionResult Index()
         {
             return View();
