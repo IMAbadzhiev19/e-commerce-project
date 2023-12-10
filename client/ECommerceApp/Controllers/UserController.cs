@@ -15,6 +15,7 @@ namespace WebApp.Controllers
     {
         private Uri _uri = new Uri("https://localhost:7148/");
         private readonly HttpClient _httpClient;
+        private string _temporaryAccessToken;
 
         [HttpGet("Index")]
         public IActionResult Index()
@@ -28,6 +29,7 @@ namespace WebApp.Controllers
             _httpClient.BaseAddress = _uri;
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _temporaryAccessToken = string.Empty;
             _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjZjODkyMDY5LTE0YzAtNGM1MS04ODAzLTU5ZGQyYjlmNGZhMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDE3MjIzNzB9.EXkUgug4PvLd1rleoWDga3bFbu8u0HeSKsp9lHBujbA");
         }
 
@@ -60,10 +62,10 @@ namespace WebApp.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Privacy", "Home");
+                    return RedirectToAction("Index");
                 }
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Error","Home");
             }
 
             return View();
@@ -92,14 +94,24 @@ namespace WebApp.Controllers
                     var data = response.Content.ReadAsStringAsync().Result;
                     var loginInfo = JsonConvert.DeserializeObject<LoginInfo>(data);
 
-                    ViewBag.AccessToken = loginInfo.AccessToken;
+                    ViewBag.LoginInfo = loginInfo?.AccessToken;
+                    ViewData["AccessToken"] = loginInfo?.AccessToken;
+                    _temporaryAccessToken = loginInfo?.AccessToken;
+                    //ViewBag.AccessToken = loginInfo?.AccessToken;
 
-                    _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"bearer {loginInfo.AccessToken}");
-                    return PartialView("_StoreTokenScript", loginInfo.AccessToken);
+                    _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"bearer {loginInfo?.AccessToken}");
+                    return RedirectToAction("MainPage");
                 }
             }
 
             return RedirectToAction("Error", "Home");
+            }
+
+        [HttpGet("MainPage")]
+        public IActionResult MainPage()
+        {
+
+            return View(_temporaryAccessToken);
         }
 
         [HttpGet("Logout")]

@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-@await Html.PartialAsync("_StoreTokenScript");
+@*@await Html.PartialAsync("_StoreTokenScript");*@
 
 <html>
 <head>
@@ -21,14 +21,13 @@
 
             <button type="submit" id="btn" class="mt-4 btn btn-info">Log in</button>
         </form>
-        
     </div>
-    <script>
+    @*<script>
         const element = document.querySelector("#btn");
         element.addEventListener("click", () => {
             location.href = "/Home/Privacy";
         });
-    </script>
+    </script>*@
 </body>
 
 </html>

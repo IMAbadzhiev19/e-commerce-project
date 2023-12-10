@@ -4,11 +4,16 @@
 
 
 @{
+    Layout = null;
     ViewData["Title"] = "Page";
 }
 
+<link rel="stylesheet" href="~/css/IndexStyle.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <a class="btn btn-primary" href="@Url.Action("Register")">Add Resume</a>
-    <a class="btn btn-primary" href="@Url.Action("Login")">Add Resume</a>
+    <h3 class="display-4">Welcome to our e-commerce store project</h3>
+    <a class="btn btn-outline-primary btn-lg" href="@Url.Action("Register")">Register</a>
+    <a class="btn btn-outline-primary btn-lg" href="@Url.Action("Login")">Log In</a>
 </div>
+

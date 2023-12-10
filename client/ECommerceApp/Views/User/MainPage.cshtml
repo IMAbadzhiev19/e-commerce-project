@@ -1,0 +1,15 @@
+﻿@model string
+@{
+    Layout = null;
+    var data = ViewData["AccessToken"] as string;
+}
+
+<input type="hidden" id="my-data" value="@data" />
+<script>
+    var myData = document.getElementById("my-data").value;
+    alert(myData);
+    window.localStorage.setItem('accessToken', @Model);
+</script>
+
+<p>@Model</p>
+
