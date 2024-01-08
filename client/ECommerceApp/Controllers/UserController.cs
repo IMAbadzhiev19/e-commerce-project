@@ -20,7 +20,7 @@ namespace WebApp.Controllers
         [HttpGet("Index")]
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("SingleProduct", "Product"); ;
         }
 
         public UserController()
@@ -30,7 +30,7 @@ namespace WebApp.Controllers
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _temporaryAccessToken = string.Empty;
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjZjODkyMDY5LTE0YzAtNGM1MS04ODAzLTU5ZGQyYjlmNGZhMiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDE3MjIzNzB9.EXkUgug4PvLd1rleoWDga3bFbu8u0HeSKsp9lHBujbA");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjBjOGZkYWUwLTkxZWUtNGRiNS1hZmUwLTU3MjczYmM3MDc1ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDQ2NTk4NjJ9.jn1u21aOq0hLD0A696Z5rJjzOekNyKXlK5HGWEIYfEs");
         }
 
 

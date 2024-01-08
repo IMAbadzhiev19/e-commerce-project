@@ -5,6 +5,8 @@ namespace ECommerceProject.Shared.Models.ECommerce;
 
 public class ReviewVM
 {
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Gets or sets the user associated with the review, if available.
     /// Can be null if the review is anonymous.

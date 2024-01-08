@@ -5,6 +5,8 @@
 /// </summary>
 public class ProductVM
 {
+    public Guid Id { get; set; }
+
     /// <summary>
     /// The Title of the product
     /// </summary>

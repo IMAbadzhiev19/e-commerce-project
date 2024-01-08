@@ -4,5 +4,7 @@ namespace ECommerceProject.Shared.Models.ECommerce;
 
 public class CartVM
 {
+    public Guid Id { get; set; }
+
     public ICollection<Product> Products { get; set; } = default!;
 }

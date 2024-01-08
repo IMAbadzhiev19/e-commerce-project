@@ -50,6 +50,16 @@ var app = builder.Build();
 //await SeedInitialAdmin.SeedInitialAdminAsync(configuration, app.Services.CreateScope().ServiceProvider);
 //await SeedProducts.SeedProductsAsync(app.Services.CreateScope().ServiceProvider);
 
+try
+{
+    var dbContext = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.EnsureCreated();
+}
+catch (System.Exception)
+{
+    app.Logger.LogInformation("Database creation failed");
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
