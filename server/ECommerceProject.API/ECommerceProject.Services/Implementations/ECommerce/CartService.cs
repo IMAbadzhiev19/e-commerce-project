@@ -75,10 +75,10 @@ public class CartService : ICartService
     }
 
     /// <inheritdoc/>
-    public async Task<CartVM> GetCartByIdAsync(string userId, Guid cartId)
+    public async Task<CartVM> GetCartByIdAsync(string userId)
     {
         var cart = await this._context.Carts
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == cartId);
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
 
         if (cart is null)
             throw new Exception("An error occured while retrieving the cart");

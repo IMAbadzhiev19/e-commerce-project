@@ -79,28 +79,28 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapGet("api/wishlists/get-wishlists", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
-        {
-            try
-            {
-                var wishlists = await wishlistService.GetWishlistsAsync(currentUser.UserId);
-                return Results.Ok(wishlists);
-            }
-            catch (Exception e)
-            {
-                return Results.BadRequest(new Response
-                {
-                    Status = "get-wishlists-failed",
-                    Message = e.Message,
-                });
-            }
-        }).WithTags("Wishlist");
+        //app.MapGet("api/wishlists/get-wishlists", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
+        //{
+        //    try
+        //    {
+        //        var wishlists = await wishlistService.GetWishlistsAsync(currentUser.UserId);
+        //        return Results.Ok(wishlists);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return Results.BadRequest(new Response
+        //        {
+        //            Status = "get-wishlists-failed",
+        //            Message = e.Message,
+        //        });
+        //    }
+        //}).WithTags("Wishlist");
 
-        app.MapGet("api/wishlists/get-wishlist{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapGet("api/wishlists/get-wishlist", [Authorize] async (ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
-                var wishlist = await wishlistService.GetWishlistByIdAsync(currentUser.UserId, id);
+                var wishlist = await wishlistService.GetWishlistByIdAsync(currentUser.UserId);
                 return Results.Ok(wishlist);
             }
             catch (Exception e)

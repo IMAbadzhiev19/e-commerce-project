@@ -1,6 +1,6 @@
 ﻿namespace ECommerceApp.Models
 {
-    public class ProductMV
+    public class ProductVM
     {
         public int Id { get; set; }
 
@@ -14,5 +14,6 @@
 
         public int? Quantity { get; set; }
 
+        public ICollection<CommentVM>? Comments { get; set;}
     }
 }

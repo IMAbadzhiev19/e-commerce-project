@@ -74,10 +74,10 @@ public class WishlistService : IWishlistService
     }
 
     /// <inheritdoc/>
-    public async Task<WishlistVM> GetWishlistByIdAsync(string userId, Guid wishlistId)
+    public async Task<WishlistVM> GetWishlistByIdAsync(string userId)
     {
-        var wishlist = await this._context.Wishlists
-            .FindAsync(wishlistId);
+        var wishlist = await this._context.Wishlists.Include(w => w.Products)
+            .Where(w => w.UserId == userId).FirstOrDefaultAsync();
 
         if (wishlist is null)
             throw new ArgumentException("Invalid wishlistId");
@@ -89,23 +89,23 @@ public class WishlistService : IWishlistService
     }
 
     /// <inheritdoc/>
-    public async Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId)
-    {
-        var user = _userManager.FindByIdAsync(userId);
-        if (user is null)
-        {
-            throw new ArgumentException();
-        }
+    //public async Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId)
+    //{
+    //    var user = _userManager.FindByIdAsync(userId);
+    //    if (user is null)
+    //    {
+    //        throw new ArgumentException();
+    //    }
 
-        var wishlist = await this._context.Wishlists
-            .Where(x => x.UserId == userId)
-            .ToListAsync();
+    //    var wishlist = await this._context.Wishlists
+    //        .Where(x => x.UserId == userId)
+    //        .ToListAsync();
 
-        if (wishlist is null)
-            throw new Exception("Wishlist not found");
+    //    if (wishlist is null)
+    //        throw new Exception("Wishlist not found");
 
-        return wishlist.Adapt<List<WishlistVM>>();
-    }
+    //    return wishlist.Adapt<List<WishlistVM>>();
+    //}
 
     /// <inheritdoc/>
     public async Task RemoveProductFromWishlistAsync(string userId, Guid productId, Guid wishlistId)

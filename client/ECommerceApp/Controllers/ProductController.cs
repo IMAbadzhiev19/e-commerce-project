@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Text;
+using ECommerceApp.EndpointsMethods;
 
 namespace ECommerceApp.Controllers
 {
@@ -48,10 +49,8 @@ namespace ECommerceApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var contentQuery = JsonConvert.SerializeObject(order);
-                HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/orders/update{order.Id}", content);
+                OrderEndpoints orderEndpoints = new(this._httpClient);
+                HttpResponseMessage response = await orderEndpoints. UpdateProduct(order);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -67,15 +66,8 @@ namespace ECommerceApp.Controllers
         [HttpGet("{Id}/UpdateOrder")]
         public async Task<IActionResult> UpdateOrder([FromRoute]int Id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/orders/get-order{Id}");
-
-            OrderVM order = new();
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                order = JsonConvert.DeserializeObject<OrderVM>(data);
-            }
+            OrderEndpoints orderEndpoints = new(this._httpClient);
+            OrderVM order = await orderEndpoints.GetOrder(Id);
 
             return View(order);
         }
@@ -83,15 +75,8 @@ namespace ECommerceApp.Controllers
         [HttpGet("GetOrders")]
         public async Task<IActionResult> Orders()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/orders/get-orders");
-
-            List<OrderVM> orders = new();
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                orders = JsonConvert.DeserializeObject<List<OrderVM>>(data);
-            }
+            OrderEndpoints orderEndpoints = new(this._httpClient);
+            List<OrderVM> orders = await orderEndpoints.GetOrders();
 
             return View(orders);
         }
@@ -99,15 +84,8 @@ namespace ECommerceApp.Controllers
         [HttpGet("{Id}/GetSingleOrder")]
         public async Task<IActionResult> SingleOrder([FromRoute]int Id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/orders/get-order{Id}");
-
-            OrderVM order = new();
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                order = JsonConvert.DeserializeObject<OrderVM>(data);
-            }
+            OrderEndpoints orderEndpoints = new(this._httpClient);
+            OrderVM order = await orderEndpoints.GetOrder(Id);
 
             return View(order);
         }
@@ -130,19 +108,17 @@ namespace ECommerceApp.Controllers
         [HttpGet("AddProuct")]
         public IActionResult AddProduct()
         {
-            ProductMV productMV = new ProductMV();
+            ProductVM productMV = new ProductVM();
             return View(productMV);
         }
 
         [HttpPost("AddProduct")]
-        public async Task<IActionResult> AddProduct([FromForm] ProductMV product)
+        public async Task<IActionResult> AddProduct([FromForm] ProductVM product)
         {
+            ProductEndpoints productEndpoints = new(this._httpClient);
             if (ModelState.IsValid)
             {
-                var contentQuery = JsonConvert.SerializeObject(product);
-                HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "api/products/create", content);
+                HttpResponseMessage response = await productEndpoints.AddProduct(product);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -158,28 +134,19 @@ namespace ECommerceApp.Controllers
         [HttpGet("{Id}/Edit")]
         public async Task<IActionResult> EditProduct([FromRoute]int Id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/products/get-product{Id}");
-
-            ProductMV product = new();
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<ProductMV>(data);
-            }
+            ProductEndpoints productEndpoints = new(this._httpClient);
+            ProductVM product = await productEndpoints.SingleProduct(Id);
 
             return View(product);
         }
 
         [HttpPost("Edit")]
-        public async Task<IActionResult> EditProductInfo([FromForm] ProductMV product)
+        public async Task<IActionResult> EditProductInfo([FromForm] ProductVM product)
         {
+            ProductEndpoints productEndpoints = new(this._httpClient);
             if (ModelState.IsValid)
             {
-                var contentQuery = JsonConvert.SerializeObject(product);
-                HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/products/update{product.Id}", content);
+                HttpResponseMessage response = await productEndpoints.Update(product);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -206,32 +173,19 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("AllProducts")]
-        public IActionResult Products()
+        public async Task<IActionResult> Products()
         {
-            List<ProductMV> products = new();
-            HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "api/products/get-products").Result;
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                products = JsonConvert.DeserializeObject<List<ProductMV>>(data);
-            }
+            ProductEndpoints productEndpoints = new(this._httpClient);
+            List<ProductVM> products = await productEndpoints.GetProducts();
 
             return View(products);
         }
 
         [HttpGet("SingleProduct")]
-        public async Task<IActionResult> SingleProduct(string Id)
+        public async Task<IActionResult> SingleProduct(int Id)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/products/get-product{Id}");
-
-            ProductMV product = new();
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<ProductMV>(data);
-            }
+            ProductEndpoints productEndpoints = new(this._httpClient);
+            ProductVM product = await productEndpoints.SingleProduct(Id);
 
             return View(product);
         }
@@ -243,10 +197,8 @@ namespace ECommerceApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var contentQuery = JsonConvert.SerializeObject(comment);
-                HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "api/comments/create", content);
+                CommentsEndpoints commentsEndpoints = new(_httpClient);
+                HttpResponseMessage response = await commentsEndpoints.AddComment(comment);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -278,22 +230,6 @@ namespace ECommerceApp.Controllers
             }
 
             return RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet("{productId}/GetComments")]
-        public async Task<IActionResult> GetComments([FromRoute]int productId)
-        {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/products/get-product{productId}");
-
-            CommentVM comments = new();
-
-            if (response.IsSuccessStatusCode)
-            {
-                string data = response.Content.ReadAsStringAsync().Result;
-                comments = JsonConvert.DeserializeObject<CommentVM>(data);
-            }
-
-            return View(comments);
         }
 
         //-----------------------------------------------------------------------------------

@@ -36,7 +36,7 @@ public interface IWishlistService
     /// </summary>
     /// <param name="userId">The unique identifier of the user to retrieve watchlist for.</param>
     /// <returns>Task representing the user's watchlist.</returns>
-    Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId);
+   // Task<ICollection<WishlistVM>> GetWishlistsAsync(string userId);
 
     /// <summary>
     /// Removes user's wishlist
@@ -51,5 +51,5 @@ public interface IWishlistService
     /// <param name="userId">The unique identitifer of the user</param>
     /// <param name="wishlistId">The unique identitifer of the wishlist</param>
     /// <returns>Wishlist View Model</returns>
-    Task<WishlistVM> GetWishlistByIdAsync(string userId, Guid wishlistId);
+    Task<WishlistVM> GetWishlistByIdAsync(string userId);
 }

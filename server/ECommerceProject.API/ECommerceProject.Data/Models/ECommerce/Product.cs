@@ -47,4 +47,6 @@ public class Product
     /// Gets a collection of carts containing this product.
     /// </summary>
     public virtual ICollection<Cart> Carts { get; set; } = default!;
+
+    public virtual ICollection<Comment> Comments { get; set; } = default!;
 }

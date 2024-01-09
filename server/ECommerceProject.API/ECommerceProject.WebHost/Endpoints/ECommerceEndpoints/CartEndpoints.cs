@@ -23,11 +23,7 @@ public class CartEndpoints : ICarterModule
             try
             {
                 var cartId = await cartService.CreateCartAsync(currentUser.UserId);
-                return Results.Ok(new Response
-                {
-                    Status = "create-success",
-                    Message = cartId.ToString(),
-                });
+                return Results.Ok(cartId);
             }
             catch(Exception e)
             {
@@ -81,11 +77,11 @@ public class CartEndpoints : ICarterModule
             }
         }).WithTags("Cart");
 
-        app.MapGet("api/carts/get-cart{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, ICartService cartService) =>
+        app.MapGet("api/carts/get-cart", [Authorize] async (ICurrentUser currentUser, ICartService cartService) =>
         {
             try
             {
-                var cart = await cartService.GetCartByIdAsync(currentUser.UserId, id);
+                var cart = await cartService.GetCartByIdAsync(currentUser.UserId);
                 return Results.Ok(cart);
             }
             catch(Exception e)
@@ -93,7 +89,6 @@ public class CartEndpoints : ICarterModule
                 return Results.BadRequest(new Response
                 {
                     Status = "get-cart-failed",
-                    
                 });
             }
         }).WithTags("Cart");

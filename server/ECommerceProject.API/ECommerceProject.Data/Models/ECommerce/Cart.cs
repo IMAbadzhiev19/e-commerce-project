@@ -12,6 +12,7 @@ public class Cart
     /// </summary>
     public Guid Id { get; set; }
 
+    public bool IsActive { get; set; } = true;
     /// <summary>
     /// Gets or sets the foreign key representing the identifier of the user related to this cart.
     /// Can be null if the cart is not associated with any user.

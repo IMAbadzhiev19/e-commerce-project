@@ -36,5 +36,5 @@ public interface ICartService
     /// <param name="userId">The unique identifier of the user</param>
     /// <param name="cartId">The unique identifier of the cart</param>
     /// <returns>Cart View Model</returns>
-    Task<CartVM> GetCartByIdAsync(string userId, Guid cartId);
+    Task<CartVM> GetCartByIdAsync(string userId);
 }
