@@ -77,11 +77,18 @@ public class CartService : ICartService
     /// <inheritdoc/>
     public async Task<CartVM> GetCartByIdAsync(string userId)
     {
-        var cart = await this._context.Carts
+        var cart = await this._context.Carts.Include(c=>c.Products)
             .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
 
         if (cart is null)
             throw new Exception("An error occured while retrieving the cart");
+
+        if(cart == default)
+        {
+            await CreateCartAsync(userId);
+            cart = await this._context.Carts.Include(c => c.Products)
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
+        }
 
         return cart.Adapt<CartVM>();
     }

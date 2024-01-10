@@ -1,4 +1,6 @@
-﻿namespace ECommerceProject.Shared.Models.ECommerce;
+﻿using ECommerceProject.Data.Models.ECommerce;
+
+namespace ECommerceProject.Shared.Models.ECommerce;
 
 /// <summary>
 /// Product View Model
@@ -36,4 +38,8 @@ public class ProductVM
     /// The category of the product
     /// </summary>
     public string Category { get; set; } = string.Empty;
+
+    public virtual ICollection<Comment> Comments { get; set; } = default!;
+
+    public virtual ICollection<Review> Reviews { get; set; } = default!;
 }

@@ -4,6 +4,8 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Text;
 using ECommerceApp.EndpointsMethods;
+using Microsoft.CodeAnalysis;
+using System.Diagnostics;
 
 namespace ECommerceApp.Controllers
 {
@@ -28,18 +30,50 @@ namespace ECommerceApp.Controllers
             return View();
         }
 
-        public IActionResult AddWishList(string productId, string wishlistId)
-        {
-            return View();
+        [HttpGet("get-wishlist")]
+        public async Task<IActionResult> GetWishList() {
+            WishlistEndpoints wishlistEndpoints = new(_httpClient);
+            var result = await wishlistEndpoints.GetWishList();
+
+            if(result == null)
+            {
+                var creation = await wishlistEndpoints.CreateAsync();
+                if (creation != Guid.Empty)
+                {
+                    result = await wishlistEndpoints.GetWishList();
+                }
+            }
+
+            return View(result);
         }
 
-        public IActionResult WishList(string wishListId) {
-            return View();
+        [HttpGet("{wishlistId}/{productId}/remove")]
+        public async Task<IActionResult> RemoveFromWishList([FromRoute] Guid productId, [FromRoute] Guid wishlistId)
+        {
+            WishlistEndpoints wishlistEndpoints = new(_httpClient);
+            var result = await wishlistEndpoints.DeleteProduct(wishlistId, productId);
+
+            if(result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult RemoveFromWishList(string productId, string wishlistId)
+
+        [HttpGet("{wishlistId}/{productId}/assign")]
+        public async Task<IActionResult> AssignToWishList([FromRoute] Guid productId, [FromRoute] Guid wishlistId)
         {
-            return View();
+            WishlistEndpoints wishlistEndpoints = new(_httpClient);
+            var result = await wishlistEndpoints.AssignProduct(wishlistId, productId);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         //-----------------------------------------------------------------------------------
@@ -50,7 +84,7 @@ namespace ECommerceApp.Controllers
             if (ModelState.IsValid)
             {
                 OrderEndpoints orderEndpoints = new(this._httpClient);
-                HttpResponseMessage response = await orderEndpoints. UpdateProduct(order);
+                HttpResponseMessage response = await orderEndpoints.UpdateProduct(order);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -64,7 +98,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/UpdateOrder")]
-        public async Task<IActionResult> UpdateOrder([FromRoute]int Id)
+        public async Task<IActionResult> UpdateOrder([FromRoute] int Id)
         {
             OrderEndpoints orderEndpoints = new(this._httpClient);
             OrderVM order = await orderEndpoints.GetOrder(Id);
@@ -82,7 +116,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/GetSingleOrder")]
-        public async Task<IActionResult> SingleOrder([FromRoute]int Id)
+        public async Task<IActionResult> SingleOrder([FromRoute] int Id)
         {
             OrderEndpoints orderEndpoints = new(this._httpClient);
             OrderVM order = await orderEndpoints.GetOrder(Id);
@@ -91,7 +125,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/DeleteOrder")]
-        public async Task<IActionResult> DeleteOrder([FromRoute]int Id)
+        public async Task<IActionResult> DeleteOrder([FromRoute] int Id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/orders/remove{Id}");
 
@@ -132,7 +166,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/Edit")]
-        public async Task<IActionResult> EditProduct([FromRoute]int Id)
+        public async Task<IActionResult> EditProduct([FromRoute] int Id)
         {
             ProductEndpoints productEndpoints = new(this._httpClient);
             ProductVM product = await productEndpoints.SingleProduct(Id);
@@ -169,7 +203,7 @@ namespace ECommerceApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet("AllProducts")]
@@ -220,7 +254,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/RemoveComment")]
-        public async Task<IActionResult> RemoveComment([FromRoute]int Id)
+        public async Task<IActionResult> RemoveComment([FromRoute] int Id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/comments/remove{Id}");
 
@@ -233,19 +267,130 @@ namespace ECommerceApp.Controllers
         }
 
         //-----------------------------------------------------------------------------------
-        public IActionResult RemoveFromCart(string cartId, string productId)
+
+        [HttpGet("{productId}/grade")]
+        public async Task<IActionResult> GradeProduct([FromRoute] Guid productId, [FromForm] int grade)
         {
-            return View();
+            ReviewEndpoints reviewEndpoints = new(_httpClient);
+
+            var result = await reviewEndpoints.CreateAsync(productId, grade);
+            if(result != Guid.Empty)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult AddToCart(string cartId, string productId)
+        [HttpGet("{gradeId}/grade")]
+        public async Task<IActionResult> RemoveGrade([FromRoute] Guid gradeId)
         {
-            return View();
+            ReviewEndpoints reviewEndpoints = new(_httpClient);
+
+            var result = await reviewEndpoints.RemoveAsync(gradeId);
+            if (result)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult FinishOrder(string orderId)
+        //-----------------------------------------------------------------------------------
+
+        [HttpGet("get-cart")]
+        public async Task<IActionResult> GetCart()
         {
-            return View();
+            CartEndpoints cartEndpoints = new(_httpClient);
+
+            var result = await cartEndpoints.GetCart();
+            return View(result);
+        }
+
+        [HttpGet("{cartId}/{productId}/remove")]
+        public async Task<IActionResult> RemoveFromCart([FromRoute]Guid cartId, [FromRoute] Guid productId)
+        {
+            CartEndpoints cartEndpoints = new(_httpClient);
+            var result = await cartEndpoints.DeleteProduct(cartId, productId);
+
+            if(result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet("{cartId}/{productId}/assign")]
+        public async Task<IActionResult> AddToCart([FromRoute] Guid cartId,[FromRoute] Guid productId)
+        {
+            CartEndpoints cartEndpoints = new(_httpClient);
+            var result = await cartEndpoints.AssignProduct(cartId, productId);
+
+            if (result.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        //------------------------------------------------------------------------------------
+        [HttpGet("current-user")]
+        public async Task<IActionResult> UserInfo()
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.GetUser();
+
+            if(result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost("userUpdate")]
+        public async Task<IActionResult> UserInfoUpdate()
+        { 
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.GetUser();
+
+            if(result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet("userUpdate")]
+        public async Task<IActionResult> UserInfo([FromBody] UserVM user)
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.UserInfoUpdate(user);
+
+            if (result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet("changePassword")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            ChangePassword changePassword = new ChangePassword();
+            return View(changePassword);
+        }
+
+        [HttpGet("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword changePassword)
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.ChangePassword(changePassword.OldPassword,changePassword.NewPassword);
+
+            if (result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -35,6 +35,5 @@ namespace ECommerceApp.EndpointsMethods
             HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "api/comments/create", content);
             return response;
         }
-
     }
 }

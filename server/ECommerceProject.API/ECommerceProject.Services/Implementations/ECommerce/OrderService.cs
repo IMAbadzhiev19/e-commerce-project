@@ -42,9 +42,10 @@ public class OrderService: IOrderService
         {
             throw new ArgumentException("This cart doesn't exist");
         }
-
+        cart.IsActive = false;
         var newOrder = order.Adapt<Order>();
 
+        this._context.Carts.Update(cart);
         await this._context.Orders.AddAsync(newOrder);
         await this._context.SaveChangesAsync();
         

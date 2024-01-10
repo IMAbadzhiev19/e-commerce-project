@@ -49,4 +49,6 @@ public class Product
     public virtual ICollection<Cart> Carts { get; set; } = default!;
 
     public virtual ICollection<Comment> Comments { get; set; } = default!;
+
+    public virtual ICollection<Review> Reviews { get; set; } = default!;
 }

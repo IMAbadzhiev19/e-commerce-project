@@ -34,7 +34,7 @@ public class ProductService : IProductService
     /// <inheritdoc/>
     public async Task<ProductVM> GetProductByIdAsync(Guid productId)
     {
-        var product = await this._context.Products.Include(p=>p.Comments)
+        var product = await this._context.Products.Include(p=>p.Comments).Include(p=>p.Reviews)
             .Where(p=> p.Id == productId).FirstOrDefaultAsync();
 
         if (product is null)

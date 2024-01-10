@@ -59,9 +59,9 @@ namespace ECommerceApp.EndpointsMethods
             return response;
         }
 
-        public async Task<CartVM> SingleProduct(int Id)
+        public async Task<CartVM> GetCart()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/products/get-product{Id}");
+            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/carts/get-cart");
 
             CartVM cart = new();
 
