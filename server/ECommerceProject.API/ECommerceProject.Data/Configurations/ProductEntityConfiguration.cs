@@ -50,9 +50,5 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
         builder
             .Property(x => x.Category)
             .IsRequired();
-
-        builder
-            .HasMany(c => c.Comments)
-            .WithOne();
     }
 }

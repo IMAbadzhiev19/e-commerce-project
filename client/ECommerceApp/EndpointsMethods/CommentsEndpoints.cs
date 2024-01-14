@@ -12,7 +12,7 @@ namespace ECommerceApp.EndpointsMethods
             this._httpClient = _httpClient;
         }
 
-        public async Task<List<CommentVM>> GetComments(int productId)
+        public async Task<List<CommentVM>> GetComments(Guid productId)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/comments/get-comments{productId}");
 

@@ -1,0 +1,12 @@
+﻿@model ICollection<ECommerceApp.Models.OrderVM>
+
+@foreach (var or in Model)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@or.OrderDate</h5>
+            <p class="card-text">@or.DeliveryDate</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+}

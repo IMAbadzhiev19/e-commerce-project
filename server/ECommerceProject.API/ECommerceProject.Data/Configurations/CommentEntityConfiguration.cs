@@ -23,7 +23,8 @@ public class CommentEntityConfiguration : IEntityTypeConfiguration<Comment>
             .WithMany();
 
         builder
-            .HasOne(x => x.Product)
-            .WithOne();
+           .HasOne(c => c.Product)
+           .WithMany(p => p.Comments)
+           .HasForeignKey(c => c.ProductId);
     }
 }

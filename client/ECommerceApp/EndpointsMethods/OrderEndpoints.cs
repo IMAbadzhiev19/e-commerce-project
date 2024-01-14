@@ -21,7 +21,7 @@ namespace ECommerceApp.EndpointsMethods
             return response;
         }
 
-        public async Task<OrderVM> GetOrder(int Id)
+        public async Task<OrderVM> GetOrder(Guid Id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/orders/get-order{Id}");
 

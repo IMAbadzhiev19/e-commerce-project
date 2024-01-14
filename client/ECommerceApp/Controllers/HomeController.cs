@@ -15,7 +15,7 @@ namespace ECommerceApp.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index","User");
+            return RedirectToAction("MainPage","User");
         }
 
         public IActionResult Privacy()

@@ -22,7 +22,7 @@ namespace ECommerceApp.EndpointsMethods
             return response;
         }
 
-        public async Task<ProductVM> SingleProduct(int Id)
+        public async Task<ProductVM> SingleProduct(Guid Id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/products/get-product{Id}");
 
@@ -49,12 +49,6 @@ namespace ECommerceApp.EndpointsMethods
             {
                 string data = response.Content.ReadAsStringAsync().Result;
                 products = JsonConvert.DeserializeObject<List<ProductVM>>(data);
-            }
-
-            CommentsEndpoints commentsEndpoints = new(_httpClient);
-            foreach (ProductVM pr in products)
-            {
-                pr.Comments = await commentsEndpoints.GetComments(pr.Id);
             }
 
             return products;

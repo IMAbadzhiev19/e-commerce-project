@@ -1,15 +1,41 @@
-﻿@model string
+﻿@model ICollection<ECommerceApp.Models.ProductVM>
+
 @{
-    Layout = null;
-    var data = ViewData["AccessToken"] as string;
+    ViewData["Title"] = "MainPage";
 }
 
-<input type="hidden" id="my-data" value="@data" />
-<script>
-    var myData = document.getElementById("my-data").value;
-    alert(myData);
-    window.localStorage.setItem('accessToken', @Model);
-</script>
+<div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM1bmA4odRJaF6DhSHpGoqJVQ9MtIaOWdaeQ&usqp=CAU" class="d-block w-100 h-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM1bmA4odRJaF6DhSHpGoqJVQ9MtIaOWdaeQ&usqp=CAU" class="d-block w-100 h-100" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM1bmA4odRJaF6DhSHpGoqJVQ9MtIaOWdaeQ&usqp=CAU" class="d-block w-50 h-50" alt="...">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
 
-<p>@Model</p>
-
+@foreach (var pr in Model)
+{
+    <div>
+        <div class="card" style="width: 18rem;">
+            <img src="@pr.ImageUrl" class="card-img-top" alt="">
+            <div class="card-body">
+                <h5 class="card-title">@pr.Title</h5>
+                <p class="card-text">@pr.Price</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+}

@@ -23,7 +23,8 @@ public class ReviewEntityConfiguration : IEntityTypeConfiguration<Review>
             .WithMany();
 
         builder
-            .HasOne(x=>x.Product)
-            .WithMany();
+           .HasOne(c => c.Product)
+           .WithMany(p => p.Reviews)
+           .HasForeignKey(c => c.ProductId);
     }
 }

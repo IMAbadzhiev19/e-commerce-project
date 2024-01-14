@@ -7,6 +7,7 @@ using ECommerceApp.Models;
 using System.Text;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.JSInterop;
+using ECommerceApp.EndpointsMethods;
 
 namespace WebApp.Controllers
 {
@@ -20,7 +21,7 @@ namespace WebApp.Controllers
         [HttpGet("Index")]
         public IActionResult Index()
         {
-            return RedirectToAction("SingleProduct", "Product"); ;
+            return View();
         }
 
         public UserController()
@@ -30,7 +31,7 @@ namespace WebApp.Controllers
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _temporaryAccessToken = string.Empty;
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjBjOGZkYWUwLTkxZWUtNGRiNS1hZmUwLTU3MjczYmM3MDc1ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDQ2NTk4NjJ9.jn1u21aOq0hLD0A696Z5rJjzOekNyKXlK5HGWEIYfEs");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImZlZmVjZDg3LWQzNDAtNDlkYi05NDk0LTYxMDc4MTFiMTU2NiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDUxNzQ3NzV9.6Opa0V22xFMSYZlu5gCsHjt_coq8EpE4YrW8Kn74JzU");
         }
 
 
@@ -93,14 +94,8 @@ namespace WebApp.Controllers
                 {
                     var data = response.Content.ReadAsStringAsync().Result;
                     var loginInfo = JsonConvert.DeserializeObject<LoginInfo>(data);
-
-                    ViewBag.LoginInfo = loginInfo?.AccessToken;
-                    ViewData["AccessToken"] = loginInfo?.AccessToken;
-                    _temporaryAccessToken = loginInfo?.AccessToken;
-                    //ViewBag.AccessToken = loginInfo?.AccessToken;
-
                     _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse($"bearer {loginInfo?.AccessToken}");
-                    return RedirectToAction("MainPage");
+                    return RedirectToAction("MainPage","User");
                 }
             }
 
@@ -108,10 +103,13 @@ namespace WebApp.Controllers
             }
 
         [HttpGet("MainPage")]
-        public IActionResult MainPage()
+        public async Task<IActionResult> MainPage()
         {
+            ProductEndpoints productEndpoints = new(_httpClient);
+            ICollection<ProductVM> products = await productEndpoints.GetProducts();
+            products = products.Take(10).ToList();
 
-            return View(_temporaryAccessToken);
+            return View(products);
         }
 
         [HttpGet("Logout")]

@@ -22,7 +22,7 @@ namespace ECommerceApp.Controllers
             _httpClient.BaseAddress = _uri;
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjBjOGZkYWUwLTkxZWUtNGRiNS1hZmUwLTU3MjczYmM3MDc1ZCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDQ2NTk4NjJ9.jn1u21aOq0hLD0A696Z5rJjzOekNyKXlK5HGWEIYfEs");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImZlZmVjZDg3LWQzNDAtNDlkYi05NDk0LTYxMDc4MTFiMTU2NiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDUxNzQ3NzV9.6Opa0V22xFMSYZlu5gCsHjt_coq8EpE4YrW8Kn74JzU");
         }
 
         public IActionResult Index()
@@ -98,7 +98,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/UpdateOrder")]
-        public async Task<IActionResult> UpdateOrder([FromRoute] int Id)
+        public async Task<IActionResult> UpdateOrder([FromRoute] Guid Id)
         {
             OrderEndpoints orderEndpoints = new(this._httpClient);
             OrderVM order = await orderEndpoints.GetOrder(Id);
@@ -116,7 +116,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/GetSingleOrder")]
-        public async Task<IActionResult> SingleOrder([FromRoute] int Id)
+        public async Task<IActionResult> SingleOrder([FromRoute] Guid Id)
         {
             OrderEndpoints orderEndpoints = new(this._httpClient);
             OrderVM order = await orderEndpoints.GetOrder(Id);
@@ -125,7 +125,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/DeleteOrder")]
-        public async Task<IActionResult> DeleteOrder([FromRoute] int Id)
+        public async Task<IActionResult> DeleteOrder([FromRoute] Guid Id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/orders/remove{Id}");
 
@@ -166,7 +166,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/Edit")]
-        public async Task<IActionResult> EditProduct([FromRoute] int Id)
+        public async Task<IActionResult> EditProduct([FromRoute] Guid Id)
         {
             ProductEndpoints productEndpoints = new(this._httpClient);
             ProductVM product = await productEndpoints.SingleProduct(Id);
@@ -194,7 +194,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("{Id}/Delete")]
-        public async Task<IActionResult> DeleteProduct([FromRoute] int Id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid Id)
         {
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/products/remove{Id}");
 
@@ -216,7 +216,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("SingleProduct")]
-        public async Task<IActionResult> SingleProduct(int Id)
+        public async Task<IActionResult> SingleProduct(Guid Id)
         {
             ProductEndpoints productEndpoints = new(this._httpClient);
             ProductVM product = await productEndpoints.SingleProduct(Id);
@@ -361,7 +361,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("userUpdate")]
-        public async Task<IActionResult> UserInfo([FromBody] UserVM user)
+        public async Task<IActionResult> UserInfoUpdatePost([FromBody] UserVM user)
         {
             UserEndpoints userEndpoints = new(_httpClient);
             var result = userEndpoints.UserInfoUpdate(user);
