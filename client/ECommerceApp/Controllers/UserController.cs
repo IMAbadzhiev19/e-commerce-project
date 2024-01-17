@@ -31,7 +31,7 @@ namespace WebApp.Controllers
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _temporaryAccessToken = string.Empty;
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjU2YmI0Y2IxLWE1Y2YtNGRjNi04YjQ0LWNjZTQwNDc2OWU3ZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDUzNDIwNzJ9.aUZrqnGvSCfKQ6-wwxwc8TzaqAz-gIBLtIBcZz2fKuI");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImVlOGNhZjE1LWRjNDctNGUzYi1iMGI2LTM2MTAxODQwNTQ3YyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDU1MDg3MDB9.bu0voHQ_XgI6OR15OmZcyGz_vVMqaWNX3PjZzxbNFU4");
         }
 
 
@@ -118,6 +118,69 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + "api/auth/logout");
 
             return View();
+        }
+
+        [HttpGet("current-user")]
+        public async Task<IActionResult> UserInfo()
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.GetUser();
+
+            if (result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost("userUpdate")]
+        public async Task<IActionResult> UserInfoUpdate()
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.GetUser();
+
+            if (result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpGet("userUpdate")]
+        public async Task<IActionResult> UserInfoUpdate([FromBody] UserVM user)
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.UserInfoUpdate(user);
+
+            if (result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        [HttpGet("changePassword")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            ChangePassword changePassword = new ChangePassword();
+            return View(changePassword);
+        }
+
+        [HttpGet("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword changePassword)
+        {
+            UserEndpoints userEndpoints = new(_httpClient);
+            var result = userEndpoints.ChangePassword(changePassword.OldPassword, changePassword.NewPassword);
+
+            if (result != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Error", "Home");
         }
     }
 }

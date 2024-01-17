@@ -22,7 +22,7 @@ namespace ECommerceApp.Controllers
             _httpClient.BaseAddress = _uri;
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjU2YmI0Y2IxLWE1Y2YtNGRjNi04YjQ0LWNjZTQwNDc2OWU3ZiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDUzNDIwNzJ9.aUZrqnGvSCfKQ6-wwxwc8TzaqAz-gIBLtIBcZz2fKuI");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImVlOGNhZjE1LWRjNDctNGUzYi1iMGI2LTM2MTAxODQwNTQ3YyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDU1MDg3MDB9.bu0voHQ_XgI6OR15OmZcyGz_vVMqaWNX3PjZzxbNFU4");
         }
 
         public IActionResult Index()
@@ -31,7 +31,7 @@ namespace ECommerceApp.Controllers
         }
 
         [HttpGet("get-wishlist")]
-        public async Task<IActionResult> GetWishList() {
+        public async Task<IActionResult> WishList() {
             WishlistEndpoints wishlistEndpoints = new(_httpClient);
             var result = await wishlistEndpoints.GetWishList();
 
@@ -47,18 +47,21 @@ namespace ECommerceApp.Controllers
             return View(result);
         }
 
-        [HttpGet("{wishlistId}/{productId}/remove")]
-        public async Task<IActionResult> RemoveFromWishList([FromRoute] Guid productId, [FromRoute] Guid wishlistId)
+        [HttpGet("{productId}/remove")]
+        public async Task<IActionResult> RemoveFromWishList([FromRoute] Guid productId)
         {
+
             WishlistEndpoints wishlistEndpoints = new(_httpClient);
-            var result = await wishlistEndpoints.DeleteProduct(wishlistId, productId);
+            var wishlist = await wishlistEndpoints.GetWishList();
+
+            var result = await wishlistEndpoints.DeleteProduct(wishlist.Id, productId);
 
             if(result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Error", "Home");
         }
 
 
@@ -73,7 +76,7 @@ namespace ECommerceApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Error", "Home");
         }
 
         //-----------------------------------------------------------------------------------
@@ -134,7 +137,7 @@ namespace ECommerceApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Error", "Home");
         }
 
         //-----------------------------------------------------------------------------------
@@ -203,7 +206,7 @@ namespace ECommerceApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Error", "Home");
         }
 
         [HttpGet("AllProducts")]
@@ -279,7 +282,7 @@ namespace ECommerceApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Error", "Home");
         }
 
         [HttpGet("{gradeId}/grade")]
@@ -299,7 +302,7 @@ namespace ECommerceApp.Controllers
         //-----------------------------------------------------------------------------------
 
         [HttpGet("get-cart")]
-        public async Task<IActionResult> GetCart()
+        public async Task<IActionResult> Cart()
         {
             CartEndpoints cartEndpoints = new(_httpClient);
 
@@ -307,90 +310,36 @@ namespace ECommerceApp.Controllers
             return View(result);
         }
 
-        [HttpGet("{cartId}/{productId}/remove")]
-        public async Task<IActionResult> RemoveFromCart([FromRoute]Guid cartId, [FromRoute] Guid productId)
+        [HttpGet("{productId}/remove")]
+        public async Task<IActionResult> RemoveFromCart([FromRoute] Guid productId)
         {
             CartEndpoints cartEndpoints = new(_httpClient);
-            var result = await cartEndpoints.DeleteProduct(cartId, productId);
+            var cart = await cartEndpoints.GetCart();
+            var result = await cartEndpoints.DeleteProduct(cart.Id, productId);
 
             if(result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Error", "Home");
         }
 
         [HttpGet("{cartId}/{productId}/assign")]
-        public async Task<IActionResult> AddToCart([FromRoute] Guid cartId,[FromRoute] Guid productId)
+        public async Task<IActionResult> AddToCart([FromRoute] Guid productId)
         {
             CartEndpoints cartEndpoints = new(_httpClient);
-            var result = await cartEndpoints.AssignProduct(cartId, productId);
+            var cart = await cartEndpoints.GetCart();
+            var result = await cartEndpoints.AssignProduct(cart.Id, productId);
 
             if (result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Error", "Home");
         }
 
         //------------------------------------------------------------------------------------
-        [HttpGet("current-user")]
-        public async Task<IActionResult> UserInfo()
-        {
-            UserEndpoints userEndpoints = new(_httpClient);
-            var result = userEndpoints.GetUser();
-
-            if(result != null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost("userUpdate")]
-        public async Task<IActionResult> UserInfoUpdate()
-        { 
-            UserEndpoints userEndpoints = new(_httpClient);
-            var result = userEndpoints.GetUser();
-
-            if(result != null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet("userUpdate")]
-        public async Task<IActionResult> UserInfoUpdatePost([FromBody] UserVM user)
-        {
-            UserEndpoints userEndpoints = new(_httpClient);
-            var result = userEndpoints.UserInfoUpdate(user);
-
-            if (result != null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpGet("changePassword")]
-        public async Task<IActionResult> ChangePassword()
-        {
-            ChangePassword changePassword = new ChangePassword();
-            return View(changePassword);
-        }
-
-        [HttpGet("changePassword")]
-        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword changePassword)
-        {
-            UserEndpoints userEndpoints = new(_httpClient);
-            var result = userEndpoints.ChangePassword(changePassword.OldPassword,changePassword.NewPassword);
-
-            if (result != null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return RedirectToAction("Index", "Home");
-        }
     }
 }

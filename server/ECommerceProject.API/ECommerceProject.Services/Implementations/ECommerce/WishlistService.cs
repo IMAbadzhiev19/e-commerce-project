@@ -80,7 +80,7 @@ public class WishlistService : IWishlistService
             .Where(w => w.UserId == userId).FirstOrDefaultAsync();
 
         if (wishlist is null)
-            throw new ArgumentException("Invalid wishlistId");
+            throw new ArgumentException("Invalid userId");
 
         if (wishlist.UserId != userId)
             throw new Exception("The wishlist does not belong to you");
