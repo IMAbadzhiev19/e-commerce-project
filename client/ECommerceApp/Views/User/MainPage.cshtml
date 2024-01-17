@@ -4,16 +4,21 @@
     ViewData["Title"] = "MainPage";
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/gridcontainer.css" />
+</head>
+
+
 <div id="carouselExample" class="carousel slide">
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM1bmA4odRJaF6DhSHpGoqJVQ9MtIaOWdaeQ&usqp=CAU" class="d-block w-100 h-100" alt="...">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYA-lcEF8o2k3oRLjsCOma2B8EbkEVzk0W0A&usqp=CAU" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM1bmA4odRJaF6DhSHpGoqJVQ9MtIaOWdaeQ&usqp=CAU" class="d-block w-100 h-100" alt="...">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYA-lcEF8o2k3oRLjsCOma2B8EbkEVzk0W0A&usqp=CAU" class="d-block w-100" alt="...">
         </div>
         <div class="carousel-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM1bmA4odRJaF6DhSHpGoqJVQ9MtIaOWdaeQ&usqp=CAU" class="d-block w-50 h-50" alt="...">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYA-lcEF8o2k3oRLjsCOma2B8EbkEVzk0W0A&usqp=CAU" class="d-block w-100" alt="...">
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -25,17 +30,22 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-
-@foreach (var pr in Model)
-{
-    <div>
-        <div class="card" style="width: 18rem;">
-            <img src="@pr.ImageUrl" class="card-img-top" alt="">
-            <div class="card-body">
-                <h5 class="card-title">@pr.Title</h5>
-                <p class="card-text">@pr.Price</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+<br>
+<br>
+<br>
+<br>
+<div class="gridcontainer">
+    @foreach (var pr in Model)
+    {
+        <div class="mb-2">
+            <div class="card" style="width: 18rem;">
+                <img src="@pr.ImageUrl" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">@pr.Title</h5>
+                    <p class="card-text">@pr.Price</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
