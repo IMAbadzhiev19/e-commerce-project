@@ -6,7 +6,7 @@
         <div class="card-body">
             <h5 class="card-title">@or.OrderDate</h5>
             <p class="card-text">@or.DeliveryDate</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+            <a href="@Url.Action($"{or.Id}/GetSingleOrder","Product")" class="btn btn-primary">Go somewhere</a>
         </div>
     </div>
 }

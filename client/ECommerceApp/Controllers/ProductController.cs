@@ -22,7 +22,7 @@ namespace ECommerceApp.Controllers
             _httpClient.BaseAddress = _uri;
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImVlOGNhZjE1LWRjNDctNGUzYi1iMGI2LTM2MTAxODQwNTQ3YyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDU1MDg3MDB9.bu0voHQ_XgI6OR15OmZcyGz_vVMqaWNX3PjZzxbNFU4");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQwNGQ2NWY0LTZiNTktNDljMy04NzA2LTZkODFhMzMzZDdiYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDU1NzQwMzl9.ZSrXAdrIPmQNn-9OXHcXKcn0xSB2Ynnff6jb1wpU18I");
         }
 
         public IActionResult Index()
@@ -47,7 +47,7 @@ namespace ECommerceApp.Controllers
             return View(result);
         }
 
-        [HttpGet("{productId}/remove")]
+        [HttpGet("{productId}/RemoveFromWashlist")]
         public async Task<IActionResult> RemoveFromWishList([FromRoute] Guid productId)
         {
 
@@ -209,7 +209,7 @@ namespace ECommerceApp.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-        [HttpGet("AllProducts")]
+        [HttpGet("Products")]
         public async Task<IActionResult> Products()
         {
             ProductEndpoints productEndpoints = new(this._httpClient);
@@ -325,7 +325,7 @@ namespace ECommerceApp.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-        [HttpGet("{cartId}/{productId}/assign")]
+        [HttpGet("{productId}/assign")]
         public async Task<IActionResult> AddToCart([FromRoute] Guid productId)
         {
             CartEndpoints cartEndpoints = new(_httpClient);
