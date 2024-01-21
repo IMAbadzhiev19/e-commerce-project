@@ -68,8 +68,8 @@
 
                 <div class="card-body">
                     <h5 class="card-title">@pr.Title</h5>
-                   
-                        <a id="fav">
+
+                    <a id="fav" href="@Url.Action($"AssignToWishList","Product",new {productId = pr.Id})">
                             <span id="heart" class="material-symbols-outlined">
                                 favorite
                             </span>

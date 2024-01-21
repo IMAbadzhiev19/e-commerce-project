@@ -17,7 +17,7 @@ namespace ECommerceApp.EndpointsMethods
 
         public async Task<Guid> CreateAsync()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/wishlists/create");
+            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/wishlists/create",null);
 
             Guid result;
 
@@ -45,19 +45,23 @@ namespace ECommerceApp.EndpointsMethods
                 string data = response.Content.ReadAsStringAsync().Result;
                 wishlist = JsonConvert.DeserializeObject<Wishlist>(data);
             }
+            else
+            {
+                Guid result = await CreateAsync();
+                return await GetWishList();
+            }
 
             return wishlist;
         }
 
-        public async Task<HttpResponseMessage> AssignProduct(Guid wishlistId, Guid productId)
+        public async Task<HttpResponseMessage> AssignProduct(Guid productId)
         {
-            var contentQuery = JsonConvert.SerializeObject(new { 
-                productId = productId
-            });
+            var contentQuery = JsonConvert.SerializeObject(new { productId = productId });
 
+            var wishlist = await GetWishList();
             HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/wishlists/assign-product{wishlistId}", content);
+            HttpResponseMessage response = await _httpClient.PutAsync(_httpClient.BaseAddress + "api/wishlists/assign-product{" + $"{wishlist.Id}" + "}", content);
             return response;
         }
 
@@ -70,7 +74,7 @@ namespace ECommerceApp.EndpointsMethods
 
             HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/wishlists/remove-product{wishlistId}", content);
+            HttpResponseMessage response = await _httpClient.PutAsync(_httpClient.BaseAddress + $"api/wishlists/remove-product{wishlistId}", content);
             return response;
         }
     }

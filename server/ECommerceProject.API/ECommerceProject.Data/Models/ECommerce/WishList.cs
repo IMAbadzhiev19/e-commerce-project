@@ -27,5 +27,5 @@ public class Wishlist
     /// <summary>
     /// Gets a collection of products added to the wishlist.
     /// </summary>
-    public virtual ICollection<Product> Products { get; set; } = default!;
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

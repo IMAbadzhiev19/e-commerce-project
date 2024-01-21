@@ -28,5 +28,5 @@ public class Cart
     /// <summary>
     /// Gets or sets a collection containing all the products in the cart.
     /// </summary>
-    public virtual ICollection<Product> Products { get; set; } = default!;
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

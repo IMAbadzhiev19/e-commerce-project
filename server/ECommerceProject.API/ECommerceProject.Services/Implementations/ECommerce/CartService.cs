@@ -41,7 +41,7 @@ public class CartService : ICartService
 
         var cart = await this._context.Carts
             .FindAsync(cartId);
-        
+
         if (cart is null)
         {
             throw new ArgumentException("Invalid cartId");
@@ -77,18 +77,18 @@ public class CartService : ICartService
     /// <inheritdoc/>
     public async Task<CartVM> GetCartByIdAsync(string userId)
     {
-        var cart = await this._context.Carts.Include(c=>c.Products)
+        var cart = await this._context.Carts.Include(c => c.Products)
             .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
 
-        if (cart is null)
-            throw new Exception("An error occured while retrieving the cart");
-
-        if(cart == default)
+        if (cart == null)
         {
             await CreateCartAsync(userId);
             cart = await this._context.Carts.Include(c => c.Products)
             .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
         }
+
+        if (cart is null)
+            throw new Exception("An error occured while retrieving the cart");
 
         return cart.Adapt<CartVM>();
     }

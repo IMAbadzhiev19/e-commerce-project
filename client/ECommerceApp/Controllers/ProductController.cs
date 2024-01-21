@@ -22,7 +22,7 @@ namespace ECommerceApp.Controllers
             _httpClient.BaseAddress = _uri;
             _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQwNGQ2NWY0LTZiNTktNDljMy04NzA2LTZkODFhMzMzZDdiYiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDU1NzQwMzl9.ZSrXAdrIPmQNn-9OXHcXKcn0xSB2Ynnff6jb1wpU18I");
+            _httpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM3NTE1ZjllLTYzZDUtNGNiNi1hY2E2LTY3YmI2N2ZkM2NjYyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJleHAiOjE3MDU4NjQyMTd9._9yERNxlpbQOKh0EWsDlDn96RYe9kfoe7cu8fl2ryIU");
         }
 
         public IActionResult Index()
@@ -34,15 +34,6 @@ namespace ECommerceApp.Controllers
         public async Task<IActionResult> WishList() {
             WishlistEndpoints wishlistEndpoints = new(_httpClient);
             var result = await wishlistEndpoints.GetWishList();
-
-            if(result == null)
-            {
-                var creation = await wishlistEndpoints.CreateAsync();
-                if (creation != Guid.Empty)
-                {
-                    result = await wishlistEndpoints.GetWishList();
-                }
-            }
 
             return View(result);
         }
@@ -65,11 +56,11 @@ namespace ECommerceApp.Controllers
         }
 
 
-        [HttpGet("{wishlistId}/{productId}/assign")]
-        public async Task<IActionResult> AssignToWishList([FromRoute] Guid productId, [FromRoute] Guid wishlistId)
+        [HttpGet("{productId}/AssignToWishList")]
+        public async Task<IActionResult> AssignToWishList(Guid productId)
         {
             WishlistEndpoints wishlistEndpoints = new(_httpClient);
-            var result = await wishlistEndpoints.AssignProduct(wishlistId, productId);
+            var result = await wishlistEndpoints.AssignProduct(productId);
 
             if (result.IsSuccessStatusCode)
             {

@@ -1,3 +1,69 @@
-﻿
+﻿@model ECommerceApp.Models.CartVM
 @{
+    decimal sum = 0;
 }
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="~/css/gridcontainer.css" />
+
+    <style>
+        .material-symbols-outlined {
+            align-self: end;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+        }
+
+        #fav:hover {
+            color: red;
+        }
+
+        #cart:hover {
+            color: blue;
+        }
+
+        #priceShop {
+            display: inline;
+        }
+    </style>
+
+</head>
+
+<div class="gridcontainer">
+    @foreach (var pr in Model.Products)
+    {
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="@pr.ImageUrl" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@pr.Title</h5>
+                        <p class="card-text">@pr.Price</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* <div class="mb-2">
+            <div class="card" style="width: 18rem;">
+                <a href="@Url.Action("MainPage")">
+                    <img src="https://cdn.ozone.bg/media/catalog/product/f/i/figura_funko_pop_animation_naruto_shippuden_naruto_uzumaki_kurama_link_mode_special_edition_1465_1699601387_0.jpg" class="card-img-top w-100 h-50" alt="">
+                </a>
+
+                <div class="card-body">
+                    <h5 class="card-title">@pr.Title</h5>
+
+                    <a id="cart" href=@Url.Action($"{pr.Id}/assign","Product")>
+                        <span class="material-symbols-outlined">
+                            shopping_cart
+                        </span>
+                    </a>
+
+                    <p class="card-text">@pr.Price</p>
+                    <a href="@Url.Action($"{pr.Id}/RemoveFromWashlist","Product")"> Remove </a>
+                </div>
+            </div>
+        </div> *@
+    }
+</div>

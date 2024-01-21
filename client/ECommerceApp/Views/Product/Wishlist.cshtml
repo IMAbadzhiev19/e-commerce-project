@@ -39,14 +39,14 @@
                 <div class="card-body">
                     <h5 class="card-title">@pr.Title</h5>
 
-                    <a id="cart" href=@Url.Action($"{pr.Id}/assign","Product")>
+                    <a id="cart" href=@Url.Action($"assign","Product",new{productId = pr.Id})>
                         <span class="material-symbols-outlined">
                             shopping_cart
                         </span>
                     </a>
 
                     <p class="card-text">@pr.Price</p>
-                    <a href="@Url.Action($"{pr.Id}/RemoveFromWashlist","Product")"> Remove </a>
+                    <a href="@Url.Action($"RemoveFromWashlist","Product",new {productId = pr.Id})"> Remove </a>
                 </div>
             </div>
         </div>
