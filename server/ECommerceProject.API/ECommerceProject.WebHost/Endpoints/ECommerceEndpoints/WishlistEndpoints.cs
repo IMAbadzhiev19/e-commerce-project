@@ -28,7 +28,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapDelete("api/wishlists/remove{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapDelete("api/wishlists/remove/{id}", [Authorize] async ([FromRoute] Guid id, ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -45,7 +45,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapPut("api/wishlists/assign-product{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapPut("api/wishlists/assign-product/{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {
@@ -62,7 +62,7 @@ public class WishlistEndpoints : ICarterModule
             }
         }).WithTags("Wishlist");
 
-        app.MapPut("api/wishlists/remove-product{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
+        app.MapPut("api/wishlists/remove-product/{wishlistId}", [Authorize] async ([FromRoute] Guid wishlistId, [FromQuery] Guid productId, ICurrentUser currentUser, IWishlistService wishlistService) =>
         {
             try
             {

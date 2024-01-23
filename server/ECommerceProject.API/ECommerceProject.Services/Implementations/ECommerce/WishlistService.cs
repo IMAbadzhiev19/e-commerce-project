@@ -31,7 +31,7 @@ public class WishlistService : IWishlistService
     /// <inheritdoc/>
     public async Task AddProductToWishlistAsync(string userId, Guid productId, Guid wishlistId)
     {
-        var user = _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException("Invalid userId");
@@ -50,7 +50,6 @@ public class WishlistService : IWishlistService
         }
 
         wishlist.Products.Add(product);
-        _context.Wishlists.Update(wishlist);
         await this._context.SaveChangesAsync();
     }
 

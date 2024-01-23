@@ -56,13 +56,11 @@ namespace ECommerceApp.EndpointsMethods
 
         public async Task<HttpResponseMessage> AssignProduct(Guid productId)
         {
-            var contentQuery = JsonConvert.SerializeObject(new { productId = productId });
+            var wishlistId = (await GetWishList()).Id;
 
-            var wishlist = await GetWishList();
-            HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
+            var httpReponse = await _httpClient.PutAsync(_httpClient.BaseAddress + $"api/wishlists/assign-product/{wishlistId}?productId={productId}", null);
 
-            HttpResponseMessage response = await _httpClient.PutAsync(_httpClient.BaseAddress + "api/wishlists/assign-product{" + $"{wishlist.Id}" + "}", content);
-            return response;
+            return httpReponse;
         }
 
         public async Task<HttpResponseMessage> DeleteProduct(Guid wishlistId, Guid productId)
