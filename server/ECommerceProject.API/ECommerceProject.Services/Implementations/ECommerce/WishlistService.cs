@@ -109,13 +109,16 @@ public class WishlistService : IWishlistService
     /// <inheritdoc/>
     public async Task RemoveProductFromWishlistAsync(string userId, Guid productId, Guid wishlistId)
     {
-        var user = _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
             throw new ArgumentException("Invalid userId");
         }
 
-        var wishList = await this._context.Wishlists.FindAsync(wishlistId);
+        var wishList = await this._context.Wishlists
+            .Include(w => w.Products)
+            .FirstOrDefaultAsync(w => w.Id == wishlistId);
+
         if (wishList is null)
         {
             throw new ArgumentException("Invalid wishlistId");
@@ -127,8 +130,9 @@ public class WishlistService : IWishlistService
             throw new ArgumentException("Invalid productId");
         }
 
+        Console.WriteLine($"Before removing product: {wishList.Products.Count} products in wishlist");
         wishList.Products.Remove(product);
-        _context.Wishlists.Update(wishList);
+        Console.WriteLine($"After removing product: {wishList.Products.Count} products in wishlist");
         await this._context.SaveChangesAsync();
     }
 

@@ -65,15 +65,9 @@ namespace ECommerceApp.EndpointsMethods
 
         public async Task<HttpResponseMessage> DeleteProduct(Guid wishlistId, Guid productId)
         {
-            var contentQuery = JsonConvert.SerializeObject(new
-            {
-                productId = productId
-            });
+            var httpReponse = await _httpClient.PutAsync(_httpClient.BaseAddress + $"api/wishlists/remove-product/{wishlistId}?productId={productId}", null);
 
-            HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await _httpClient.PutAsync(_httpClient.BaseAddress + $"api/wishlists/remove-product{wishlistId}", content);
-            return response;
+            return httpReponse;
         }
     }
 }
