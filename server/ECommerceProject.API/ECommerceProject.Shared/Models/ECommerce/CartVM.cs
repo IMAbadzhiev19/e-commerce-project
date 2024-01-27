@@ -9,5 +9,5 @@ public class CartVM
 
     public ApplicationUser? User { get; set; }
 
-    public ICollection<Product> Products { get; set; } = default!;
+    public virtual ICollection<Product> Products { get; set; } = default!;
 }

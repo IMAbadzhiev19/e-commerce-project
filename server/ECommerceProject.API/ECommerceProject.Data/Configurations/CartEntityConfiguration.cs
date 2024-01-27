@@ -18,13 +18,13 @@ public class CartEntityConfiguration : IEntityTypeConfiguration<Cart>
         //Setup primary and foreign keys
         builder
             .HasKey(x => x.Id);
-        
-        builder
-            .HasMany(x => x.Products)
-            .WithMany(x => x.Carts);
 
         builder
             .HasOne(x => x.User)
+            .WithMany();
+
+        builder
+            .HasMany(x => x.Products)
             .WithMany();
     }
 }

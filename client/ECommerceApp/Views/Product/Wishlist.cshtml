@@ -39,7 +39,7 @@
                 <div class="card-body">
                     <h5 class="card-title">@pr.Title</h5>
 
-                    <a id="cart" href=@Url.Action($"assign","Product",new{productId = pr.Id})>
+                    <a id="cart" href=@Url.Action($"AssignToCart","Product",new{productId = pr.Id})>
                         <span class="material-symbols-outlined">
                             shopping_cart
                         </span>

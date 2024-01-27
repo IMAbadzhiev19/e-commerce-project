@@ -14,7 +14,7 @@ namespace ECommerceApp.EndpointsMethods
 
         public async Task<Guid> CreateAsync(Guid userId)
         {
-            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/carts/create{userId}");
+            HttpResponseMessage response = await _httpClient.GetAsync(_httpClient.BaseAddress + $"api/carts/create/{userId}");
 
             Guid result;
 
@@ -31,31 +31,19 @@ namespace ECommerceApp.EndpointsMethods
             }
         }
 
-        public async Task<HttpResponseMessage> AssignProduct(Guid cratdId, Guid productId)
+        public async Task<HttpResponseMessage> AssignProduct(Guid productId)
         {
-            var contentQuery = JsonConvert.SerializeObject(new
-            {
-                productId = productId,
-                cartId = cratdId
-            });
+            var cartId = (await GetCart()).Id;
 
-            HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/carts/assign-product?productId={productId}&cartId={cartId}", null);
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/carts/assign-product", content);
             return response;
         }
 
-        public async Task<HttpResponseMessage> DeleteProduct(Guid cratdId, Guid productId)
+        public async Task<HttpResponseMessage> DeleteProduct(Guid productId)
         {
-            var contentQuery = JsonConvert.SerializeObject(new
-            {
-                productId = productId,
-                cartId = cratdId
-            });
-
-            HttpContent content = new StringContent(contentQuery, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + $"api/carts/remove-product", content);
+            var cartId = (await GetCart()).Id;
+            HttpResponseMessage response = await _httpClient.DeleteAsync(_httpClient.BaseAddress + $"api/carts/remove-product?productId={productId}&cartId={cartId}");
             return response;
         }
 

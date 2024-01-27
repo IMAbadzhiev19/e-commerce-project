@@ -19,10 +19,6 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
         builder
             .HasKey(x => x.Id);
 
-        builder
-            .HasMany(x => x.Carts)
-            .WithMany(x => x.Products);
-
         //Setups constraints
         builder
             .Property(x => x.Title)

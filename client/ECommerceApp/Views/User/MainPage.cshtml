@@ -11,7 +11,7 @@
 
     <style>
         .material-symbols-outlined {
-            align-self:end;
+            align-self: end;
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
         }
 
@@ -23,8 +23,7 @@
             color: blue;
         }
 
-        #priceShop
-        {
+        #priceShop {
             display: inline;
         }
     </style>
@@ -70,19 +69,19 @@
                     <h5 class="card-title">@pr.Title</h5>
 
                     <a id="fav" href="@Url.Action($"AssignToWishList","Product",new {productId = pr.Id})">
-                            <span id="heart" class="material-symbols-outlined">
-                                favorite
-                            </span>
-                        </a>
+                        <span id="heart" class="material-symbols-outlined">
+                            favorite
+                        </span>
+                    </a>
 
-                        <a id="cart">
-                            <span class="material-symbols-outlined">
-                                shopping_cart
-                            </span>
-                        </a>
+                    <a id="cart" href="@Url.Action("AssignToCart","Product", new{productId = pr.Id})">
+                        <span class="material-symbols-outlined">
+                            shopping_cart
+                        </span>
+                    </a>
 
-                        <p class="card-text">@pr.Price</p>
-                    
+                    <p class="card-text">@pr.Price</p>
+
                 </div>
             </div>
         </div>

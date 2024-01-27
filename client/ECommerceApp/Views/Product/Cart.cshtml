@@ -5,6 +5,7 @@
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="~/css/gridcontainer.css" />
 
     <style>
@@ -28,21 +29,21 @@
 
 </head>
 
-<div class="gridcontainer">
+<div class="justify-content-center w-100">
     @foreach (var pr in Model.Products)
     {
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="@pr.ImageUrl" class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">@pr.Title</h5>
-                        <p class="card-text">@pr.Price</p>
-                    </div>
-                </div>
+        <div class="card flex-row">
+            <img class="card-img-left example-card-img-responsive" src="@pr.ImageUrl" />
+            <div class="card-body d-flex flex-row">
+                <h4 class="card-title h5 h4-sm p-1">@pr.Title</h4> 
+                <p class="card-text p-2">@pr.Price</p>
             </div>
+           
+            <a class="align-self-center" id="cart" href=@Url.Action($"RemoveFromCart","Product",new{productId = pr.Id})>
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+            </a>
         </div>
 
         @* <div class="mb-2">

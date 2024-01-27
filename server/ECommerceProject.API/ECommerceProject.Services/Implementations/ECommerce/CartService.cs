@@ -77,14 +77,14 @@ public class CartService : ICartService
     /// <inheritdoc/>
     public async Task<CartVM> GetCartByIdAsync(string userId)
     {
-        var cart = await this._context.Carts.Include(c => c.Products)
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
+        var cart = await this._context.Carts.Where(x => x.UserId == userId && x.IsActive == true).Include(c => c.Products)
+            .FirstOrDefaultAsync();
 
         if (cart == null)
         {
             await CreateCartAsync(userId);
-            cart = await this._context.Carts.Include(c => c.Products)
-            .FirstOrDefaultAsync(x => x.UserId == userId && x.IsActive == true);
+            cart = await this._context.Carts.Include(c => c.Products).Where(x => x.UserId == userId && x.IsActive == true)
+            .FirstOrDefaultAsync();
         }
 
         if (cart is null)
@@ -105,7 +105,9 @@ public class CartService : ICartService
         }
 
         var cart = await this._context.Carts
-            .FindAsync(cartId);
+            .Where(c => c.Id == cartId)
+            .Include(c => c.Products)
+            .FirstOrDefaultAsync();
 
         if (cart is null)
         {
